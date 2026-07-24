@@ -4,26 +4,43 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:JournalApp.ViewModels"
+    xmlns:strings="clr-namespace:JournalApp.Resources.Strings"
     x:DataType="vm:JournalEditorViewModel"
-    Title="Entry">
+    Title="{x:Static strings:AppResources.AppTitle}">
 
-    <Grid RowDefinitions="*,Auto">
-        <Editor
-            Grid.Row="0"
-            Text="{Binding Text}"
-            MaxLength="{Binding MaxLength}"
-            Placeholder="Start writing…"
-            Margin="12,8"
-            FontSize="16"
-            AutoSize="Disabled"
-            VerticalOptions="Fill" />
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{x:Static strings:AppResources.History_ToolbarItem}" Command="{Binding OpenHistoryCommand}" />
+    </ContentPage.ToolbarItems>
 
-        <Label
-            Grid.Row="1"
-            Margin="16,4,16,8"
-            FontSize="12"
-            Opacity="0.5"
-            HorizontalOptions="End"
-            Text="{Binding CharacterCount, StringFormat='{0} / 10000'}" />
+    <Grid RowDefinitions="Auto,*"
+          Background="{AppThemeBinding Light={StaticResource DawnGradient}, Dark={StaticResource TwilightGradient}}">
+
+        <VerticalStackLayout Grid.Row="0" Padding="24,28,24,12" Spacing="2">
+            <Label Text="✨" FontSize="22" HorizontalOptions="Center" Opacity="0.85" />
+            <Label Text="{Binding HeaderTitle}" Style="{StaticResource Headline}" />
+            <Label Text="{Binding HeaderSubtitle}" Style="{StaticResource SubHeadline}" />
+        </VerticalStackLayout>
+
+        <Border Grid.Row="1" Style="{StaticResource MagicCard}" Margin="16,4,16,16">
+            <Grid RowDefinitions="*,Auto">
+                <Editor
+                    Grid.Row="0"
+                    Text="{Binding Text}"
+                    MaxLength="{Binding MaxLength}"
+                    Placeholder="{Binding PlaceholderText}"
+                    FontSize="16"
+                    AutoSize="Disabled"
+                    VerticalOptions="Fill" />
+
+                <Label
+                    Grid.Row="1"
+                    Margin="0,8,0,0"
+                    FontSize="12"
+                    Opacity="0.55"
+                    HorizontalOptions="End"
+                    TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                    Text="{Binding CharacterCountLabel}" />
+            </Grid>
+        </Border>
     </Grid>
 </ContentPage>

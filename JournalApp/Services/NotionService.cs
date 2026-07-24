@@ -31,11 +31,33 @@ public class NotionService
         AppSettings.NotionDataSourceId = found?.DataSourceId ?? await GetDataSourceIdAsync(databaseId);
     }
 
-    /// <summary>Uploads an entry as a new page/row. Returns the created page ID.</summary>
+    /// <summary>
+    /// Uploads an entry. If it was already uploaded (<see cref="JournalEntry.NotionPageId"/> is set), the existing
+    /// row is updated in place instead of creating a duplicate. Returns the page ID (new or existing).
+    /// </summary>
     public async Task<string> UploadEntryAsync(JournalEntry entry)
     {
         if (!Constants.NotionConfigured)
             throw new InvalidOperationException("Notion is not configured. Set the NOTIONTOKEN environment variable.");
+
+        var properties = new JsonObject
+        {
+            [TitleProperty] = TitleValue($"Day {entry.DayNumber}"),
+            ["Day Number"] = new JsonObject { ["number"] = entry.DayNumber },
+            ["Uploaded Date Time"] = new JsonObject
+            {
+                ["date"] = new JsonObject { ["start"] = DateTime.Now.ToString("o") }
+            },
+            ["Journal Text"] = new JsonObject { ["rich_text"] = RichText(EncryptionService.Encrypt(entry.Text)) }
+        };
+
+        if (!string.IsNullOrEmpty(entry.NotionPageId))
+        {
+            using var patchResponse = await _Http.PatchAsJsonAsync(
+                $"pages/{entry.NotionPageId}", new JsonObject { ["properties"] = properties });
+            await EnsureSuccessAsync(patchResponse);
+            return entry.NotionPageId;
+        }
 
         if (string.IsNullOrEmpty(AppSettings.NotionDataSourceId))
             await EnsureJournalDatabaseAsync();
@@ -46,16 +68,7 @@ public class NotionService
         var payload = new JsonObject
         {
             ["parent"] = new JsonObject { ["type"] = "data_source_id", ["data_source_id"] = dataSourceId },
-            ["properties"] = new JsonObject
-            {
-                [TitleProperty] = TitleValue($"Day {entry.DayNumber}"),
-                ["Day Number"] = new JsonObject { ["number"] = entry.DayNumber },
-                ["Uploaded Date Time"] = new JsonObject
-                {
-                    ["date"] = new JsonObject { ["start"] = DateTime.Now.ToString("o") }
-                },
-                ["Journal Text"] = new JsonObject { ["rich_text"] = RichText(EncryptionService.Encrypt(entry.Text)) }
-            }
+            ["properties"] = properties
         };
 
         using var response = await _Http.PostAsJsonAsync("pages", payload);
@@ -93,7 +106,8 @@ public class NotionService
             entries.Add(new JournalEntry
             {
                 DayNumber = (int)(props?["Day Number"]?["number"]?.GetValue<double>() ?? 0),
-                Text = TryDecrypt(cipherText)
+                Text = TryDecrypt(cipherText),
+                NotionPageId = page?["id"]?.GetValue<string>()
             });
         }
         return entries;

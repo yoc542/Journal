@@ -3,8 +3,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JournalApp.Data;
 using JournalApp.Models;
+using JournalApp.Resources.Strings;
 using JournalApp.Services;
-using JournalApp.Views;
 
 namespace JournalApp.ViewModels;
 
@@ -30,27 +30,20 @@ public partial class JournalListViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private static Task NewEntryAsync() => Shell.Current.GoToAsync($"{nameof(JournalEditorPage)}?id=0");
-
-    [RelayCommand]
     private static Task OpenEntryAsync(JournalEntry entry) =>
-        Shell.Current.GoToAsync($"{nameof(JournalEditorPage)}?id={entry.Id}");
+        Shell.Current.GoToAsync($"..?id={entry.Id}");
 
     [RelayCommand]
     private async Task ShowMenuAsync(JournalEntry entry)
     {
         var choice = await Shell.Current.DisplayActionSheetAsync(
-            entry.DisplayTitle, "Cancel", null, "Upload to Notion", "Delete");
+            entry.DisplayTitle, AppResources.Menu_Cancel, null,
+            AppResources.Menu_UploadToNotion, AppResources.Menu_Delete);
 
-        switch (choice)
-        {
-            case "Upload to Notion":
-                await UploadAsync(entry);
-                break;
-            case "Delete":
-                await DeleteAsync(entry);
-                break;
-        }
+        if (choice == AppResources.Menu_UploadToNotion)
+            await UploadAsync(entry);
+        else if (choice == AppResources.Menu_Delete)
+            await DeleteAsync(entry);
     }
 
     [RelayCommand]
@@ -69,11 +62,14 @@ public partial class JournalListViewModel : ObservableObject
                 await _Database.SaveEntryAsync(entry);
             }
             await LoadAsync();
-            await Shell.Current.DisplayAlertAsync("Imported", $"Imported {imported.Count} entries from Notion.", "OK");
+            await Shell.Current.DisplayAlertAsync(
+                AppResources.Import_SuccessTitle,
+                string.Format(AppResources.Import_SuccessMessage_Format, imported.Count),
+                AppResources.OK);
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlertAsync("Import failed", ex.Message, "OK");
+            await Shell.Current.DisplayAlertAsync(AppResources.Import_FailTitle, ex.Message, AppResources.OK);
         }
         finally
         {
@@ -84,7 +80,7 @@ public partial class JournalListViewModel : ObservableObject
     private async Task DeleteAsync(JournalEntry entry)
     {
         var confirmed = await Shell.Current.DisplayAlertAsync(
-            "Delete entry", "This entry will be permanently deleted.", "Delete", "Cancel");
+            AppResources.Delete_Title, AppResources.Delete_Message, AppResources.Delete_Confirm, AppResources.Menu_Cancel);
         if (!confirmed)
             return;
 
@@ -97,7 +93,8 @@ public partial class JournalListViewModel : ObservableObject
         if (entry.IsUploaded)
         {
             var again = await Shell.Current.DisplayAlertAsync(
-                "Already uploaded", "This entry was already uploaded to Notion. Upload again?", "Upload", "Cancel");
+                AppResources.Upload_AlreadyTitle, AppResources.Upload_AlreadyMessage,
+                AppResources.Upload_Confirm, AppResources.Menu_Cancel);
             if (!again)
                 return;
         }
@@ -108,15 +105,15 @@ public partial class JournalListViewModel : ObservableObject
         try
         {
             IsBusy = true;
-            await _Notion.UploadEntryAsync(entry);
+            entry.NotionPageId = await _Notion.UploadEntryAsync(entry);
             entry.IsUploaded = true;
             await _Database.SaveEntryAsync(entry);
             await LoadAsync();
-            await Shell.Current.DisplayAlertAsync("Uploaded", "Entry uploaded to Notion.", "OK");
+            await Shell.Current.DisplayAlertAsync(AppResources.Upload_SuccessTitle, AppResources.Upload_SuccessMessage, AppResources.OK);
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlertAsync("Upload failed", ex.Message, "OK");
+            await Shell.Current.DisplayAlertAsync(AppResources.Upload_FailTitle, ex.Message, AppResources.OK);
         }
         finally
         {

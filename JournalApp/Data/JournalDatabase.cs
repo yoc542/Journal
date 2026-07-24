@@ -31,6 +31,14 @@ public class JournalDatabase
         return await db.Table<JournalEntry>().FirstOrDefaultAsync(e => e.Id == id);
     }
 
+    /// <summary>Returns the single entry for the given calendar day, if one exists yet.</summary>
+    public async Task<JournalEntry?> GetEntryForDateAsync(DateTime date)
+    {
+        var db = await GetConnectionAsync();
+        var day = date.Date;
+        return await db.Table<JournalEntry>().FirstOrDefaultAsync(e => e.EntryDate == day);
+    }
+
     public async Task<int> SaveEntryAsync(JournalEntry entry)
     {
         var db = await GetConnectionAsync();

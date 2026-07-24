@@ -8,7 +8,7 @@
 
     <ShellContent
         Title="Journal"
-        ContentTemplate="{DataTemplate views:JournalListPage}"
-        Route="JournalListPage" />
+        ContentTemplate="{DataTemplate views:JournalEditorPage}"
+        Route="JournalEditorPage" />
 
 </Shell>

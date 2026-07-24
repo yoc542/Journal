@@ -5,18 +5,25 @@
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
-    <Color x:Key="Primary">#512BD4</Color>
-    <Color x:Key="PrimaryDark">#ac99ea</Color>
-    <Color x:Key="PrimaryDarkText">#242424</Color>
-    <Color x:Key="Secondary">#DFD8F7</Color>
-    <Color x:Key="SecondaryDarkText">#9880e5</Color>
-    <Color x:Key="Tertiary">#2B0B98</Color>
+    <!-- Fairy-tale purple palette -->
+    <Color x:Key="Primary">#6C3FA0</Color>
+    <Color x:Key="PrimaryDark">#C3A7EA</Color>
+    <Color x:Key="PrimaryDarkText">#2A1B3D</Color>
+    <Color x:Key="Secondary">#E6DAF7</Color>
+    <Color x:Key="SecondaryDarkText">#C6A8EA</Color>
+    <Color x:Key="Tertiary">#3B1466</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>
-    <Color x:Key="Magenta">#D600AA</Color>
-    <Color x:Key="MidnightBlue">#190649</Color>
-    <Color x:Key="OffBlack">#1f1f1f</Color>
+    <Color x:Key="Magenta">#B15FE0</Color>
+    <Color x:Key="MidnightBlue">#241442</Color>
+    <Color x:Key="OffBlack">#1B1330</Color>
+
+    <!-- Whimsical accents -->
+    <Color x:Key="Parchment">#FBF6FF</Color>
+    <Color x:Key="Moonlight">#F3E9FF</Color>
+    <Color x:Key="Sparkle">#D8B4FE</Color>
+    <Color x:Key="Ink">#2A1B3D</Color>
 
     <Color x:Key="Gray100">#E1E1E1</Color>
     <Color x:Key="Gray200">#C8C8C8</Color>
@@ -41,4 +48,14 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+
+    <!-- Hero gradients for the Today screen -->
+    <LinearGradientBrush x:Key="DawnGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="{StaticResource Moonlight}" Offset="0.0" />
+        <GradientStop Color="{StaticResource Secondary}" Offset="1.0" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="TwilightGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="{StaticResource Tertiary}" Offset="0.0" />
+        <GradientStop Color="{StaticResource OffBlack}" Offset="1.0" />
+    </LinearGradientBrush>
 </ResourceDictionary>

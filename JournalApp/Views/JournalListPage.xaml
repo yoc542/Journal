@@ -5,50 +5,83 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:JournalApp.Models"
     xmlns:vm="clr-namespace:JournalApp.ViewModels"
+    xmlns:strings="clr-namespace:JournalApp.Resources.Strings"
     x:Name="Page"
     x:DataType="vm:JournalListViewModel"
-    Title="Journal">
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="New" Command="{Binding NewEntryCommand}" />
-    </ContentPage.ToolbarItems>
+    Title="{x:Static strings:AppResources.History_Title}">
 
     <Grid>
         <CollectionView
             ItemsSource="{Binding Entries}"
-            SelectionMode="None">
+            SelectionMode="None"
+            Margin="12,16"
+            BackgroundColor="Transparent">
 
             <CollectionView.EmptyView>
-                <VerticalStackLayout Padding="24" Spacing="8" VerticalOptions="Center">
-                    <Label Text="No entries yet" FontSize="18" HorizontalOptions="Center" />
-                    <Label Text="Tap New to write your first journal." Opacity="0.6" HorizontalOptions="Center" />
+                <VerticalStackLayout Padding="24"
+                                     Spacing="10"
+                                     VerticalOptions="Center">
+                    <Label Text="🌙"
+                           FontSize="34"
+                           HorizontalOptions="Center"
+                           Opacity="0.8"/>
+                    <Label Text="{x:Static strings:AppResources.History_Empty_Title}"
+                           Style="{StaticResource Headline}"
+                           FontSize="20"/>
+                    <Label Text="{x:Static strings:AppResources.History_Empty_Subtitle}"
+                           Style="{StaticResource SubHeadline}"/>
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:JournalEntry">
-                    <Grid Padding="16,12" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                    <Grid Margin="0,0,0,12">
                         <Grid.GestureRecognizers>
                             <TapGestureRecognizer
                                 Command="{Binding BindingContext.OpenEntryCommand, Source={x:Reference Page}}"
-                                CommandParameter="{Binding .}" />
+                                CommandParameter="{Binding .}"/>
                         </Grid.GestureRecognizers>
 
-                        <VerticalStackLayout Grid.Column="0" Spacing="2">
-                            <Label Text="{Binding DisplayTitle}" FontSize="16" FontAttributes="Bold" LineBreakMode="TailTruncation" />
-                            <Label Text="{Binding Text}" FontSize="13" Opacity="0.6" MaxLines="1" LineBreakMode="TailTruncation" />
-                            <Label FontSize="11" Opacity="0.5"
-                                   Text="{Binding UpdatedAt, StringFormat='{0:g}'}" />
-                        </VerticalStackLayout>
+                        <Border Style="{StaticResource MagicCard}"
+                                Padding="16,12">
+                            <Grid ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="8">
+                                <VerticalStackLayout Grid.Column="0"
+                                                     Spacing="3">
+                                    <Label Text="{Binding DisplayTitle}"
+                                           FontFamily="OpenSansSemibold"
+                                           FontSize="16"
+                                           TextColor="{AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource Secondary}}"
+                                           LineBreakMode="TailTruncation"/>
+                                    <Label Text="{Binding Text}"
+                                           FontSize="13"
+                                           Opacity="0.6"
+                                           MaxLines="1"
+                                           LineBreakMode="TailTruncation"/>
+                                    <Label FontSize="11"
+                                           Opacity="0.5"
+                                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                           Text="{Binding UpdatedAt, StringFormat='{0:g}'}"/>
+                                </VerticalStackLayout>
 
-                        <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
-                            <Label Text="✓ Notion" FontSize="11" TextColor="#2E7D32"
-                                   VerticalOptions="Center"
-                                   IsVisible="{Binding IsUploaded}" />
-                            <Button Text="⋮" FontSize="20" Padding="8,0" BackgroundColor="Transparent" TextColor="Gray"
-                                    Command="{Binding BindingContext.ShowMenuCommand, Source={x:Reference Page}}"
-                                    CommandParameter="{Binding .}" />
-                        </HorizontalStackLayout>
+                                <HorizontalStackLayout Grid.Column="1"
+                                                       Spacing="8"
+                                                       VerticalOptions="Center">
+                                    <Label Text="{x:Static strings:AppResources.History_Uploaded_Badge}"
+                                           FontSize="11"
+                                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                           VerticalOptions="Center"
+                                           IsVisible="{Binding IsUploaded}"/>
+                                    <Button Text="⋮"
+                                            FontSize="20"
+                                            Padding="8,0"
+                                            BackgroundColor="Transparent"
+                                            TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
+                                            Command="{Binding BindingContext.ShowMenuCommand, Source={x:Reference Page}}"
+                                            CommandParameter="{Binding .}"/>
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
