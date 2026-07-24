@@ -53,6 +53,34 @@ public partial class JournalListViewModel : ObservableObject
         }
     }
 
+    [RelayCommand]
+    private async Task ImportFromNotionAsync()
+    {
+        if (IsBusy)
+            return;
+
+        try
+        {
+            IsBusy = true;
+            var imported = await _Notion.FetchEntriesAsync();
+            foreach (var entry in imported)
+            {
+                entry.IsUploaded = true;
+                await _Database.SaveEntryAsync(entry);
+            }
+            await LoadAsync();
+            await Shell.Current.DisplayAlertAsync("Imported", $"Imported {imported.Count} entries from Notion.", "OK");
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlertAsync("Import failed", ex.Message, "OK");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
     private async Task DeleteAsync(JournalEntry entry)
     {
         var confirmed = await Shell.Current.DisplayAlertAsync(

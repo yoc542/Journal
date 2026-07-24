@@ -31,4 +31,7 @@ public static class Constants
     public const string NotionVersion = "2026-03-11";
 
     public static bool NotionConfigured => !string.IsNullOrWhiteSpace(NotionToken);
+
+    /// <summary>Toggle to reveal developer-only features, e.g. importing entries back from Notion.</summary>
+    public static bool DeveloperMode { get; set; } = true;
 }

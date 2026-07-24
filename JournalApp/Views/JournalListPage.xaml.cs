@@ -10,6 +10,9 @@ public partial class JournalListPage : ContentPage
     {
         InitializeComponent();
         BindingContext = _ViewModel = viewModel;
+
+        if (Constants.DeveloperMode)
+            ToolbarItems.Add(new ToolbarItem { Text = "Import", Command = viewModel.ImportFromNotionCommand });
     }
 
     protected override async void OnAppearing()

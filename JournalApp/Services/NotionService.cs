@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Security.Cryptography;
 using System.Text.Json.Nodes;
 using JournalApp.Models;
 
@@ -53,7 +54,7 @@ public class NotionService
                 {
                     ["date"] = new JsonObject { ["start"] = DateTime.Now.ToString("o") }
                 },
-                ["Journal Text"] = new JsonObject { ["rich_text"] = RichText(entry.Text) }
+                ["Journal Text"] = new JsonObject { ["rich_text"] = RichText(EncryptionService.Encrypt(entry.Text)) }
             }
         };
 
@@ -61,6 +62,49 @@ public class NotionService
         await EnsureSuccessAsync(response);
         var json = await response.Content.ReadFromJsonAsync<JsonObject>();
         return json?["id"]?.GetValue<string>() ?? string.Empty;
+    }
+
+    /// <summary>Fetches every row from the Notion "Journal" database, decrypting its text.</summary>
+    public async Task<List<JournalEntry>> FetchEntriesAsync()
+    {
+        if (!Constants.NotionConfigured)
+            throw new InvalidOperationException("Notion is not configured. Set the NOTIONTOKEN environment variable.");
+
+        if (string.IsNullOrEmpty(AppSettings.NotionDataSourceId))
+            await EnsureJournalDatabaseAsync();
+
+        var dataSourceId = AppSettings.NotionDataSourceId
+            ?? throw new InvalidOperationException("Could not resolve the Notion Journal data source.");
+
+        using var response = await _Http.PostAsJsonAsync($"data_sources/{dataSourceId}/query", new JsonObject());
+        await EnsureSuccessAsync(response);
+        var json = await response.Content.ReadFromJsonAsync<JsonObject>();
+
+        var entries = new List<JournalEntry>();
+        foreach (var page in json?["results"]?.AsArray() ?? new JsonArray())
+        {
+            var props = page?["properties"];
+            var cipherText = string.Concat((props?["Journal Text"]?["rich_text"]?.AsArray() ?? [])
+                .Select(t => t?["plain_text"]?.GetValue<string>() ?? string.Empty));
+
+            if (string.IsNullOrEmpty(cipherText))
+                continue;
+
+            entries.Add(new JournalEntry
+            {
+                DayNumber = (int)(props?["Day Number"]?["number"]?.GetValue<double>() ?? 0),
+                Text = TryDecrypt(cipherText)
+            });
+        }
+        return entries;
+    }
+
+    /// <summary>Decrypts text, falling back to the raw value for legacy rows uploaded before encryption was added.</summary>
+    private static string TryDecrypt(string text)
+    {
+        try { return EncryptionService.Decrypt(text); }
+        catch (FormatException) { return text; }
+        catch (CryptographicException) { return text; }
     }
 
     private async Task<(string DatabaseId, string DataSourceId)?> FindDataSourceAsync(string title)
