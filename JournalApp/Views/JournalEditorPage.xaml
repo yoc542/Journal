@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="JournalApp.Views.JournalEditorPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:JournalApp.ViewModels"
+    x:DataType="vm:JournalEditorViewModel"
+    Title="Entry">
+
+    <Grid RowDefinitions="*,Auto">
+        <Editor
+            Grid.Row="0"
+            Text="{Binding Text}"
+            MaxLength="{Binding MaxLength}"
+            Placeholder="Start writing…"
+            Margin="12,8"
+            FontSize="16"
+            AutoSize="Disabled"
+            VerticalOptions="Fill" />
+
+        <Label
+            Grid.Row="1"
+            Margin="16,4,16,8"
+            FontSize="12"
+            Opacity="0.5"
+            HorizontalOptions="End"
+            Text="{Binding CharacterCount, StringFormat='{0} / 10000'}" />
+    </Grid>
+</ContentPage>
