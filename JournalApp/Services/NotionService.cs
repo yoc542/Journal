@@ -1,7 +1,9 @@
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Text.Json.Nodes;
 using JournalApp.Models;
+using JournalApp.Resources.Strings;
 
 namespace JournalApp.Services;
 
@@ -9,26 +11,60 @@ namespace JournalApp.Services;
 public class NotionService
 {
     private const string TitleProperty = "Name"; // Notion requires exactly one title property.
+    private const string JournalTitle = "Journal";
+
     private readonly HttpClient _Http;
+    private readonly SemaphoreSlim _SetupGate = new(1, 1);
 
     public NotionService(HttpClient http)
     {
         _Http = http;
         _Http.BaseAddress = new Uri("https://api.notion.com/v1/");
-        _Http.DefaultRequestHeaders.Add("Authorization", $"Bearer {Constants.NotionToken}");
         _Http.DefaultRequestHeaders.Add("Notion-Version", Constants.NotionVersion);
     }
 
-    /// <summary>First-launch setup: reuse the cached data source, else find or create the "Journal" database.</summary>
+    /// <summary>Verifies a token with Notion before it is saved, so a typo surfaces on the settings page.</summary>
+    public async Task<bool> IsTokenValidAsync(string token)
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Get, "users/me");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        using var response = await _Http.SendAsync(request);
+        return response.IsSuccessStatusCode;
+    }
+
+    /// <summary>
+    /// First-launch setup: reuse the cached data source, else find the "Journal" database in the
+    /// workspace, else create a workspace-level page and a "Journal" database underneath it.
+    /// </summary>
     public async Task EnsureJournalDatabaseAsync()
     {
-        if (!Constants.NotionConfigured || !string.IsNullOrEmpty(AppSettings.NotionDataSourceId))
+        if (IsSetupComplete)
             return;
 
-        var found = await FindDataSourceAsync("Journal");
-        var databaseId = found?.DatabaseId ?? await CreateJournalDatabaseAsync();
-        AppSettings.NotionDatabaseId = databaseId;
-        AppSettings.NotionDataSourceId = found?.DataSourceId ?? await GetDataSourceIdAsync(databaseId);
+        await AuthorizeAsync();
+
+        // Serialized so a concurrent startup and upload can't create two databases.
+        await _SetupGate.WaitAsync();
+        try
+        {
+            if (IsSetupComplete)
+                return;
+
+            var existing = await FindJournalDataSourceAsync();
+            if (existing is not null)
+            {
+                CacheJournalIds(existing.Value.DatabaseId, existing.Value.DataSourceId);
+                return;
+            }
+
+            var parentPageId = await EnsureJournalPageAsync();
+            var databaseId = await CreateJournalDatabaseAsync(parentPageId);
+            CacheJournalIds(databaseId, await GetFirstDataSourceIdAsync(databaseId));
+        }
+        finally
+        {
+            _SetupGate.Release();
+        }
     }
 
     /// <summary>
@@ -37,8 +73,7 @@ public class NotionService
     /// </summary>
     public async Task<string> UploadEntryAsync(JournalEntry entry)
     {
-        if (!Constants.NotionConfigured)
-            throw new InvalidOperationException("Notion is not configured. Set the NOTIONTOKEN environment variable.");
+        await AuthorizeAsync();
 
         var properties = new JsonObject
         {
@@ -53,45 +88,31 @@ public class NotionService
 
         if (!string.IsNullOrEmpty(entry.NotionPageId))
         {
-            using var patchResponse = await _Http.PatchAsJsonAsync(
-                $"pages/{entry.NotionPageId}", new JsonObject { ["properties"] = properties });
-            await EnsureSuccessAsync(patchResponse);
+            await PatchJsonAsync($"pages/{entry.NotionPageId}", new JsonObject { ["properties"] = properties });
             return entry.NotionPageId;
         }
 
-        if (string.IsNullOrEmpty(AppSettings.NotionDataSourceId))
-            await EnsureJournalDatabaseAsync();
-
-        var dataSourceId = AppSettings.NotionDataSourceId
-            ?? throw new InvalidOperationException("Could not resolve the Notion Journal data source.");
-
         var payload = new JsonObject
         {
-            ["parent"] = new JsonObject { ["type"] = "data_source_id", ["data_source_id"] = dataSourceId },
+            ["parent"] = new JsonObject
+            {
+                ["type"] = "data_source_id",
+                ["data_source_id"] = await RequireDataSourceIdAsync()
+            },
             ["properties"] = properties
         };
 
-        using var response = await _Http.PostAsJsonAsync("pages", payload);
-        await EnsureSuccessAsync(response);
-        var json = await response.Content.ReadFromJsonAsync<JsonObject>();
+        var json = await PostJsonAsync("pages", payload);
         return json?["id"]?.GetValue<string>() ?? string.Empty;
     }
 
     /// <summary>Fetches every row from the Notion "Journal" database, decrypting its text.</summary>
     public async Task<List<JournalEntry>> FetchEntriesAsync()
     {
-        if (!Constants.NotionConfigured)
-            throw new InvalidOperationException("Notion is not configured. Set the NOTIONTOKEN environment variable.");
+        await AuthorizeAsync();
 
-        if (string.IsNullOrEmpty(AppSettings.NotionDataSourceId))
-            await EnsureJournalDatabaseAsync();
-
-        var dataSourceId = AppSettings.NotionDataSourceId
-            ?? throw new InvalidOperationException("Could not resolve the Notion Journal data source.");
-
-        using var response = await _Http.PostAsJsonAsync($"data_sources/{dataSourceId}/query", new JsonObject());
-        await EnsureSuccessAsync(response);
-        var json = await response.Content.ReadFromJsonAsync<JsonObject>();
+        var dataSourceId = await RequireDataSourceIdAsync();
+        var json = await PostJsonAsync($"data_sources/{dataSourceId}/query", new JsonObject());
 
         var entries = new List<JournalEntry>();
         foreach (var page in json?["results"]?.AsArray() ?? new JsonArray())
@@ -121,42 +142,73 @@ public class NotionService
         catch (CryptographicException) { return text; }
     }
 
-    private async Task<(string DatabaseId, string DataSourceId)?> FindDataSourceAsync(string title)
+    // --- first-launch setup ---
+
+    private static bool IsSetupComplete => !string.IsNullOrEmpty(AppSettings.NotionDataSourceId);
+
+    private static void CacheJournalIds(string databaseId, string dataSourceId)
+    {
+        AppSettings.NotionDatabaseId = databaseId;
+        AppSettings.NotionDataSourceId = dataSourceId;
+    }
+
+    /// <summary>Locates an existing "Journal" data source so a re-installed app reuses it instead of creating a second one.</summary>
+    private async Task<(string DatabaseId, string DataSourceId)?> FindJournalDataSourceAsync()
     {
         var payload = new JsonObject
         {
-            ["query"] = title,
-            ["filter"] = new JsonObject { ["property"] = "object", ["value"] = "data_source", ["in_trash"] = false }
+            ["query"] = JournalTitle,
+            ["filter"] = new JsonObject { ["property"] = "object", ["value"] = "data_source" }
         };
 
-        using var response = await _Http.PostAsJsonAsync("search", payload);
-        await EnsureSuccessAsync(response);
-        var json = await response.Content.ReadFromJsonAsync<JsonObject>();
+        var json = await PostJsonAsync("search", payload);
 
         foreach (var item in json?["results"]?.AsArray() ?? new JsonArray())
         {
-            var name = item?["title"]?.AsArray().FirstOrDefault()?["plain_text"]?.GetValue<string>();
-            if (!string.Equals(name, title, StringComparison.OrdinalIgnoreCase))
+            if (item?["in_trash"]?.GetValue<bool>() is true)
                 continue;
 
+            if (!string.Equals(DataSourceName(item), JournalTitle, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            // A data source's parent is the database that owns it.
             var dataSourceId = item?["id"]?.GetValue<string>();
             var databaseId = item?["parent"]?["database_id"]?.GetValue<string>();
-            if (dataSourceId is not null && databaseId is not null)
+            if (!string.IsNullOrEmpty(dataSourceId) && !string.IsNullOrEmpty(databaseId))
                 return (databaseId, dataSourceId);
         }
         return null;
     }
 
-    private async Task<string> GetDataSourceIdAsync(string databaseId)
+    private static string? DataSourceName(JsonNode? dataSource) =>
+        dataSource?["title"]?.AsArray().FirstOrDefault()?["plain_text"]?.GetValue<string>()
+        ?? dataSource?["name"]?.GetValue<string>();
+
+    /// <summary>
+    /// Returns the workspace-level page that hosts the database, creating it on first launch.
+    /// Public connections and personal access tokens create a workspace page by passing
+    /// <c>"parent": { "workspace": true }</c>; a database itself always needs a page parent.
+    /// </summary>
+    private async Task<string> EnsureJournalPageAsync()
     {
-        using var response = await _Http.GetAsync($"databases/{databaseId}");
-        await EnsureSuccessAsync(response);
-        var json = await response.Content.ReadFromJsonAsync<JsonObject>();
-        return json?["data_sources"]?.AsArray().FirstOrDefault()?["id"]?.GetValue<string>()
-            ?? throw new InvalidOperationException("Notion database has no data source.");
+        if (AppSettings.NotionParentPageId is { Length: > 0 } cached)
+            return cached;
+
+        var payload = new JsonObject
+        {
+            ["parent"] = new JsonObject { ["workspace"] = true },
+            ["properties"] = new JsonObject { ["title"] = TitleValue(JournalTitle) }
+        };
+
+        var json = await PostJsonAsync("pages", payload);
+        var pageId = json?["id"]?.GetValue<string>()
+            ?? throw new InvalidOperationException("Notion did not return a page ID.");
+
+        AppSettings.NotionParentPageId = pageId;
+        return pageId;
     }
 
-    private async Task<string> CreateJournalDatabaseAsync()
+    private async Task<string> CreateJournalDatabaseAsync(string parentPageId)
     {
         var properties = new JsonObject
         {
@@ -166,41 +218,41 @@ public class NotionService
             ["Journal Text"] = new JsonObject { ["rich_text"] = new JsonObject() }
         };
 
-        // Internal integrations can't create workspace-level pages, so try a wrapper page
-        // first and fall back to creating the database directly at the workspace level.
-        var parentPageId = await TryCreateWrapperPageAsync();
-        var parent = parentPageId is not null
-            ? new JsonObject { ["type"] = "page_id", ["page_id"] = parentPageId }
-            : new JsonObject { ["type"] = "workspace", ["workspace"] = true };
-
         var payload = new JsonObject
         {
-            ["parent"] = parent,
-            ["title"] = TitleText("Journal"),
+            ["parent"] = new JsonObject { ["type"] = "page_id", ["page_id"] = parentPageId },
+            ["title"] = TitleText(JournalTitle),
             ["initial_data_source"] = new JsonObject { ["properties"] = properties }
         };
 
-        using var response = await _Http.PostAsJsonAsync("databases", payload);
-        await EnsureSuccessAsync(response);
-        var json = await response.Content.ReadFromJsonAsync<JsonObject>();
+        var json = await PostJsonAsync("databases", payload);
         return json?["id"]?.GetValue<string>()
                ?? throw new InvalidOperationException("Notion did not return a database ID.");
     }
 
-    private async Task<string?> TryCreateWrapperPageAsync()
+    private async Task<string> GetFirstDataSourceIdAsync(string databaseId)
     {
-        var payload = new JsonObject
-        {
-            ["parent"] = new JsonObject { ["type"] = "workspace", ["workspace"] = true },
-            ["properties"] = new JsonObject { ["title"] = TitleValue("Journal") }
-        };
+        var json = await GetJsonAsync($"databases/{databaseId}");
+        return json?["data_sources"]?.AsArray().FirstOrDefault()?["id"]?.GetValue<string>()
+            ?? throw new InvalidOperationException("Notion database has no data source.");
+    }
 
-        using var response = await _Http.PostAsJsonAsync("pages", payload);
-        if (!response.IsSuccessStatusCode)
-            return null;
+    /// <summary>Applies the stored token to the client, throwing if the user has not connected Notion yet.</summary>
+    private async Task AuthorizeAsync()
+    {
+        var token = await SecureSettings.GetNotionTokenAsync();
+        if (string.IsNullOrWhiteSpace(token))
+            throw new InvalidOperationException(AppResources.Notion_NotConnected);
 
-        var json = await response.Content.ReadFromJsonAsync<JsonObject>();
-        return json?["id"]?.GetValue<string>();
+        _Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+
+    private async Task<string> RequireDataSourceIdAsync()
+    {
+        await EnsureJournalDatabaseAsync();
+        return AppSettings.NotionDataSourceId is { Length: > 0 } dataSourceId
+            ? dataSourceId
+            : throw new InvalidOperationException("Could not resolve the Notion Journal data source.");
     }
 
     // --- payload helpers ---
@@ -222,11 +274,24 @@ public class NotionService
         return array;
     }
 
-    private static async Task EnsureSuccessAsync(HttpResponseMessage response)
+    // --- transport helpers ---
+
+    private Task<JsonObject?> GetJsonAsync(string url) => ReadJsonAsync(_Http.GetAsync(url));
+
+    private Task<JsonObject?> PostJsonAsync(string url, JsonObject body) =>
+        ReadJsonAsync(_Http.PostAsJsonAsync(url, body));
+
+    private Task<JsonObject?> PatchJsonAsync(string url, JsonObject body) =>
+        ReadJsonAsync(_Http.PatchAsJsonAsync(url, body));
+
+    private static async Task<JsonObject?> ReadJsonAsync(Task<HttpResponseMessage> send)
     {
-        if (response.IsSuccessStatusCode)
-            return;
-        var body = await response.Content.ReadAsStringAsync();
-        throw new HttpRequestException($"Notion API {(int)response.StatusCode}: {body}");
+        using var response = await send;
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Notion API {(int)response.StatusCode}: {body}");
+        }
+        return await response.Content.ReadFromJsonAsync<JsonObject>();
     }
 }

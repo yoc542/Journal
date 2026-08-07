@@ -65,4 +65,7 @@ public partial class JournalEditorViewModel : ObservableObject
 
     [RelayCommand]
     private static Task OpenHistoryAsync() => Shell.Current.GoToAsync(nameof(JournalListPage));
+
+    [RelayCommand]
+    private static Task OpenSettingsAsync() => Shell.Current.GoToAsync(nameof(SettingsPage));
 }

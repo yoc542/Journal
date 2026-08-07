@@ -11,10 +11,10 @@ public static class Constants
     private static readonly bool _DotEnvLoaded = LoadDotEnv();
 
     /// <summary>
-    /// Notion integration token. Read from the NOTIONTOKEN environment variable, populated
-    /// either by a real OS environment variable or by a local .env file loaded via DotNetEnv.
-    /// Note: this only works on Windows, where the app can read files from its working directory tree.
-    /// Android/iOS have no such .env file, so Notion features are simply unavailable there.
+    /// Desktop-dev fallback for the Notion integration token, read from the NOTIONTOKEN environment
+    /// variable (a real OS variable, or a local .env file loaded via DotNetEnv). On Android/iOS there
+    /// is no .env file to find, so the token comes from
+    /// <see cref="Services.SecureSettings.GetNotionTokenAsync"/> instead — see the settings page.
     /// </summary>
     public static readonly string NotionToken = Environment.GetEnvironmentVariable("NOTIONTOKEN") ?? string.Empty;
 
@@ -29,8 +29,6 @@ public static class Constants
     }
 
     public const string NotionVersion = "2026-03-11";
-
-    public static bool NotionConfigured => !string.IsNullOrWhiteSpace(NotionToken);
 
     /// <summary>Toggle to reveal developer-only features, e.g. importing entries back from Notion.</summary>
     public static bool DeveloperMode { get; set; } = true;

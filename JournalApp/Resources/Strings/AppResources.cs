@@ -41,4 +41,22 @@ public static class AppResources
     public static string Import_FailTitle => Get(nameof(Import_FailTitle));
     public static string OK => Get(nameof(OK));
     public static string Untitled_Entry => Get(nameof(Untitled_Entry));
+    public static string Settings_ToolbarItem => Get(nameof(Settings_ToolbarItem));
+    public static string Settings_Title => Get(nameof(Settings_Title));
+    public static string Settings_Subtitle => Get(nameof(Settings_Subtitle));
+    public static string Settings_Token_Label => Get(nameof(Settings_Token_Label));
+    public static string Settings_Token_Placeholder => Get(nameof(Settings_Token_Placeholder));
+    public static string Settings_Token_Help => Get(nameof(Settings_Token_Help));
+    public static string Settings_Save => Get(nameof(Settings_Save));
+    public static string Settings_Clear => Get(nameof(Settings_Clear));
+    public static string Settings_Connected_Badge => Get(nameof(Settings_Connected_Badge));
+    public static string Settings_Disconnected_Badge => Get(nameof(Settings_Disconnected_Badge));
+    public static string Settings_SavedTitle => Get(nameof(Settings_SavedTitle));
+    public static string Settings_SavedMessage => Get(nameof(Settings_SavedMessage));
+    public static string Settings_InvalidTitle => Get(nameof(Settings_InvalidTitle));
+    public static string Settings_InvalidMessage => Get(nameof(Settings_InvalidMessage));
+    public static string Settings_EmptyMessage => Get(nameof(Settings_EmptyMessage));
+    public static string Settings_ClearedTitle => Get(nameof(Settings_ClearedTitle));
+    public static string Settings_ClearedMessage => Get(nameof(Settings_ClearedMessage));
+    public static string Notion_NotConnected => Get(nameof(Notion_NotConnected));
 }

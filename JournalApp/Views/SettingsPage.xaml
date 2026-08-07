@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="JournalApp.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:JournalApp.ViewModels"
+    xmlns:strings="clr-namespace:JournalApp.Resources.Strings"
+    x:DataType="vm:SettingsViewModel"
+    Title="{x:Static strings:AppResources.Settings_Title}">
+
+    <ScrollView Background="{AppThemeBinding Light={StaticResource DawnGradient}, Dark={StaticResource TwilightGradient}}">
+        <VerticalStackLayout Padding="16,24" Spacing="12">
+
+            <Label Text="🔑" FontSize="22" HorizontalOptions="Center" Opacity="0.85" />
+            <Label Text="{x:Static strings:AppResources.Settings_Title}" Style="{StaticResource Headline}" />
+            <Label Text="{x:Static strings:AppResources.Settings_Subtitle}" Style="{StaticResource SubHeadline}" />
+
+            <Border Style="{StaticResource MagicCard}" Margin="0,12,0,0">
+                <VerticalStackLayout Spacing="10">
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="{x:Static strings:AppResources.Settings_Token_Label}" FontSize="14" VerticalOptions="Center" />
+                        <Label
+                            Grid.Column="1"
+                            Text="{Binding StatusLabel}"
+                            FontSize="12"
+                            Opacity="0.7"
+                            VerticalOptions="Center"
+                            TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+                    </Grid>
+
+                    <Entry
+                        Text="{Binding Token}"
+                        Placeholder="{x:Static strings:AppResources.Settings_Token_Placeholder}"
+                        IsPassword="True"
+                        IsEnabled="{Binding IsNotBusy}" />
+
+                    <Label Text="{x:Static strings:AppResources.Settings_Token_Help}" FontSize="12" Opacity="0.6" />
+
+                    <Button
+                        Text="{x:Static strings:AppResources.Settings_Save}"
+                        Command="{Binding SaveCommand}"
+                        IsEnabled="{Binding IsNotBusy}" />
+
+                    <Button
+                        Text="{x:Static strings:AppResources.Settings_Clear}"
+                        Command="{Binding ClearCommand}"
+                        BackgroundColor="Transparent"
+                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
+
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

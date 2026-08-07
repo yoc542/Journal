@@ -9,11 +9,11 @@ public partial class App : Application
         InitializeComponent();
 
         // First-launch setup: create the Notion "Journal" database if needed.
-        // No-op until the Notion placeholders in Constants.cs are replaced.
+        // No-op until a token is saved on the settings page.
         _ = Task.Run(async () =>
         {
             try { await notion.EnsureJournalDatabaseAsync(); }
-            catch { /* offline or not configured yet — ignore, upload will surface errors */ }
+            catch { /* offline or not connected yet — ignore, upload will surface errors */ }
         });
     }
 

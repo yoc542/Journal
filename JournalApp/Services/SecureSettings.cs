@@ -1,0 +1,24 @@
+namespace JournalApp.Services;
+
+/// <summary>Secrets persisted in the platform keystore/keychain via MAUI SecureStorage.</summary>
+public static class SecureSettings
+{
+    private const string NotionTokenKey = "NotionToken";
+
+    /// <summary>
+    /// The Notion integration token entered on the settings page, falling back to the NOTIONTOKEN
+    /// environment variable so desktop dev runs can keep using a local .env file.
+    /// </summary>
+    public static async Task<string> GetNotionTokenAsync()
+    {
+        string? stored = null;
+        try { stored = await SecureStorage.GetAsync(NotionTokenKey); }
+        catch { /* keystore unavailable or entry undecryptable — treat as unset */ }
+
+        return string.IsNullOrWhiteSpace(stored) ? Constants.NotionToken : stored;
+    }
+
+    public static Task SetNotionTokenAsync(string token) => SecureStorage.SetAsync(NotionTokenKey, token);
+
+    public static void ClearNotionToken() => SecureStorage.Remove(NotionTokenKey);
+}
