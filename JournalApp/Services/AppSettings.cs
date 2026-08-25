@@ -23,4 +23,25 @@ public static class AppSettings
         get => Preferences.Get(nameof(NotionDataSourceId), null);
         set => Preferences.Set(nameof(NotionDataSourceId), value ?? string.Empty);
     }
+
+    /// <summary>Set once the user has finished (or skipped through) the onboarding wizard.</summary>
+    public static bool SetupCompleted
+    {
+        get => Preferences.Get(nameof(SetupCompleted), false);
+        set => Preferences.Set(nameof(SetupCompleted), value);
+    }
+
+    /// <summary>Name the user gave during setup, used to greet them on the Today screen.</summary>
+    public static string UserName
+    {
+        get => Preferences.Get(nameof(UserName), string.Empty);
+        set => Preferences.Set(nameof(UserName), value ?? string.Empty);
+    }
+
+    /// <summary>Whether the evening writing reminder is switched on.</summary>
+    public static bool ReminderEnabled
+    {
+        get => Preferences.Get(nameof(ReminderEnabled), true);
+        set => Preferences.Set(nameof(ReminderEnabled), value);
+    }
 }

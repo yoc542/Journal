@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using JournalApp.Resources.Strings;
+using JournalApp.Localization;
 using JournalApp.Services;
 
 namespace JournalApp.ViewModels;

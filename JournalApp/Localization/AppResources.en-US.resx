@@ -196,4 +196,101 @@
   <data name="Notion_NotConnected" xml:space="preserve">
     <value>Notion is not connected. Add your integration token in Settings.</value>
   </data>
+  <data name="Onboarding_Welcome_Title" xml:space="preserve">
+    <value>One page,
+every evening.</value>
+  </data>
+  <data name="Onboarding_Welcome_Body" xml:space="preserve">
+    <value>A private daily journal. One entry per day, saved as you write, kept private on your phone.</value>
+  </data>
+  <data name="Onboarding_Welcome_Begin" xml:space="preserve">
+    <value>Begin your journal</value>
+  </data>
+  <data name="Onboarding_Welcome_Existing" xml:space="preserve">
+    <value>I already have a journal</value>
+  </data>
+  <data name="Onboarding_Step_Format" xml:space="preserve">
+    <value>Step {0} of 2</value>
+  </data>
+  <data name="Onboarding_Setup_Eyebrow" xml:space="preserve">
+    <value>Setup</value>
+  </data>
+  <data name="Onboarding_Profile_Title" xml:space="preserve">
+    <value>Who is keeping this journal?</value>
+  </data>
+  <data name="Onboarding_Name_Label" xml:space="preserve">
+    <value>Your name</value>
+  </data>
+  <data name="Onboarding_Name_Placeholder" xml:space="preserve">
+    <value>Elowen</value>
+  </data>
+  <data name="Onboarding_Reminder_Label" xml:space="preserve">
+    <value>Evening reminder</value>
+  </data>
+  <data name="Onboarding_Reminder_Title" xml:space="preserve">
+    <value>Nudge me at 9:30 pm</value>
+  </data>
+  <data name="Onboarding_Reminder_Body" xml:space="preserve">
+    <value>A local notification. Nothing leaves the device.</value>
+  </data>
+  <data name="Onboarding_Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="Onboarding_Token_Eyebrow" xml:space="preserve">
+    <value>Connect Notion</value>
+  </data>
+  <data name="Onboarding_Token_Title" xml:space="preserve">
+    <value>Paste your Notion token</value>
+  </data>
+  <data name="Onboarding_Token_Body" xml:space="preserve">
+    <value>Your Notion personal access token lets Grimoire upload entries to your Notion database and import them back. It is stored only on this device.</value>
+  </data>
+  <data name="Onboarding_Token_Label" xml:space="preserve">
+    <value>Personal access token</value>
+  </data>
+  <data name="Onboarding_Token_Help" xml:space="preserve">
+    <value>Notion → Settings → Integrations → New integration → copy the secret, then share your journal database with it.</value>
+  </data>
+  <data name="Onboarding_Token_Connect" xml:space="preserve">
+    <value>Connect Notion</value>
+  </data>
+  <data name="Onboarding_Token_Save" xml:space="preserve">
+    <value>Save token</value>
+  </data>
+  <data name="Onboarding_Token_Skip" xml:space="preserve">
+    <value>Skip for now</value>
+  </data>
+  <data name="Onboarding_Token_SkipHint" xml:space="preserve">
+    <value>You can add the token later in Settings.</value>
+  </data>
+  <data name="Onboarding_Token_ErrorEmpty" xml:space="preserve">
+    <value>Paste the token from your Notion integration.</value>
+  </data>
+  <data name="Onboarding_Token_ErrorShape" xml:space="preserve">
+    <value>That doesn't look like a Notion token — it starts with ntn_ or secret_.</value>
+  </data>
+  <data name="Onboarding_Token_ErrorRejected" xml:space="preserve">
+    <value>Notion refused the token. Check that the integration is shared with this database, then try again.</value>
+  </data>
+  <data name="Onboarding_Done_Title_Connected" xml:space="preserve">
+    <value>Notion is connected.</value>
+  </data>
+  <data name="Onboarding_Done_Title_Skipped" xml:space="preserve">
+    <value>Your journal is ready.</value>
+  </data>
+  <data name="Onboarding_Done_Body_Connected" xml:space="preserve">
+    <value>Upload and import are on. Write tonight — entries sync to your Notion database.</value>
+  </data>
+  <data name="Onboarding_Done_Body_Skipped" xml:space="preserve">
+    <value>You skipped Notion for now. Add your personal access token in Settings whenever you want upload and import.</value>
+  </data>
+  <data name="Onboarding_Done_Write" xml:space="preserve">
+    <value>Write today's entry</value>
+  </data>
+  <data name="Onboarding_Done_Settings" xml:space="preserve">
+    <value>Open settings</value>
+  </data>
+  <data name="Onboarding_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
 </root>

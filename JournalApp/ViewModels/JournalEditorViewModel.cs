@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JournalApp.Data;
 using JournalApp.Models;
-using JournalApp.Resources.Strings;
+using JournalApp.Localization;
 using JournalApp.Views;
 
 namespace JournalApp.ViewModels;

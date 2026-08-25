@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:JournalApp.Models"
     xmlns:vm="clr-namespace:JournalApp.ViewModels"
-    xmlns:strings="clr-namespace:JournalApp.Resources.Strings"
+    xmlns:strings="clr-namespace:JournalApp.Localization"
     x:Name="Page"
     x:DataType="vm:JournalListViewModel"
     Title="{x:Static strings:AppResources.History_Title}">

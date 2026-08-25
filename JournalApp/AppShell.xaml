@@ -7,6 +7,13 @@
     Title="Journal">
 
     <ShellContent
+        x:Name="OnboardingShell"
+        Title="Journal"
+        ContentTemplate="{DataTemplate views:OnboardingPage}"
+        Route="OnboardingPage" />
+
+    <ShellContent
+        x:Name="JournalShell"
         Title="Journal"
         ContentTemplate="{DataTemplate views:JournalEditorPage}"
         Route="JournalEditorPage" />

@@ -1,4 +1,4 @@
-using JournalApp.Resources.Strings;
+using JournalApp.Localization;
 using SQLite;
 
 namespace JournalApp.Models;

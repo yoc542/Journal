@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
@@ -445,4 +445,103 @@
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
 
+
+    <!-- ==== Grimoire onboarding styles ==== -->
+
+    <Style TargetType="Label" x:Key="Eyebrow">
+        <Setter Property="FontFamily" Value="KarlaSemiBold" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="CharacterSpacing" Value="2.2" />
+        <Setter Property="TextTransform" Value="Uppercase" />
+        <Setter Property="TextColor" Value="{StaticResource Gold}" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Display">
+        <Setter Property="FontFamily" Value="CormorantSemiBold" />
+        <Setter Property="FontSize" Value="42" />
+        <Setter Property="LineHeight" Value="1.06" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="DisplaySmall" BasedOn="{StaticResource Display}">
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="LineHeight" Value="1.14" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Body">
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="LineHeight" Value="1.5" />
+        <Setter Property="TextColor" Value="{StaticResource Lilac}" />
+        <Setter Property="Opacity" Value="0.8" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Caption" BasedOn="{StaticResource Body}">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Opacity" Value="0.62" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="FieldLabel" BasedOn="{StaticResource Body}">
+        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="Opacity" Value="0.75" />
+    </Style>
+
+    <!-- Rounded field wrapper: Entry itself cannot round its corners in MAUI -->
+    <Style TargetType="Border" x:Key="Field">
+        <Setter Property="Stroke" Value="{StaticResource Orchid}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="BackgroundColor" Value="{StaticResource NightCard}" />
+        <Setter Property="Padding" Value="12,0" />
+        <Setter Property="HeightRequest" Value="52" />
+    </Style>
+
+    <Style TargetType="Entry" x:Key="FieldEntry">
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource Orchid}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="CardPanel">
+        <Setter Property="Stroke" Value="{StaticResource Orchid}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 14" />
+        <Setter Property="BackgroundColor" Value="{StaticResource NightCard}" />
+        <Setter Property="Padding" Value="16,14" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="PrimaryCta">
+        <Setter Property="Background" Value="{StaticResource DuskGradient}" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="FontFamily" Value="KarlaSemiBold" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="HeightRequest" Value="54" />
+        <Setter Property="BorderWidth" Value="0" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="SecondaryCta">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="HeightRequest" Value="50" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderColor" Value="{StaticResource Orchid}" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="GhostCta" BasedOn="{StaticResource SecondaryCta}">
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Lilac}" />
+        <Setter Property="HeightRequest" Value="44" />
+    </Style>
+
+    <Style TargetType="Switch" x:Key="NightSwitch">
+        <Setter Property="OnColor" Value="#7A5199" />
+        <Setter Property="ThumbColor" Value="{StaticResource Cream}" />
+    </Style>
 </ResourceDictionary>

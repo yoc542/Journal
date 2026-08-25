@@ -17,6 +17,10 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont("CormorantGaramond-Regular.ttf", "CormorantRegular");
+                fonts.AddFont("CormorantGaramond-SemiBold.ttf", "CormorantSemiBold");
+                fonts.AddFont("Karla-Regular.ttf", "KarlaRegular");
+                fonts.AddFont("Karla-SemiBold.ttf", "KarlaSemiBold");
             });
 
         // Services
@@ -27,11 +31,13 @@ public static class MauiProgram
         builder.Services.AddSingleton<JournalListViewModel>();
         builder.Services.AddTransient<JournalEditorViewModel>();
         builder.Services.AddTransient<SettingsViewModel>();
+        builder.Services.AddTransient<OnboardingViewModel>();
 
         // Views
         builder.Services.AddSingleton<JournalListPage>();
         builder.Services.AddTransient<JournalEditorPage>();
         builder.Services.AddTransient<SettingsPage>();
+        builder.Services.AddTransient<OnboardingPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

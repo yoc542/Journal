@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
@@ -58,4 +58,37 @@
         <GradientStop Color="{StaticResource Tertiary}" Offset="0.0" />
         <GradientStop Color="{StaticResource OffBlack}" Offset="1.0" />
     </LinearGradientBrush>
+
+    <!-- ==== Grimoire design tokens (night-sky theme) ==== -->
+    <Color x:Key="NightDeep">#0D0912</Color>
+    <Color x:Key="NightBase">#150F1C</Color>
+    <Color x:Key="NightPlum">#2A1D33</Color>
+    <Color x:Key="NightHaze">#4A3358</Color>
+    <Color x:Key="NightCard">#322234</Color>
+    <Color x:Key="NightVeil">#171021</Color>
+    <Color x:Key="Gold">#E8C98A</Color>
+    <Color x:Key="GoldDeep">#D8A860</Color>
+    <Color x:Key="Cream">#F6EFE2</Color>
+    <Color x:Key="Lilac">#E4D4E7</Color>
+    <Color x:Key="Orchid">#C4A9D6</Color>
+    <Color x:Key="Mist">#F1E6DC</Color>
+    <Color x:Key="Verdant">#BFE8C9</Color>
+    <Color x:Key="Ember">#F3C9C9</Color>
+    <Color x:Key="EmberDeep">#E27878</Color>
+
+    <SolidColorBrush x:Key="GoldBrush" Color="{StaticResource Gold}"/>
+    <SolidColorBrush x:Key="CreamBrush" Color="{StaticResource Cream}"/>
+
+    <!-- Primary call-to-action: violet dusk -->
+    <LinearGradientBrush x:Key="DuskGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#7A5199" Offset="0.0" />
+        <GradientStop Color="#3F2660" Offset="1.0" />
+    </LinearGradientBrush>
+
+    <!-- Night sky behind onboarding / journal screens -->
+    <RadialGradientBrush x:Key="NightSkyGradient" Center="0.5,0.0" Radius="1.1">
+        <GradientStop Color="{StaticResource NightHaze}" Offset="0.0" />
+        <GradientStop Color="{StaticResource NightPlum}" Offset="0.46" />
+        <GradientStop Color="{StaticResource NightBase}" Offset="1.0" />
+    </RadialGradientBrush>
 </ResourceDictionary>
