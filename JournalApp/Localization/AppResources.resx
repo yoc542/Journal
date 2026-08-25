@@ -68,10 +68,7 @@
     <value>Day {0} of your story</value>
   </data>
   <data name="Editor_Placeholder" xml:space="preserve">
-    <value>Once upon today... what will you write?</value>
-  </data>
-  <data name="CharacterCount_Format" xml:space="preserve">
-    <value>{0} / {1}</value>
+    <value>Write freely. Nobody reads this but you.</value>
   </data>
   <data name="History_ToolbarItem" xml:space="preserve">
     <value>History</value>
@@ -292,5 +289,89 @@ every evening.</value>
   </data>
   <data name="Onboarding_Back" xml:space="preserve">
     <value>Back</value>
+  </data>
+  <data name="Today_Greeting_Morning" xml:space="preserve">
+    <value>Good morning</value>
+  </data>
+  <data name="Today_Greeting_Afternoon" xml:space="preserve">
+    <value>Good afternoon</value>
+  </data>
+  <data name="Today_Greeting_Evening" xml:space="preserve">
+    <value>Good evening</value>
+  </data>
+  <data name="Today_Greeting_Morning_Format" xml:space="preserve">
+    <value>Good morning, {0}</value>
+  </data>
+  <data name="Today_Greeting_Afternoon_Format" xml:space="preserve">
+    <value>Good afternoon, {0}</value>
+  </data>
+  <data name="Today_Greeting_Evening_Format" xml:space="preserve">
+    <value>Good evening, {0}</value>
+  </data>
+  <data name="Today_Page_Eyebrow" xml:space="preserve">
+    <value>Today's page</value>
+  </data>
+  <data name="Today_Preview_Empty" xml:space="preserve">
+    <value>The page is still blank. Whatever the day was, put it down here.</value>
+  </data>
+  <data name="Today_Continue" xml:space="preserve">
+    <value>Continue writing</value>
+  </data>
+  <data name="Today_Start" xml:space="preserve">
+    <value>Start tonight's page</value>
+  </data>
+  <data name="Today_WordCount_Format" xml:space="preserve">
+    <value>{0} words</value>
+  </data>
+  <data name="Today_WordCount_One" xml:space="preserve">
+    <value>1 word</value>
+  </data>
+  <data name="Today_Upload_Title" xml:space="preserve">
+    <value>Upload to Notion</value>
+  </data>
+  <data name="Today_Upload_Pending_Format" xml:space="preserve">
+    <value>{0} entries waiting</value>
+  </data>
+  <data name="Today_Upload_Pending_One" xml:space="preserve">
+    <value>1 entry waiting</value>
+  </data>
+  <data name="Today_Upload_None" xml:space="preserve">
+    <value>All uploaded</value>
+  </data>
+  <data name="Today_History_Title" xml:space="preserve">
+    <value>Journal history</value>
+  </data>
+  <data name="Today_History_Count_Format" xml:space="preserve">
+    <value>{0} entries</value>
+  </data>
+  <data name="Today_History_Count_One" xml:space="preserve">
+    <value>1 entry</value>
+  </data>
+  <data name="Today_Week_Eyebrow" xml:space="preserve">
+    <value>This week</value>
+  </data>
+  <data name="Saved_At_Format" xml:space="preserve">
+    <value>Saved {0}</value>
+  </data>
+  <data name="Saved_Never" xml:space="preserve">
+    <value>Not saved yet</value>
+  </data>
+  <data name="Editor_Back" xml:space="preserve">
+    <value>‹ Today</value>
+  </data>
+  <data name="Editor_Tonight_Title" xml:space="preserve">
+    <value>Tonight's page</value>
+  </data>
+  <data name="Editor_Saving" xml:space="preserve">
+    <value>Saving…</value>
+  </data>
+  <data name="Editor_WordCount_Format" xml:space="preserve">
+    <value>{0} words · autosaved</value>
+  </data>
+  <data name="Editor_WordCount_One" xml:space="preserve">
+    <value>1 word · autosaved</value>
+  </data>
+  <data name="Editor_Close" xml:space="preserve">
+    <value>Close</value>
   </data>
 </root>

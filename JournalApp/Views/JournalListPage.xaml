@@ -5,10 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:JournalApp.Models"
     xmlns:vm="clr-namespace:JournalApp.ViewModels"
-    xmlns:strings="clr-namespace:JournalApp.Localization"
+    xmlns:localize="clr-namespace:JournalApp.Extensions"
     x:Name="Page"
     x:DataType="vm:JournalListViewModel"
-    Title="{x:Static strings:AppResources.History_Title}">
+    Title="{localize:Translate History_Title}">
 
     <Grid>
         <CollectionView
@@ -25,10 +25,10 @@
                            FontSize="34"
                            HorizontalOptions="Center"
                            Opacity="0.8"/>
-                    <Label Text="{x:Static strings:AppResources.History_Empty_Title}"
+                    <Label Text="{localize:Translate History_Empty_Title}"
                            Style="{StaticResource Headline}"
                            FontSize="20"/>
-                    <Label Text="{x:Static strings:AppResources.History_Empty_Subtitle}"
+                    <Label Text="{localize:Translate History_Empty_Subtitle}"
                            Style="{StaticResource SubHeadline}"/>
                 </VerticalStackLayout>
             </CollectionView.EmptyView>
@@ -67,7 +67,7 @@
                                 <HorizontalStackLayout Grid.Column="1"
                                                        Spacing="8"
                                                        VerticalOptions="Center">
-                                    <Label Text="{x:Static strings:AppResources.History_Uploaded_Badge}"
+                                    <Label Text="{localize:Translate History_Uploaded_Badge}"
                                            FontSize="11"
                                            TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
                                            VerticalOptions="Center"

@@ -13,9 +13,9 @@
         Route="OnboardingPage" />
 
     <ShellContent
-        x:Name="JournalShell"
+        x:Name="TodayShell"
         Title="Journal"
-        ContentTemplate="{DataTemplate views:JournalEditorPage}"
-        Route="JournalEditorPage" />
+        ContentTemplate="{DataTemplate views:TodayPage}"
+        Route="TodayPage" />
 
 </Shell>

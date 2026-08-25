@@ -544,4 +544,64 @@
         <Setter Property="OnColor" Value="#7A5199" />
         <Setter Property="ThumbColor" Value="{StaticResource Cream}" />
     </Style>
+
+    <!-- ==== Grimoire daily-journal styles ==== -->
+
+    <Style TargetType="Label" x:Key="EyebrowMuted" BasedOn="{StaticResource Eyebrow}">
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="CharacterSpacing" Value="2" />
+        <Setter Property="TextColor" Value="{StaticResource Lilac}" />
+        <Setter Property="Opacity" Value="0.55" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="SaveStatus">
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="11.5" />
+        <Setter Property="TextColor" Value="{StaticResource Gold}" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <!-- Today's page: squarer corners and a gold edge, so it reads as paper rather than a chip -->
+    <Style TargetType="Border" x:Key="PageCard">
+        <Setter Property="Stroke" Value="{StaticResource GoldDeep}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 6" />
+        <Setter Property="Background" Value="{StaticResource ParchmentGradient}" />
+        <Setter Property="Padding" Value="18" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="Tile" BasedOn="{StaticResource CardPanel}">
+        <Setter Property="Padding" Value="14" />
+        <Setter Property="Opacity" Value="0.94" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="TileTitle">
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+    </Style>
+
+    <!-- The written page itself: serif, generous, no chrome -->
+    <Style TargetType="Editor" x:Key="EditorBody">
+        <Setter Property="FontFamily" Value="CormorantRegular" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource Orchid}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="AutoSize" Value="Disabled" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="FooterCta" BasedOn="{StaticResource PrimaryCta}">
+        <Setter Property="FontSize" Value="13.5" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="11" />
+        <Setter Property="Padding" Value="18,0" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="FooterGhostCta" BasedOn="{StaticResource SecondaryCta}">
+        <Setter Property="FontSize" Value="13.5" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="11" />
+        <Setter Property="Padding" Value="16,0" />
+    </Style>
 </ResourceDictionary>

@@ -2,70 +2,178 @@ using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JournalApp.Data;
-using JournalApp.Models;
 using JournalApp.Localization;
-using JournalApp.Views;
+using JournalApp.Models;
+using JournalApp.Services;
 
 namespace JournalApp.ViewModels;
 
 public partial class JournalEditorViewModel : ObservableObject
 {
+    /// <summary>Quiet period after the last keystroke before the page is written to disk.</summary>
+    private const int AutoSaveDelayMs = 900;
+
     private readonly JournalDatabase _Database;
+    private readonly NotionService _Notion;
+
     private JournalEntry _Entry = new();
+    private CancellationTokenSource? _AutoSave;
+    private bool _IsLoading;
 
     [ObservableProperty] private int _EntryId;
     [ObservableProperty] private string _Text = string.Empty;
-    [ObservableProperty] private int _CharacterCount;
+    [ObservableProperty] private string _DateLabel = string.Empty;
     [ObservableProperty] private string _HeaderTitle = string.Empty;
-    [ObservableProperty] private string _HeaderSubtitle = string.Empty;
+    [ObservableProperty] private string _SaveStatus = string.Empty;
+    [ObservableProperty] private bool _IsSaving;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
+    private bool _IsBusy;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(WordCountLabel))]
+    private int _WordCount;
+
+    public bool IsNotBusy => !IsBusy;
 
     public int MaxLength => Constants.MaxJournalLength;
     public string PlaceholderText => AppResources.Editor_Placeholder;
 
-    public JournalEditorViewModel(JournalDatabase database) => _Database = database;
+    public string WordCountLabel => WordCount == 1
+        ? AppResources.Editor_WordCount_One
+        : string.Format(AppResources.Editor_WordCount_Format, WordCount);
 
-    partial void OnTextChanged(string value) => CharacterCount = value?.Length ?? 0;
-    partial void OnCharacterCountChanged(int value) => OnPropertyChanged(nameof(CharacterCountLabel));
+    public JournalEditorViewModel(JournalDatabase database, NotionService notion)
+    {
+        _Database = database;
+        _Notion = notion;
+    }
 
-    public string CharacterCountLabel => string.Format(AppResources.CharacterCount_Format, CharacterCount, MaxLength);
+    partial void OnTextChanged(string value)
+    {
+        if (_IsLoading)
+            return;
+
+        WordCount = CountWords(value ?? string.Empty);
+        IsSaving = true;
+        SaveStatus = AppResources.Editor_Saving;
+        QueueAutoSave();
+    }
 
     public async Task LoadAsync()
     {
-        _Entry = EntryId != 0
-            ? await _Database.GetEntryAsync(EntryId) ?? new JournalEntry()
-            : await _Database.GetEntryForDateAsync(DateTime.Today) ?? new JournalEntry();
+        _IsLoading = true;
+        try
+        {
+            _Entry = EntryId != 0
+                ? await _Database.GetEntryAsync(EntryId) ?? new JournalEntry()
+                : await _Database.GetEntryForDateAsync(DateTime.Today) ?? new JournalEntry();
 
-        EntryId = _Entry.Id;
-        Text = _Entry.Text;
+            EntryId = _Entry.Id;
+            Text = _Entry.Text;
+        }
+        finally
+        {
+            _IsLoading = false;
+        }
 
-        var isToday = _Entry.EntryDate.Date == DateTime.Today;
-        var formattedDate = _Entry.EntryDate.ToString("dddd, MMMM d, yyyy", CultureInfo.CurrentCulture);
+        WordCount = CountWords(Text);
+        DateLabel = _Entry.EntryDate.ToString("dddd, d MMMM", CultureInfo.CurrentCulture);
+        HeaderTitle = _Entry.EntryDate.Date == DateTime.Today
+            ? AppResources.Editor_Tonight_Title
+            : string.Format(AppResources.Entry_Day_Format, _Entry.DayNumber);
 
-        HeaderTitle = isToday ? AppResources.Today_Title : formattedDate;
-        HeaderSubtitle = isToday ? formattedDate : string.Format(AppResources.Entry_Day_Format, _Entry.DayNumber);
+        IsSaving = false;
+        SaveStatus = _Entry.Id == 0 ? AppResources.Saved_Never : FormatSavedAt(_Entry.UpdatedAt);
     }
 
-    /// <summary>Notepad-style auto-save: called when the editor page disappears.</summary>
+    /// <summary>Debounced autosave — the newest keystroke supersedes any pending write.</summary>
+    private void QueueAutoSave()
+    {
+        _AutoSave?.Cancel();
+        var cts = new CancellationTokenSource();
+        _AutoSave = cts;
+        _ = AutoSaveAsync(cts.Token);
+    }
+
+    private async Task AutoSaveAsync(CancellationToken token)
+    {
+        try
+        {
+            await Task.Delay(AutoSaveDelayMs, token);
+            await MainThread.InvokeOnMainThreadAsync(SaveAsync);
+        }
+        catch (OperationCanceledException)
+        {
+            // Superseded by a later keystroke, or the page went away.
+        }
+    }
+
+    /// <summary>Persists the page and refreshes the save status. Any pending autosave is dropped.</summary>
     public async Task SaveAsync()
     {
+        _AutoSave?.Cancel();
+
         var text = (Text ?? string.Empty).Trim();
 
-        // Don't persist an empty, never-saved entry.
+        // Nothing worth a row yet: a brand-new page the user has not written in.
         if (_Entry.Id == 0 && text.Length == 0)
+        {
+            IsSaving = false;
+            SaveStatus = AppResources.Saved_Never;
+            return;
+        }
+
+        if (_Entry.Text != text)
+        {
+            _Entry.Text = text;
+            _Entry.IsUploaded = false; // content changed since the last upload
+            await _Database.SaveEntryAsync(_Entry);
+            EntryId = _Entry.Id;
+        }
+
+        IsSaving = false;
+        SaveStatus = FormatSavedAt(_Entry.UpdatedAt);
+    }
+
+    /// <summary>Footer action: commit the page, then push it to Notion.</summary>
+    [RelayCommand]
+    private async Task UploadAsync()
+    {
+        if (IsBusy)
             return;
 
-        if (_Entry.Text == text)
+        await SaveAsync();
+
+        if (_Entry.Id == 0)
             return;
 
-        _Entry.Text = text;
-        _Entry.IsUploaded = false; // content changed since last upload
-        await _Database.SaveEntryAsync(_Entry);
-        EntryId = _Entry.Id;
+        try
+        {
+            IsBusy = true;
+            _Entry.NotionPageId = await _Notion.UploadEntryAsync(_Entry);
+            _Entry.IsUploaded = true;
+            await _Database.SaveEntryAsync(_Entry);
+            await Shell.Current.DisplayAlertAsync(
+                AppResources.Upload_SuccessTitle, AppResources.Upload_SuccessMessage, AppResources.OK);
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlertAsync(AppResources.Upload_FailTitle, ex.Message, AppResources.OK);
+        }
+        finally
+        {
+            IsBusy = false;
+        }
     }
 
     [RelayCommand]
-    private static Task OpenHistoryAsync() => Shell.Current.GoToAsync(nameof(JournalListPage));
+    private static Task CloseAsync() => Shell.Current.GoToAsync("..");
 
-    [RelayCommand]
-    private static Task OpenSettingsAsync() => Shell.Current.GoToAsync(nameof(SettingsPage));
+    private static string FormatSavedAt(DateTime when) =>
+        string.Format(AppResources.Saved_At_Format, when.ToString("t", CultureInfo.CurrentCulture));
+
+    private static int CountWords(string text) =>
+        text.Split(default(char[]), StringSplitOptions.RemoveEmptyEntries).Length;
 }

@@ -91,4 +91,10 @@
         <GradientStop Color="{StaticResource NightPlum}" Offset="0.46" />
         <GradientStop Color="{StaticResource NightBase}" Offset="1.0" />
     </RadialGradientBrush>
+
+    <!-- Today's page card: lit parchment over the night sky -->
+    <LinearGradientBrush x:Key="ParchmentGradient" StartPoint="0,0" EndPoint="0.55,1">
+        <GradientStop Color="#563868" Offset="0.0" />
+        <GradientStop Color="#26192E" Offset="1.0" />
+    </LinearGradientBrush>
 </ResourceDictionary>

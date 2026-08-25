@@ -31,7 +31,7 @@ public partial class JournalListViewModel : ObservableObject
 
     [RelayCommand]
     private static Task OpenEntryAsync(JournalEntry entry) =>
-        Shell.Current.GoToAsync($"..?id={entry.Id}");
+        Shell.Current.GoToAsync($"{nameof(Views.JournalEditorPage)}?id={entry.Id}");
 
     [RelayCommand]
     private async Task ShowMenuAsync(JournalEntry entry)

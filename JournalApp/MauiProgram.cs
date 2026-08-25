@@ -32,12 +32,14 @@ public static class MauiProgram
         builder.Services.AddTransient<JournalEditorViewModel>();
         builder.Services.AddTransient<SettingsViewModel>();
         builder.Services.AddTransient<OnboardingViewModel>();
+        builder.Services.AddTransient<TodayViewModel>();
 
         // Views
         builder.Services.AddSingleton<JournalListPage>();
         builder.Services.AddTransient<JournalEditorPage>();
         builder.Services.AddTransient<SettingsPage>();
         builder.Services.AddTransient<OnboardingPage>();
+        builder.Services.AddTransient<TodayPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

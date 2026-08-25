@@ -152,14 +152,14 @@ public partial class OnboardingViewModel : ObservableObject
     private Task FinishAsync()
     {
         AppSettings.SetupCompleted = true;
-        return Shell.Current.GoToAsync($"//{nameof(JournalEditorPage)}");
+        return Shell.Current.GoToAsync($"//{nameof(TodayPage)}");
     }
 
     [RelayCommand]
     private async Task OpenSettingsAsync()
     {
         AppSettings.SetupCompleted = true;
-        await Shell.Current.GoToAsync($"//{nameof(JournalEditorPage)}");
+        await Shell.Current.GoToAsync($"//{nameof(TodayPage)}");
         await Shell.Current.GoToAsync(nameof(SettingsPage));
     }
 }

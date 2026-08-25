@@ -39,6 +39,32 @@ public class JournalDatabase
         return await db.Table<JournalEntry>().FirstOrDefaultAsync(e => e.EntryDate == day);
     }
 
+    /// <summary>How many entries the journal holds, for the Today screen's history tile.</summary>
+    public async Task<int> GetEntryCountAsync()
+    {
+        var db = await GetConnectionAsync();
+        return await db.Table<JournalEntry>().CountAsync();
+    }
+
+    /// <summary>How many entries have not reached Notion yet.</summary>
+    public async Task<int> GetPendingUploadCountAsync()
+    {
+        var db = await GetConnectionAsync();
+        return await db.Table<JournalEntry>().Where(e => !e.IsUploaded).CountAsync();
+    }
+
+    /// <summary>The days in the given inclusive range that already have an entry, for the week strip.</summary>
+    public async Task<HashSet<DateTime>> GetWrittenDatesAsync(DateTime from, DateTime to)
+    {
+        var db = await GetConnectionAsync();
+        var start = from.Date;
+        var end = to.Date;
+        var entries = await db.Table<JournalEntry>()
+            .Where(e => e.EntryDate >= start && e.EntryDate <= end)
+            .ToListAsync();
+        return entries.Select(e => e.EntryDate.Date).ToHashSet();
+    }
+
     public async Task<int> SaveEntryAsync(JournalEntry entry)
     {
         var db = await GetConnectionAsync();
