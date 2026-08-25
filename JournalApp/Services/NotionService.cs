@@ -1,6 +1,5 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Security.Cryptography;
 using System.Text.Json.Nodes;
 using JournalApp.Models;
 using JournalApp.Resources.Strings;
@@ -83,7 +82,7 @@ public class NotionService
             {
                 ["date"] = new JsonObject { ["start"] = DateTime.Now.ToString("o") }
             },
-            ["Journal Text"] = new JsonObject { ["rich_text"] = RichText(EncryptionService.Encrypt(entry.Text)) }
+            ["Journal Text"] = new JsonObject { ["rich_text"] = RichText(entry.Text) }
         };
 
         if (!string.IsNullOrEmpty(entry.NotionPageId))
@@ -106,7 +105,7 @@ public class NotionService
         return json?["id"]?.GetValue<string>() ?? string.Empty;
     }
 
-    /// <summary>Fetches every row from the Notion "Journal" database, decrypting its text.</summary>
+    /// <summary>Fetches every row from the Notion "Journal" database.</summary>
     public async Task<List<JournalEntry>> FetchEntriesAsync()
     {
         await AuthorizeAsync();
@@ -118,28 +117,20 @@ public class NotionService
         foreach (var page in json?["results"]?.AsArray() ?? new JsonArray())
         {
             var props = page?["properties"];
-            var cipherText = string.Concat((props?["Journal Text"]?["rich_text"]?.AsArray() ?? [])
+            var text = string.Concat((props?["Journal Text"]?["rich_text"]?.AsArray() ?? [])
                 .Select(t => t?["plain_text"]?.GetValue<string>() ?? string.Empty));
 
-            if (string.IsNullOrEmpty(cipherText))
+            if (string.IsNullOrEmpty(text))
                 continue;
 
             entries.Add(new JournalEntry
             {
                 DayNumber = (int)(props?["Day Number"]?["number"]?.GetValue<double>() ?? 0),
-                Text = TryDecrypt(cipherText),
+                Text = text,
                 NotionPageId = page?["id"]?.GetValue<string>()
             });
         }
         return entries;
-    }
-
-    /// <summary>Decrypts text, falling back to the raw value for legacy rows uploaded before encryption was added.</summary>
-    private static string TryDecrypt(string text)
-    {
-        try { return EncryptionService.Decrypt(text); }
-        catch (FormatException) { return text; }
-        catch (CryptographicException) { return text; }
     }
 
     // --- first-launch setup ---
