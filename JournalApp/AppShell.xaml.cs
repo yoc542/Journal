@@ -10,6 +10,7 @@ public partial class AppShell : Shell
         InitializeComponent();
         Routing.RegisterRoute(nameof(JournalEditorPage), typeof(JournalEditorPage));
         Routing.RegisterRoute(nameof(JournalListPage), typeof(JournalListPage));
+        Routing.RegisterRoute(nameof(EntryDetailPage), typeof(EntryDetailPage));
         Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
 
         // Onboarding is the first ShellContent, so returning users skip straight to their journal.

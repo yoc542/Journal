@@ -1,4 +1,3 @@
-using JournalApp.Localization;
 using JournalApp.ViewModels;
 
 namespace JournalApp.Views;
@@ -11,9 +10,6 @@ public partial class JournalListPage : ContentPage
     {
         InitializeComponent();
         BindingContext = _ViewModel = viewModel;
-
-        if (Constants.DeveloperMode)
-            ToolbarItems.Add(new ToolbarItem { Text = AppResources.Import_ToolbarItem, Command = viewModel.ImportFromNotionCommand });
     }
 
     protected override async void OnAppearing()

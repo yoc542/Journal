@@ -28,18 +28,20 @@ public static class MauiProgram
         builder.Services.AddSingleton(sp => new NotionService(new HttpClient()));
 
         // ViewModels
-        builder.Services.AddSingleton<JournalListViewModel>();
+        builder.Services.AddTransient<JournalListViewModel>();
         builder.Services.AddTransient<JournalEditorViewModel>();
         builder.Services.AddTransient<SettingsViewModel>();
         builder.Services.AddTransient<OnboardingViewModel>();
         builder.Services.AddTransient<TodayViewModel>();
+        builder.Services.AddTransient<EntryDetailViewModel>();
 
         // Views
-        builder.Services.AddSingleton<JournalListPage>();
+        builder.Services.AddTransient<JournalListPage>();
         builder.Services.AddTransient<JournalEditorPage>();
         builder.Services.AddTransient<SettingsPage>();
         builder.Services.AddTransient<OnboardingPage>();
         builder.Services.AddTransient<TodayPage>();
+        builder.Services.AddTransient<EntryDetailPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

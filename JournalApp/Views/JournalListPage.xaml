@@ -4,87 +4,168 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:JournalApp.Models"
+    xmlns:views="clr-namespace:JournalApp.Views"
     xmlns:vm="clr-namespace:JournalApp.ViewModels"
     xmlns:localize="clr-namespace:JournalApp.Extensions"
     x:Name="Page"
     x:DataType="vm:JournalListViewModel"
-    Title="{localize:Translate History_Title}">
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource NightBase}">
 
-    <Grid>
-        <CollectionView
-            ItemsSource="{Binding Entries}"
-            SelectionMode="None"
-            Margin="12,16"
-            BackgroundColor="Transparent">
+    <ContentPage.Resources>
+        <views:NightSkyDrawable x:Key="NightSky" />
+    </ContentPage.Resources>
 
-            <CollectionView.EmptyView>
-                <VerticalStackLayout Padding="24"
-                                     Spacing="10"
-                                     VerticalOptions="Center">
-                    <Label Text="🌙"
-                           FontSize="34"
-                           HorizontalOptions="Center"
-                           Opacity="0.8"/>
-                    <Label Text="{localize:Translate History_Empty_Title}"
-                           Style="{StaticResource Headline}"
-                           FontSize="20"/>
-                    <Label Text="{localize:Translate History_Empty_Subtitle}"
-                           Style="{StaticResource SubHeadline}"/>
-                </VerticalStackLayout>
-            </CollectionView.EmptyView>
+    <Grid Background="{StaticResource NightSkyGradient}">
 
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:JournalEntry">
-                    <Grid Margin="0,0,0,12">
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer
-                                Command="{Binding BindingContext.OpenEntryCommand, Source={x:Reference Page}}"
-                                CommandParameter="{Binding .}"/>
-                        </Grid.GestureRecognizers>
+        <GraphicsView Drawable="{StaticResource NightSky}" InputTransparent="True" />
 
-                        <Border Style="{StaticResource MagicCard}"
-                                Padding="16,12">
-                            <Grid ColumnDefinitions="*,Auto"
-                                  ColumnSpacing="8">
-                                <VerticalStackLayout Grid.Column="0"
-                                                     Spacing="3">
-                                    <Label Text="{Binding DisplayTitle}"
-                                           FontFamily="OpenSansSemibold"
-                                           FontSize="16"
-                                           TextColor="{AppThemeBinding Light={StaticResource Tertiary}, Dark={StaticResource Secondary}}"
-                                           LineBreakMode="TailTruncation"/>
-                                    <Label Text="{Binding Text}"
-                                           FontSize="13"
-                                           Opacity="0.6"
-                                           MaxLines="1"
-                                           LineBreakMode="TailTruncation"/>
-                                    <Label FontSize="11"
-                                           Opacity="0.5"
-                                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                                           Text="{Binding UpdatedAt, StringFormat='{0:g}'}"/>
+        <!-- ==================== Populated history ==================== -->
+        <Grid RowDefinitions="Auto,*" IsVisible="{Binding HasEntries}">
+
+            <VerticalStackLayout Grid.Row="0" Padding="24,12,24,14" Spacing="14">
+
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Button
+                        Grid.Column="0"
+                        Text="{localize:Translate History_Back}"
+                        Style="{StaticResource GhostCta}"
+                        Padding="4,0"
+                        HeightRequest="34"
+                        Command="{Binding BackCommand}" />
+
+                    <Button
+                        Grid.Column="2"
+                        Text="{localize:Translate History_Import}"
+                        Style="{StaticResource ChipButton}"
+                        IsVisible="{Binding IsImportVisible}"
+                        IsEnabled="{Binding IsNotBusy}"
+                        Command="{Binding ImportFromNotionCommand}" />
+                </Grid>
+
+                <Label Text="{localize:Translate History_Title}" Style="{StaticResource DisplaySmall}" />
+
+                <Border Style="{StaticResource Field}" HeightRequest="42">
+                    <Entry
+                        Style="{StaticResource FieldEntry}"
+                        FontSize="14"
+                        Text="{Binding Query}"
+                        Placeholder="{localize:Translate History_Search_Placeholder}" />
+                </Border>
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Gold}" />
+
+                <Label
+                    Text="{Binding NoResultsMessage}"
+                    Style="{StaticResource Body}"
+                    IsVisible="{Binding HasNoResults}" />
+            </VerticalStackLayout>
+
+            <CollectionView
+                Grid.Row="1"
+                ItemsSource="{Binding Months}"
+                IsGrouped="True"
+                SelectionMode="None"
+                Margin="24,0,24,0"
+                BackgroundColor="Transparent">
+
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="vm:MonthGroup">
+                        <Label Text="{Binding Label}" Style="{StaticResource Eyebrow}" FontSize="10" Margin="0,10,0,8" />
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:JournalEntry">
+                        <Border Style="{StaticResource EntryRow}" Margin="0,0,0,9">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding BindingContext.OpenEntryCommand, Source={x:Reference Page}}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+
+                            <Grid ColumnDefinitions="46,*" ColumnSpacing="13">
+
+                                <VerticalStackLayout Grid.Column="0" Spacing="1" Padding="0,2,0,0">
+                                    <Label Text="{Binding DayLabel}" Style="{StaticResource EntryDay}" />
+                                    <Label Text="{Binding DayOfWeekLabel}" Style="{StaticResource EntryDow}" />
                                 </VerticalStackLayout>
 
-                                <HorizontalStackLayout Grid.Column="1"
-                                                       Spacing="8"
-                                                       VerticalOptions="Center">
-                                    <Label Text="{localize:Translate History_Uploaded_Badge}"
-                                           FontSize="11"
-                                           TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                                           VerticalOptions="Center"
-                                           IsVisible="{Binding IsUploaded}"/>
-                                    <Button Text="⋮"
-                                            FontSize="20"
-                                            Padding="8,0"
-                                            BackgroundColor="Transparent"
-                                            TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"
-                                            Command="{Binding BindingContext.ShowMenuCommand, Source={x:Reference Page}}"
-                                            CommandParameter="{Binding .}"/>
-                                </HorizontalStackLayout>
+                                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                    <Label
+                                        Text="{Binding DisplayTitle}"
+                                        Style="{StaticResource EntryTitle}"
+                                        MaxLines="2"
+                                        LineBreakMode="TailTruncation" />
+                                    <Label
+                                        Text="{Binding Excerpt}"
+                                        Style="{StaticResource Caption}"
+                                        FontSize="12"
+                                        MaxLines="2"
+                                        LineBreakMode="TailTruncation" />
+                                    <Label Text="{Binding SyncLabel}" FontSize="10.5" TextColor="{StaticResource Gold}" Opacity="0.9">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding IsUploaded}" Value="True">
+                                                <Setter Property="TextColor" Value="{StaticResource Verdant}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </VerticalStackLayout>
                             </Grid>
                         </Border>
-                    </Grid>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <!-- ==================== Nothing written yet ==================== -->
+        <Grid RowDefinitions="Auto,*" IsVisible="{Binding IsEmpty}">
+
+            <Button
+                Grid.Row="0"
+                Text="{localize:Translate History_Back}"
+                Style="{StaticResource GhostCta}"
+                HorizontalOptions="Start"
+                Margin="20,12,0,0"
+                Padding="4,0"
+                HeightRequest="34"
+                Command="{Binding BackCommand}" />
+
+            <VerticalStackLayout Grid.Row="1" Padding="32,0,32,60" Spacing="18" VerticalOptions="Center">
+
+                <Border
+                    HeightRequest="64"
+                    WidthRequest="64"
+                    HorizontalOptions="Start"
+                    StrokeShape="RoundRectangle 32"
+                    Stroke="{StaticResource Orchid}"
+                    StrokeThickness="1"
+                    StrokeDashArray="3,3"
+                    StrokeDashOffset="0"
+                    BackgroundColor="Transparent">
+                    <Label Text="◌" FontSize="24" TextColor="{StaticResource Gold}" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+
+                <Label Text="{localize:Translate History_Empty_Title}" Style="{StaticResource DisplaySmall}" FontSize="30" />
+                <Label Text="{localize:Translate History_Empty_Subtitle}" Style="{StaticResource Body}" FontSize="14" />
+
+                <VerticalStackLayout Spacing="10" Margin="0,4,0,0">
+                    <Button
+                        Text="{localize:Translate History_Empty_Write}"
+                        Style="{StaticResource PrimaryCta}"
+                        FontSize="15"
+                        HeightRequest="50"
+                        CornerRadius="13"
+                        Command="{Binding WriteTodayCommand}" />
+                    <Button
+                        Text="{localize:Translate History_Empty_Import}"
+                        Style="{StaticResource SecondaryCta}"
+                        HeightRequest="48"
+                        CornerRadius="13"
+                        IsVisible="{Binding IsImportVisible}"
+                        Command="{Binding ImportFromNotionCommand}" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
     </Grid>
 </ContentPage>

@@ -24,6 +24,7 @@ public partial class JournalEditorViewModel : ObservableObject
     [ObservableProperty] private string _Text = string.Empty;
     [ObservableProperty] private string _DateLabel = string.Empty;
     [ObservableProperty] private string _HeaderTitle = string.Empty;
+    [ObservableProperty] private string _BackLabel = string.Empty;
     [ObservableProperty] private string _SaveStatus = string.Empty;
     [ObservableProperty] private bool _IsSaving;
 
@@ -78,9 +79,14 @@ public partial class JournalEditorViewModel : ObservableObject
             _IsLoading = false;
         }
 
+        var isToday = _Entry.EntryDate.Date == DateTime.Today;
+
         WordCount = CountWords(Text);
         DateLabel = _Entry.EntryDate.ToString("dddd, d MMMM", CultureInfo.CurrentCulture);
-        HeaderTitle = _Entry.EntryDate.Date == DateTime.Today
+
+        // Reached from Today for tonight's page, but from the detail screen for an older one.
+        BackLabel = isToday ? AppResources.Editor_Back : AppResources.Editor_Back_Generic;
+        HeaderTitle = isToday
             ? AppResources.Editor_Tonight_Title
             : string.Format(AppResources.Entry_Day_Format, _Entry.DayNumber);
 

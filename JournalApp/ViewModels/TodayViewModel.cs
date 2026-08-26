@@ -40,9 +40,9 @@ public partial class TodayViewModel : ObservableObject
 
         var entry = await _Database.GetEntryForDateAsync(DateTime.Today);
         var text = entry?.Text ?? string.Empty;
-        var words = CountWords(text);
+        var words = entry?.WordCount ?? 0;
 
-        Preview = text.Length == 0 ? AppResources.Today_Preview_Empty : Truncate(text, PreviewLength);
+        Preview = text.Length == 0 ? AppResources.Today_Preview_Empty : entry!.Summarize(PreviewLength);
         ContinueLabel = text.Length == 0 ? AppResources.Today_Start : AppResources.Today_Continue;
 
         WordCountLabel = words == 1
@@ -104,16 +104,6 @@ public partial class TodayViewModel : ObservableObject
             : AppResources.Today_Greeting_Evening_Format;
 
         return string.Format(format, name);
-    }
-
-    private static int CountWords(string text) =>
-        text.Split(default(char[]), StringSplitOptions.RemoveEmptyEntries).Length;
-
-    /// <summary>Flattens the entry to one line for the card preview.</summary>
-    private static string Truncate(string text, int max)
-    {
-        var line = text.Replace('\r', ' ').Replace('\n', ' ').Trim();
-        return line.Length <= max ? line : line[..max].TrimEnd() + "…";
     }
 
     [RelayCommand]

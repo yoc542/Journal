@@ -97,4 +97,10 @@
         <GradientStop Color="#563868" Offset="0.0" />
         <GradientStop Color="#26192E" Offset="1.0" />
     </LinearGradientBrush>
+
+    <!-- Destructive action: banked embers -->
+    <LinearGradientBrush x:Key="EmberGradient" StartPoint="0,0" EndPoint="1,0.4">
+        <GradientStop Color="#B4453A" Offset="0.0" />
+        <GradientStop Color="#7E2A2A" Offset="1.0" />
+    </LinearGradientBrush>
 </ResourceDictionary>

@@ -15,7 +15,7 @@
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="16,10,20,12">
             <Button
                 Grid.Column="0"
-                Text="{localize:Translate Editor_Back}"
+                Text="{Binding BackLabel}"
                 Style="{StaticResource GhostCta}"
                 Padding="6,0"
                 HeightRequest="36"

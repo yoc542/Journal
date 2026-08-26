@@ -58,50 +58,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AppTitle" xml:space="preserve">
-    <value>Journal</value>
-  </data>
-  <data name="Today_Title" xml:space="preserve">
-    <value>Today's Journal</value>
-  </data>
   <data name="Entry_Day_Format" xml:space="preserve">
     <value>Day {0} of your story</value>
   </data>
   <data name="Editor_Placeholder" xml:space="preserve">
     <value>Write freely. Nobody reads this but you.</value>
   </data>
-  <data name="History_ToolbarItem" xml:space="preserve">
+  <data name="History_Title" xml:space="preserve">
     <value>History</value>
   </data>
-  <data name="History_Title" xml:space="preserve">
-    <value>Past Entries</value>
-  </data>
   <data name="History_Empty_Title" xml:space="preserve">
-    <value>No entries yet</value>
+    <value>No pages yet.</value>
   </data>
   <data name="History_Empty_Subtitle" xml:space="preserve">
-    <value>Today's page is still blank. Go write your story.</value>
-  </data>
-  <data name="History_Uploaded_Badge" xml:space="preserve">
-    <value>✓ Notion</value>
+    <value>Your history fills in one evening at a time. Write today's entry, or import what you already keep in Notion.</value>
   </data>
   <data name="Menu_Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
   <data name="Menu_UploadToNotion" xml:space="preserve">
     <value>Upload to Notion</value>
-  </data>
-  <data name="Menu_Delete" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="Delete_Title" xml:space="preserve">
-    <value>Delete entry</value>
-  </data>
-  <data name="Delete_Message" xml:space="preserve">
-    <value>This entry will be permanently deleted.</value>
-  </data>
-  <data name="Delete_Confirm" xml:space="preserve">
-    <value>Delete</value>
   </data>
   <data name="Upload_AlreadyTitle" xml:space="preserve">
     <value>Already uploaded</value>
@@ -121,9 +97,6 @@
   <data name="Upload_FailTitle" xml:space="preserve">
     <value>Upload failed</value>
   </data>
-  <data name="Import_ToolbarItem" xml:space="preserve">
-    <value>Import</value>
-  </data>
   <data name="Import_SuccessTitle" xml:space="preserve">
     <value>Imported</value>
   </data>
@@ -138,9 +111,6 @@
   </data>
   <data name="Untitled_Entry" xml:space="preserve">
     <value>Untitled entry</value>
-  </data>
-  <data name="Settings_ToolbarItem" xml:space="preserve">
-    <value>Settings</value>
   </data>
   <data name="Settings_Title" xml:space="preserve">
     <value>Settings</value>
@@ -251,9 +221,6 @@ every evening.</value>
   <data name="Onboarding_Token_Connect" xml:space="preserve">
     <value>Connect Notion</value>
   </data>
-  <data name="Onboarding_Token_Save" xml:space="preserve">
-    <value>Save token</value>
-  </data>
   <data name="Onboarding_Token_Skip" xml:space="preserve">
     <value>Skip for now</value>
   </data>
@@ -286,9 +253,6 @@ every evening.</value>
   </data>
   <data name="Onboarding_Done_Settings" xml:space="preserve">
     <value>Open settings</value>
-  </data>
-  <data name="Onboarding_Back" xml:space="preserve">
-    <value>Back</value>
   </data>
   <data name="Today_Greeting_Morning" xml:space="preserve">
     <value>Good morning</value>
@@ -373,5 +337,62 @@ every evening.</value>
   </data>
   <data name="Editor_Close" xml:space="preserve">
     <value>Close</value>
+  </data>
+  <data name="History_Back" xml:space="preserve">
+    <value>‹ Today</value>
+  </data>
+  <data name="History_Import" xml:space="preserve">
+    <value>↓ Import</value>
+  </data>
+  <data name="History_Search_Placeholder" xml:space="preserve">
+    <value>Search by date or word</value>
+  </data>
+  <data name="History_Sync_InNotion" xml:space="preserve">
+    <value>In Notion</value>
+  </data>
+  <data name="History_Sync_Pending" xml:space="preserve">
+    <value>Not yet uploaded</value>
+  </data>
+  <data name="History_Empty_Write" xml:space="preserve">
+    <value>Write today's entry</value>
+  </data>
+  <data name="History_Empty_Import" xml:space="preserve">
+    <value>Import from Notion</value>
+  </data>
+  <data name="History_NoResults_Format" xml:space="preserve">
+    <value>Nothing matches “{0}”.</value>
+  </data>
+  <data name="Detail_Back" xml:space="preserve">
+    <value>‹ History</value>
+  </data>
+  <data name="Detail_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Detail_Upload" xml:space="preserve">
+    <value>↑</value>
+  </data>
+  <data name="Detail_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Detail_Meta_Format" xml:space="preserve">
+    <value>{0} words · {1}</value>
+  </data>
+  <data name="Detail_Meta_One_Format" xml:space="preserve">
+    <value>1 word · {0}</value>
+  </data>
+  <data name="Detail_Delete_Title" xml:space="preserve">
+    <value>Delete this entry?</value>
+  </data>
+  <data name="Detail_Delete_Message_Format" xml:space="preserve">
+    <value>“{0}” from {1} will be removed from this device. The copy already uploaded to Notion stays there.</value>
+  </data>
+  <data name="Detail_Delete_Confirm" xml:space="preserve">
+    <value>Delete entry</value>
+  </data>
+  <data name="Detail_Delete_Keep" xml:space="preserve">
+    <value>Keep it</value>
+  </data>
+  <data name="Editor_Back_Generic" xml:space="preserve">
+    <value>‹ Back</value>
   </data>
 </root>
