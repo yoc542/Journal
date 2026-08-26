@@ -57,6 +57,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<!-- Generate the strongly-typed AppResources accessor from the neutral resx at build time,
+		     so adding a string only means editing the resx. Culture-specific resx files
+		     (AppResources.en-US.resx) still become satellite assemblies automatically. -->
+		<EmbeddedResource Update="Localization\AppResources.resx">
+			<Generator>MSBuild:Compile</Generator>
+			<StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+			<StronglyTypedNamespace>JournalApp.Localization</StronglyTypedNamespace>
+			<StronglyTypedClassName>AppResources</StronglyTypedClassName>
+			<StronglyTypedFileName>$(IntermediateOutputPath)AppResources.Designer.cs</StronglyTypedFileName>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="DotNetEnv" Version="3.2.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
