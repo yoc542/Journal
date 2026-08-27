@@ -1,3 +1,4 @@
+﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json.Nodes;
@@ -90,6 +91,22 @@ public class NotionService
     /// </summary>
     public async Task<string> UploadEntryAsync(JournalEntry entry)
     {
+        try
+        {
+            return await SendEntryAsync(entry);
+        }
+        catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
+        {
+            // The user deleted the Journal page, database, or this row in Notion. Drop the stale
+            // IDs and send again, which re-discovers or re-creates the database from scratch.
+            ForgetJournalIds();
+            entry.NotionPageId = null;
+            return await SendEntryAsync(entry);
+        }
+    }
+
+    private async Task<string> SendEntryAsync(JournalEntry entry)
+    {
         await AuthorizeAsync();
         await EnsureEntryDatePropertyAsync();
 
@@ -130,6 +147,19 @@ public class NotionService
 
     /// <summary>Fetches every row from the Notion "Journal" database.</summary>
     public async Task<List<JournalEntry>> FetchEntriesAsync()
+    {
+        try
+        {
+            return await ReadEntriesAsync();
+        }
+        catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
+        {
+            ForgetJournalIds();
+            return await ReadEntriesAsync();
+        }
+    }
+
+    private async Task<List<JournalEntry>> ReadEntriesAsync()
     {
         await AuthorizeAsync();
 
@@ -179,7 +209,9 @@ public class NotionService
     /// <summary>
     /// Adds the "Entry Date" property to an existing Journal data source. Databases created by
     /// older versions of the app lack it, and Notion rejects writes to unknown properties.
-    /// Notion merges the schema, so this is idempotent; the result is cached in preferences.
+    /// The schema is read first: a database this device merely found (rather than created) usually
+    /// already has the property, and skipping the write keeps uploads working for integrations
+    /// without the "Update content" capability. The result is cached in preferences.
     /// </summary>
     private async Task EnsureEntryDatePropertyAsync()
     {
@@ -187,13 +219,16 @@ public class NotionService
             return;
 
         var dataSourceId = await RequireDataSourceIdAsync();
-        await PatchJsonAsync($"data_sources/{dataSourceId}", new JsonObject
-        {
-            ["properties"] = new JsonObject
+        var schema = await GetJsonAsync($"data_sources/{dataSourceId}");
+
+        if (schema?["properties"]?[EntryDateProperty] is null)
+            await PatchJsonAsync($"data_sources/{dataSourceId}", new JsonObject
             {
-                [EntryDateProperty] = new JsonObject { ["date"] = new JsonObject() }
-            }
-        });
+                ["properties"] = new JsonObject
+                {
+                    [EntryDateProperty] = new JsonObject { ["date"] = new JsonObject() }
+                }
+            });
 
         AppSettings.NotionEntryDateReady = true;
     }
@@ -201,6 +236,19 @@ public class NotionService
     // --- first-launch setup ---
 
     private static bool IsSetupComplete => !string.IsNullOrEmpty(AppSettings.NotionDataSourceId);
+
+    /// <summary>
+    /// Forgets the cached Journal IDs so the next call rebuilds the database. Without this a
+    /// database deleted in Notion leaves an ID that <see cref="IsSetupComplete"/> keeps trusting,
+    /// and every upload 404s until the app's stored preferences are cleared by hand.
+    /// </summary>
+    private static void ForgetJournalIds()
+    {
+        AppSettings.NotionParentPageId = null;
+        AppSettings.NotionDatabaseId = null;
+        AppSettings.NotionDataSourceId = null;
+        AppSettings.NotionEntryDateReady = false;
+    }
 
     private static void CacheJournalIds(string databaseId, string dataSourceId)
     {
@@ -347,7 +395,7 @@ public class NotionService
         if (!response.IsSuccessStatusCode)
         {
             var body = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Notion API {(int)response.StatusCode}: {body}");
+            throw new HttpRequestException($"Notion API {(int)response.StatusCode}: {body}", null, response.StatusCode);
         }
         return await response.Content.ReadFromJsonAsync<JsonObject>();
     }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -388,6 +388,9 @@ every evening.</value>
   </data>
   <data name="Upload_Sub_Failed" xml:space="preserve">
     <value>Nothing was lost — Grimoire keeps the queue and retries when you are back online.</value>
+  </data>
+  <data name="Upload_Error_Detail_Format" xml:space="preserve">
+    <value>Notion said: {0}</value>
   </data>
   <data name="Upload_Status_Ready" xml:space="preserve">
     <value>Ready</value>

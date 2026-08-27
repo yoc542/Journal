@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
     x:Class="JournalApp.Views.UploadPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -156,13 +156,21 @@
                         Padding="14">
                         <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
                             <Label Grid.Column="0" Text="⚠" FontSize="13" TextColor="{StaticResource Ember}" />
-                            <Label
-                                Grid.Column="1"
-                                Text="{localize:Translate Upload_Failed_Banner}"
-                                FontFamily="KarlaRegular"
-                                FontSize="13"
-                                LineHeight="1.5"
-                                TextColor="{StaticResource Ember}" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="6">
+                                <Label
+                                    Text="{localize:Translate Upload_Failed_Banner}"
+                                    FontFamily="KarlaRegular"
+                                    FontSize="13"
+                                    LineHeight="1.5"
+                                    TextColor="{StaticResource Ember}" />
+                                <Label
+                                    Text="{Binding ErrorDetail}"
+                                    IsVisible="{Binding HasErrorDetail}"
+                                    FontFamily="KarlaRegular"
+                                    FontSize="11.5"
+                                    LineHeight="1.4"
+                                    TextColor="{StaticResource Ember}" />
+                            </VerticalStackLayout>
                         </Grid>
                     </Border>
                 </VerticalStackLayout>

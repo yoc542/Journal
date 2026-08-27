@@ -57,17 +57,30 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<!-- Generate the strongly-typed AppResources accessor from the neutral resx at build time,
-		     so adding a string only means editing the resx. Culture-specific resx files
-		     (AppResources.en-US.resx) still become satellite assemblies automatically. -->
-		<EmbeddedResource Update="Localization\AppResources.resx">
-			<Generator>MSBuild:Compile</Generator>
-			<StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
-			<StronglyTypedNamespace>JournalApp.Localization</StronglyTypedNamespace>
-			<StronglyTypedClassName>AppResources</StronglyTypedClassName>
-			<StronglyTypedFileName>$(IntermediateOutputPath)AppResources.Designer.cs</StronglyTypedFileName>
-		</EmbeddedResource>
+		<!-- The neutral resx the strongly-typed accessor is generated from. Culture-specific resx
+		     files (AppResources.en-US.resx) still become satellite assemblies automatically. -->
+		<_AppResourcesResx Include="Localization\AppResources.resx" />
 	</ItemGroup>
+
+	<!-- Generate the strongly-typed AppResources accessor at build time, so adding a string only
+	     means editing the resx. This cannot ride on the EmbeddedResource StronglyTyped* metadata:
+	     that generates during PrepareResources, but the WinUI XamlPreCompile target compiles
+	     @(Compile) before then, so the Windows head would fail with CS0234. -->
+	<Target Name="GenerateAppResourcesClass" BeforeTargets="XamlPreCompile;BeforeCompile">
+		<GenerateResource Sources="@(_AppResourcesResx)"
+		                  ExecuteAsTool="false"
+		                  UsePreserializedResources="$(GenerateResourceUsePreserializedResources)"
+		                  OutputResources="$(IntermediateOutputPath)AppResources.StronglyTyped.resources"
+		                  StateFile="$(IntermediateOutputPath)AppResources.StronglyTyped.cache"
+		                  StronglyTypedLanguage="CSharp"
+		                  StronglyTypedNamespace="JournalApp.Localization"
+		                  StronglyTypedClassName="AppResources"
+		                  StronglyTypedFileName="$(IntermediateOutputPath)AppResources.Designer.cs" />
+		<ItemGroup>
+			<Compile Include="$(IntermediateOutputPath)AppResources.Designer.cs" />
+			<FileWrites Include="$(IntermediateOutputPath)AppResources.Designer.cs;$(IntermediateOutputPath)AppResources.StronglyTyped.resources;$(IntermediateOutputPath)AppResources.StronglyTyped.cache" />
+		</ItemGroup>
+	</Target>
 
 	<ItemGroup>
 		<PackageReference Include="DotNetEnv" Version="3.2.0" />

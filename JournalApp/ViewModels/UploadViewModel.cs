@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JournalApp.Data;
@@ -56,6 +56,11 @@ public partial class UploadViewModel : ObservableObject
     [ObservableProperty] private string _PercentLabel = string.Empty;
     [ObservableProperty] private string _ButtonLabel = string.Empty;
     [ObservableProperty] private string _DoneBanner = string.Empty;
+
+    /// <summary>Notion's own words for the last failure, so a schema or permission problem is not silent.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasErrorDetail))]
+    private string _ErrorDetail = string.Empty;
     [ObservableProperty] private double _Progress;
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsNotConnected))]
@@ -76,6 +81,8 @@ public partial class UploadViewModel : ObservableObject
     public bool IsDone => State == UploadState.Done;
     public bool IsFailed => State == UploadState.Failed;
     public bool IsNotRunning => State != UploadState.Running;
+
+    public bool HasErrorDetail => ErrorDetail.Length > 0;
 
     /// <summary>Hides the progress card when there was never anything to send.</summary>
     public bool HasQueue => Queue.Count > 0;
@@ -167,6 +174,7 @@ public partial class UploadViewModel : ObservableObject
             blocked.MarkQueued();
 
         State = UploadState.Running;
+        ErrorDetail = string.Empty;
         Refresh();
 
         foreach (var item in Queue.Where(q => !q.IsUploaded).ToList())
@@ -180,9 +188,10 @@ public partial class UploadViewModel : ObservableObject
                 item.MarkUploaded();
                 Refresh();
             }
-            catch
+            catch (Exception ex)
             {
                 // Stop at the first failure: the rest stay queued for the retry.
+                ErrorDetail = string.Format(AppResources.Upload_Error_Detail_Format, ex.Message);
                 item.MarkBlocked();
                 foreach (var rest in Queue.Where(q => !q.IsUploaded && q != item))
                     rest.MarkBlocked();
