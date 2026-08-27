@@ -1,8 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="456" height="456" viewBox="0 0 456 456" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
-    <path d="m 105.50037,281.60863 c -2.70293,0 -5.00091,-0.90042 -6.893127,-2.70209 -1.892214,-1.84778 -2.837901,-4.04181 -2.837901,-6.58209 0,-2.58722 0.945687,-4.80389 2.837901,-6.65167 1.892217,-1.84778 4.190197,-2.77167 6.893127,-2.77167 2.74819,0 5.06798,0.92389 6.96019,2.77167 1.93749,1.84778 2.90581,4.06445 2.90581,6.65167 0,2.54028 -0.96832,4.73431 -2.90581,6.58209 -1.89221,1.80167 -4.212,2.70209 -6.96019,2.70209 z" style="fill:#ffffff;fill-rule:nonzero;stroke-width:0.838376" />
-    <path d="M 213.56111,280.08446 H 195.99044 L 149.69953,207.0544 c -1.17121,-1.84778 -2.14037,-3.76515 -2.90581,-5.75126 h -0.40578 c 0.36051,2.12528 0.54076,6.67515 0.54076,13.6496 v 65.13172 h -15.54349 v -99.36009 h 18.71925 l 44.7374,71.29798 c 1.89222,2.95695 3.1087,4.98917 3.64945,6.09751 h 0.26996 c -0.45021,-2.6325 -0.67573,-7.09015 -0.67573,-13.37293 v -64.02256 h 15.47557 z" style="fill:#ffffff;fill-rule:nonzero;stroke-width:0.838376" />
-    <path d="m 289.25134,280.08446 h -54.40052 v -99.36009 h 52.23835 v 13.99669 h -36.15411 v 28.13085 h 33.31621 v 13.9271 h -33.31621 v 29.37835 h 38.31628 z" style="fill:#ffffff;fill-rule:nonzero;stroke-width:0.838376" />
-    <path d="M 366.56466,194.72106 H 338.7222 v 85.3634 h -16.08423 v -85.3634 h -27.77455 v -13.99669 h 71.70124 z" style="fill:#ffffff;fill-rule:nonzero;stroke-width:0.838376" />
+<svg width="256" height="256" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <!-- Grimoire: the closed spellbook of the night-sky theme. Palette matches Resources/Styles/Colors.xaml
+         (NightPlum, NightHaze, Cream, Gold, Orchid, Primary). Artwork stays inside a centred circle of
+         radius ~100 so the Android 12+ circular splash mask does not clip it. -->
+
+    <!-- Page block, peeking out along the right edge and the foot of the book -->
+    <rect x="70" y="50" width="116" height="150" rx="9" fill="#F6EFE2" />
+    <rect x="70" y="50" width="116" height="150" rx="9" fill="#C4A9D6" fill-opacity="0.35" />
+
+    <!-- Front cover -->
+    <rect x="62" y="46" width="116" height="150" rx="10" fill="#2A1D33" />
+    <!-- Spine -->
+    <rect x="62" y="46" width="15" height="150" rx="7" fill="#4A3358" />
+    <path d="M69.5,60 L69.5,182" stroke="#E8C98A" stroke-opacity="0.45" stroke-width="1.4" stroke-linecap="round" fill="none" />
+    <!-- Gold rule inset into the cover -->
+    <rect x="82" y="56" width="90" height="130" rx="7" fill="none" stroke="#E8C98A" stroke-opacity="0.55" stroke-width="1.6" />
+
+    <!-- Crescent moon -->
+    <path d="M139.8,87.1 A28,28 0 1 0 139.8,136.9 A25,25 0 1 1 139.8,87.1 Z" fill="#F6EFE2" />
+    <path d="M139.8,87.1 A28,28 0 1 0 139.8,136.9 A25,25 0 1 1 139.8,87.1 Z" fill="#C4A9D6" fill-opacity="0.28" />
+
+    <!-- Crystal beneath the moon, echoing the app icon -->
+    <path d="M127,144 L138,160 L134,178 L120,178 L116,160 Z" fill="#C4A9D6" />
+    <path d="M127,144 L138,160 L134,178 L120,178 L116,160 Z" fill="none" stroke="#E8C98A" stroke-opacity="0.75" stroke-width="1.3" />
+    <path d="M127,144 L127,178" stroke="#E8C98A" stroke-opacity="0.45" stroke-width="1.1" fill="none" />
+    <path d="M116,160 L138,160" stroke="#E8C98A" stroke-opacity="0.4" stroke-width="1.1" fill="none" />
+    <circle cx="107" cy="168" r="1.8" fill="#E8C98A" fill-opacity="0.8" />
+    <circle cx="147" cy="168" r="1.8" fill="#E8C98A" fill-opacity="0.8" />
+
+    <!-- Stars on the cover -->
+    <path d="M95,67 Q96.4,72.6 102,74 Q96.4,75.4 95,81 Q93.6,75.4 88,74 Q93.6,72.6 95,67 Z" fill="#E8C98A" />
+    <path d="M159,86.5 Q160.1,90.9 164.5,92 Q160.1,93.1 159,97.5 Q157.9,93.1 153.5,92 Q157.9,90.9 159,86.5 Z" fill="#F6EFE2" fill-opacity="0.9" />
+    <path d="M162,138.5 Q162.9,142.1 166.5,143 Q162.9,143.9 162,147.5 Q161.1,143.9 157.5,143 Q161.1,142.1 162,138.5 Z" fill="#F6EFE2" fill-opacity="0.75" />
+    <circle cx="88" cy="120" r="1.5" fill="#F6EFE2" fill-opacity="0.6" />
+    <circle cx="94" cy="158" r="1.5" fill="#F6EFE2" fill-opacity="0.5" />
+    <circle cx="146" cy="72" r="1.6" fill="#E8C98A" fill-opacity="0.7" />
+
+    <!-- Clasp strap and stud -->
+    <rect x="160" y="114" width="34" height="22" rx="7" fill="#4A3358" />
+    <rect x="160" y="114" width="34" height="22" rx="7" fill="none" stroke="#E8C98A" stroke-opacity="0.5" stroke-width="1.4" />
+    <circle cx="177" cy="125" r="3.6" fill="#E8C98A" />
+
+    <!-- Bookmark ribbon -->
+    <path d="M121,192 L135,192 L135,220 L128,213 L121,220 Z" fill="#6C3FA0" />
+    <path d="M121,192 L135,192 L135,220 L128,213 L121,220 Z" fill="none" stroke="#E8C98A" stroke-opacity="0.45" stroke-width="1.2" />
+
+    <!-- Stars in the sky around the book -->
+    <path d="M48,62 Q49.6,68.4 56,70 Q49.6,71.6 48,78 Q46.4,71.6 40,70 Q46.4,68.4 48,62 Z" fill="#F6EFE2" fill-opacity="0.9" />
+    <path d="M200,55.5 Q201.3,60.7 206.5,62 Q201.3,63.3 200,68.5 Q198.7,63.3 193.5,62 Q198.7,60.7 200,55.5 Z" fill="#E8C98A" />
+    <path d="M46,162.5 Q47.1,166.9 51.5,168 Q47.1,169.1 46,173.5 Q44.9,169.1 40.5,168 Q44.9,166.9 46,162.5 Z" fill="#E8C98A" fill-opacity="0.85" />
+    <path d="M204,171 Q205,175 209,176 Q205,177 204,181 Q203,177 199,176 Q203,175 204,171 Z" fill="#F6EFE2" fill-opacity="0.85" />
+    <circle cx="40" cy="120" r="1.8" fill="#F6EFE2" fill-opacity="0.55" />
+    <circle cx="212" cy="132" r="1.6" fill="#F6EFE2" fill-opacity="0.5" />
+    <circle cx="196" cy="196" r="1.6" fill="#E8C98A" fill-opacity="0.55" />
+    <circle cx="60" cy="200" r="1.5" fill="#F6EFE2" fill-opacity="0.45" />
 </svg>
