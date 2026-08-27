@@ -32,6 +32,13 @@ public static class AppSettings
         set => Preferences.Set(nameof(NotionEntryDateReady), value);
     }
 
+    /// <summary>When the last successful Notion upload finished; default when there has never been one.</summary>
+    public static DateTime LastNotionUploadAt
+    {
+        get => Preferences.Get(nameof(LastNotionUploadAt), default(DateTime));
+        set => Preferences.Set(nameof(LastNotionUploadAt), value);
+    }
+
     /// <summary>Set once the user has finished (or skipped through) the onboarding wizard.</summary>
     public static bool SetupCompleted
     {

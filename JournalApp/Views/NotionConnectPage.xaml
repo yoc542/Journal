@@ -92,12 +92,19 @@
                     <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Gold}" />
                 </VerticalStackLayout>
 
-                <Button
-                    Grid.Row="2"
-                    Text="{Binding ButtonLabel}"
-                    Style="{StaticResource PrimaryCta}"
-                    Command="{Binding ConnectCommand}"
-                    IsEnabled="{Binding IsNotBusy}" />
+                <VerticalStackLayout Grid.Row="2" Spacing="10">
+                    <Button
+                        Text="{Binding ButtonLabel}"
+                        Style="{StaticResource PrimaryCta}"
+                        Command="{Binding ConnectCommand}"
+                        IsEnabled="{Binding IsNotBusy}" />
+                    <Button
+                        Text="{localize:Translate Notion_Connect_Remove}"
+                        Style="{StaticResource SecondaryCta}"
+                        IsVisible="{Binding IsConnected}"
+                        IsEnabled="{Binding IsNotBusy}"
+                        Command="{Binding RemoveCommand}" />
+                </VerticalStackLayout>
             </Grid>
         </ScrollView>
     </Grid>

@@ -11,4 +11,10 @@ public partial class NotionConnectPage : ContentPage
         InitializeComponent();
         BindingContext = _ViewModel = viewModel;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _ViewModel.LoadAsync();
+    }
 }

@@ -193,6 +193,7 @@ public partial class UploadViewModel : ObservableObject
             }
         }
 
+        AppSettings.LastNotionUploadAt = DateTime.Now;
         State = UploadState.Done;
         Refresh();
     }

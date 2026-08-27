@@ -11,6 +11,9 @@ public partial class NotionConnectViewModel : ObservableObject
 
     [ObservableProperty] private string _Token = string.Empty;
 
+    /// <summary>A token is already stored, so this visit can also remove it.</summary>
+    [ObservableProperty] private bool _IsConnected;
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasError), nameof(ButtonLabel))]
     private string _ErrorMessage = string.Empty;
@@ -20,6 +23,8 @@ public partial class NotionConnectViewModel : ObservableObject
     private bool _IsBusy;
 
     public NotionConnectViewModel(NotionService notion) => _Notion = notion;
+
+    public async Task LoadAsync() => IsConnected = await NotionService.IsConnectedAsync();
 
     public bool HasError => ErrorMessage.Length > 0;
     public bool IsNotBusy => !IsBusy;
@@ -71,6 +76,18 @@ public partial class NotionConnectViewModel : ObservableObject
         {
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task RemoveAsync()
+    {
+        SecureSettings.ClearNotionToken();
+        Token = string.Empty;
+        IsConnected = false;
+
+        await Shell.Current.DisplayAlertAsync(
+            AppResources.Settings_ClearedTitle, AppResources.Settings_ClearedMessage, AppResources.OK);
+        await Shell.Current.GoToAsync("..");
     }
 
     [RelayCommand]

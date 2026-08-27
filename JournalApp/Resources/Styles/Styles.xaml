@@ -620,6 +620,14 @@
         <Setter Property="BorderColor" Value="{StaticResource Orchid}" />
     </Style>
 
+    <Style TargetType="Button" x:Key="GoldChipButton" BasedOn="{StaticResource ChipButton}">
+        <Setter Property="BorderColor" Value="{StaticResource Gold}" />
+        <Setter Property="TextColor" Value="{StaticResource Gold}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="11" />
+    </Style>
+
     <Style TargetType="Button" x:Key="DangerChipButton" BasedOn="{StaticResource ChipButton}">
         <Setter Property="BorderColor" Value="{StaticResource EmberDeep}" />
         <Setter Property="TextColor" Value="{StaticResource Ember}" />

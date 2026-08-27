@@ -88,44 +88,8 @@
   <data name="Settings_Title" xml:space="preserve">
     <value>Settings</value>
   </data>
-  <data name="Settings_Subtitle" xml:space="preserve">
-    <value>Connect the Notion workspace your entries are uploaded to.</value>
-  </data>
-  <data name="Settings_Token_Label" xml:space="preserve">
-    <value>Notion integration token</value>
-  </data>
   <data name="Settings_Token_Placeholder" xml:space="preserve">
     <value>ntn_…</value>
-  </data>
-  <data name="Settings_Token_Help" xml:space="preserve">
-    <value>Create an internal integration at notion.so/my-integrations and paste its token here. It is kept in this device's secure storage.</value>
-  </data>
-  <data name="Settings_Save" xml:space="preserve">
-    <value>Save token</value>
-  </data>
-  <data name="Settings_Clear" xml:space="preserve">
-    <value>Remove token</value>
-  </data>
-  <data name="Settings_Connected_Badge" xml:space="preserve">
-    <value>Connected</value>
-  </data>
-  <data name="Settings_Disconnected_Badge" xml:space="preserve">
-    <value>Not connected</value>
-  </data>
-  <data name="Settings_SavedTitle" xml:space="preserve">
-    <value>Connected</value>
-  </data>
-  <data name="Settings_SavedMessage" xml:space="preserve">
-    <value>Your Notion token was saved.</value>
-  </data>
-  <data name="Settings_InvalidTitle" xml:space="preserve">
-    <value>Token rejected</value>
-  </data>
-  <data name="Settings_InvalidMessage" xml:space="preserve">
-    <value>Notion did not accept that token. Check that it was copied in full and try again.</value>
-  </data>
-  <data name="Settings_EmptyMessage" xml:space="preserve">
-    <value>Enter your Notion integration token first.</value>
   </data>
   <data name="Settings_ClearedTitle" xml:space="preserve">
     <value>Token removed</value>
@@ -580,5 +544,77 @@ every evening.</value>
   </data>
   <data name="ImportDone_Today" xml:space="preserve">
     <value>Back to today</value>
+  </data>
+  <data name="Settings_Back" xml:space="preserve">
+    <value>‹ Today</value>
+  </data>
+  <data name="Settings_Sync_Eyebrow" xml:space="preserve">
+    <value>Sync</value>
+  </data>
+  <data name="Settings_Sync_Notion" xml:space="preserve">
+    <value>Notion</value>
+  </data>
+  <data name="Settings_Sync_Connected" xml:space="preserve">
+    <value>● Connected</value>
+  </data>
+  <data name="Settings_Sync_Disconnected" xml:space="preserve">
+    <value>○ Not connected</value>
+  </data>
+  <data name="Settings_Sync_Line_Format" xml:space="preserve">
+    <value>Journal · last upload {0} · {1} pages</value>
+  </data>
+  <data name="Settings_Sync_Line_One" xml:space="preserve">
+    <value>Journal · last upload {0} · 1 page</value>
+  </data>
+  <data name="Settings_Sync_Line_Never" xml:space="preserve">
+    <value>Journal · nothing uploaded yet</value>
+  </data>
+  <data name="Settings_Sync_Line_Disconnected" xml:space="preserve">
+    <value>Add your Notion access token to upload or import.</value>
+  </data>
+  <data name="Settings_Sync_UploadNow" xml:space="preserve">
+    <value>Upload now</value>
+  </data>
+  <data name="Settings_Sync_Import" xml:space="preserve">
+    <value>Import…</value>
+  </data>
+  <data name="Settings_Sync_Enable" xml:space="preserve">
+    <value>Add access token to enable</value>
+  </data>
+  <data name="Settings_Token_Eyebrow" xml:space="preserve">
+    <value>Notion access token</value>
+  </data>
+  <data name="Settings_Token_Body" xml:space="preserve">
+    <value>Your Notion personal access token. Stored on this device only — upload and import need it.</value>
+  </data>
+  <data name="Settings_Token_Caption" xml:space="preserve">
+    <value>Token</value>
+  </data>
+  <data name="Settings_Token_NotSet" xml:space="preserve">
+    <value>Not set</value>
+  </data>
+  <data name="Settings_Token_Change" xml:space="preserve">
+    <value>Change or remove token</value>
+  </data>
+  <data name="Settings_Token_Add" xml:space="preserve">
+    <value>Add access token</value>
+  </data>
+  <data name="Settings_Reminder_Eyebrow" xml:space="preserve">
+    <value>Reminder</value>
+  </data>
+  <data name="Settings_Reminder_Title" xml:space="preserve">
+    <value>Evening reminder</value>
+  </data>
+  <data name="Settings_Reminder_On" xml:space="preserve">
+    <value>Saved for 9:30 pm · notifications are not scheduled yet</value>
+  </data>
+  <data name="Settings_Reminder_Off" xml:space="preserve">
+    <value>Off — no notifications.</value>
+  </data>
+  <data name="Settings_Footer_Format" xml:space="preserve">
+    <value>Grimoire {0} · entries stored locally on this device</value>
+  </data>
+  <data name="Notion_Connect_Remove" xml:space="preserve">
+    <value>Remove token</value>
   </data>
 </root>
