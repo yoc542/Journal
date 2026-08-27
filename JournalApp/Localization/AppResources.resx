@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Entry_Day_Format" xml:space="preserve">
+    <value>Day {0} of your story</value>
+  </data>
+  <data name="Editor_Placeholder" xml:space="preserve">
+    <value>Write freely. Nobody reads this but you.</value>
+  </data>
+  <data name="History_Title" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="History_Empty_Title" xml:space="preserve">
+    <value>No pages yet.</value>
+  </data>
+  <data name="History_Empty_Subtitle" xml:space="preserve">
+    <value>Your history fills in one evening at a time. Write today's entry, or import what you already keep in Notion.</value>
+  </data>
+  <data name="Menu_UploadToNotion" xml:space="preserve">
+    <value>Upload to Notion</value>
+  </data>
+  <data name="Import_FailTitle" xml:space="preserve">
+    <value>Import failed</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Untitled_Entry" xml:space="preserve">
+    <value>Untitled entry</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings_Token_Placeholder" xml:space="preserve">
+    <value>ntn_…</value>
+  </data>
+  <data name="Settings_ClearedTitle" xml:space="preserve">
+    <value>Token removed</value>
+  </data>
+  <data name="Settings_ClearedMessage" xml:space="preserve">
+    <value>Notion uploads are disabled until you add a token again.</value>
+  </data>
+  <data name="Notion_NotConnected" xml:space="preserve">
+    <value>Notion is not connected. Add your integration token in Settings.</value>
+  </data>
+  <data name="Onboarding_Welcome_Title" xml:space="preserve">
+    <value>One page,
+every evening.</value>
+  </data>
+  <data name="Onboarding_Welcome_Body" xml:space="preserve">
+    <value>A private daily journal. One entry per day, saved as you write, kept private on your phone.</value>
+  </data>
+  <data name="Onboarding_Welcome_Begin" xml:space="preserve">
+    <value>Begin your journal</value>
+  </data>
+  <data name="Onboarding_Welcome_Existing" xml:space="preserve">
+    <value>I already have a journal</value>
+  </data>
+  <data name="Onboarding_Step_Format" xml:space="preserve">
+    <value>Step {0} of 2</value>
+  </data>
+  <data name="Onboarding_Setup_Eyebrow" xml:space="preserve">
+    <value>Setup</value>
+  </data>
+  <data name="Onboarding_Profile_Title" xml:space="preserve">
+    <value>Who is keeping this journal?</value>
+  </data>
+  <data name="Onboarding_Name_Label" xml:space="preserve">
+    <value>Your name</value>
+  </data>
+  <data name="Onboarding_Name_Placeholder" xml:space="preserve">
+    <value>Elowen</value>
+  </data>
+  <data name="Onboarding_Reminder_Label" xml:space="preserve">
+    <value>Evening reminder</value>
+  </data>
+  <data name="Onboarding_Reminder_Title" xml:space="preserve">
+    <value>Nudge me at 9:30 pm</value>
+  </data>
+  <data name="Onboarding_Reminder_Body" xml:space="preserve">
+    <value>A local notification. Nothing leaves the device.</value>
+  </data>
+  <data name="Onboarding_Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="Onboarding_Token_Eyebrow" xml:space="preserve">
+    <value>Connect Notion</value>
+  </data>
+  <data name="Onboarding_Token_Title" xml:space="preserve">
+    <value>Paste your Notion token</value>
+  </data>
+  <data name="Onboarding_Token_Body" xml:space="preserve">
+    <value>Your Notion personal access token lets Grimoire upload entries to your Notion database and import them back. It is stored only on this device.</value>
+  </data>
+  <data name="Onboarding_Token_Label" xml:space="preserve">
+    <value>Personal access token</value>
+  </data>
+  <data name="Onboarding_Token_Help" xml:space="preserve">
+    <value>Notion → Settings → Integrations → New integration → copy the secret, then share your journal database with it.</value>
+  </data>
+  <data name="Onboarding_Token_Connect" xml:space="preserve">
+    <value>Connect Notion</value>
+  </data>
+  <data name="Onboarding_Token_Skip" xml:space="preserve">
+    <value>Skip for now</value>
+  </data>
+  <data name="Onboarding_Token_SkipHint" xml:space="preserve">
+    <value>You can add the token later in Settings.</value>
+  </data>
+  <data name="Onboarding_Token_ErrorEmpty" xml:space="preserve">
+    <value>Paste the token from your Notion integration.</value>
+  </data>
+  <data name="Onboarding_Token_ErrorShape" xml:space="preserve">
+    <value>That doesn't look like a Notion token — it starts with ntn_ or secret_.</value>
+  </data>
+  <data name="Onboarding_Token_ErrorRejected" xml:space="preserve">
+    <value>Notion refused the token. Check that the integration is shared with this database, then try again.</value>
+  </data>
+  <data name="Onboarding_Done_Title_Connected" xml:space="preserve">
+    <value>Notion is connected.</value>
+  </data>
+  <data name="Onboarding_Done_Title_Skipped" xml:space="preserve">
+    <value>Your journal is ready.</value>
+  </data>
+  <data name="Onboarding_Done_Body_Connected" xml:space="preserve">
+    <value>Upload and import are on. Write tonight — entries sync to your Notion database.</value>
+  </data>
+  <data name="Onboarding_Done_Body_Skipped" xml:space="preserve">
+    <value>You skipped Notion for now. Add your personal access token in Settings whenever you want upload and import.</value>
+  </data>
+  <data name="Onboarding_Done_Write" xml:space="preserve">
+    <value>Write today's entry</value>
+  </data>
+  <data name="Onboarding_Done_Settings" xml:space="preserve">
+    <value>Open settings</value>
+  </data>
+  <data name="Today_Greeting_Morning" xml:space="preserve">
+    <value>Good morning</value>
+  </data>
+  <data name="Today_Greeting_Afternoon" xml:space="preserve">
+    <value>Good afternoon</value>
+  </data>
+  <data name="Today_Greeting_Evening" xml:space="preserve">
+    <value>Good evening</value>
+  </data>
+  <data name="Today_Greeting_Morning_Format" xml:space="preserve">
+    <value>Good morning, {0}</value>
+  </data>
+  <data name="Today_Greeting_Afternoon_Format" xml:space="preserve">
+    <value>Good afternoon, {0}</value>
+  </data>
+  <data name="Today_Greeting_Evening_Format" xml:space="preserve">
+    <value>Good evening, {0}</value>
+  </data>
+  <data name="Today_Page_Eyebrow" xml:space="preserve">
+    <value>Today's page</value>
+  </data>
+  <data name="Today_Preview_Empty" xml:space="preserve">
+    <value>The page is still blank. Whatever the day was, put it down here.</value>
+  </data>
+  <data name="Today_Continue" xml:space="preserve">
+    <value>Continue writing</value>
+  </data>
+  <data name="Today_Start" xml:space="preserve">
+    <value>Start tonight's page</value>
+  </data>
+  <data name="Today_WordCount_Format" xml:space="preserve">
+    <value>{0} words</value>
+  </data>
+  <data name="Today_WordCount_One" xml:space="preserve">
+    <value>1 word</value>
+  </data>
+  <data name="Today_Upload_Title" xml:space="preserve">
+    <value>Upload to Notion</value>
+  </data>
+  <data name="Today_Upload_Pending_Format" xml:space="preserve">
+    <value>{0} entries waiting</value>
+  </data>
+  <data name="Today_Upload_Pending_One" xml:space="preserve">
+    <value>1 entry waiting</value>
+  </data>
+  <data name="Today_Upload_None" xml:space="preserve">
+    <value>All uploaded</value>
+  </data>
+  <data name="Today_History_Title" xml:space="preserve">
+    <value>Journal history</value>
+  </data>
+  <data name="Today_History_Count_Format" xml:space="preserve">
+    <value>{0} entries</value>
+  </data>
+  <data name="Today_History_Count_One" xml:space="preserve">
+    <value>1 entry</value>
+  </data>
+  <data name="Today_Week_Eyebrow" xml:space="preserve">
+    <value>This week</value>
+  </data>
+  <data name="Saved_At_Format" xml:space="preserve">
+    <value>Saved {0}</value>
+  </data>
+  <data name="Saved_Never" xml:space="preserve">
+    <value>Not saved yet</value>
+  </data>
+  <data name="Editor_Back" xml:space="preserve">
+    <value>‹ Today</value>
+  </data>
+  <data name="Editor_Tonight_Title" xml:space="preserve">
+    <value>Tonight's page</value>
+  </data>
+  <data name="Editor_Saving" xml:space="preserve">
+    <value>Saving…</value>
+  </data>
+  <data name="Editor_WordCount_Format" xml:space="preserve">
+    <value>{0} words · autosaved</value>
+  </data>
+  <data name="Editor_WordCount_One" xml:space="preserve">
+    <value>1 word · autosaved</value>
+  </data>
+  <data name="Editor_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="History_Back" xml:space="preserve">
+    <value>‹ Today</value>
+  </data>
+  <data name="History_Import" xml:space="preserve">
+    <value>↓ Import</value>
+  </data>
+  <data name="History_Search_Placeholder" xml:space="preserve">
+    <value>Search by date or word</value>
+  </data>
+  <data name="History_Sync_InNotion" xml:space="preserve">
+    <value>In Notion</value>
+  </data>
+  <data name="History_Sync_Pending" xml:space="preserve">
+    <value>Not yet uploaded</value>
+  </data>
+  <data name="History_Empty_Write" xml:space="preserve">
+    <value>Write today's entry</value>
+  </data>
+  <data name="History_Empty_Import" xml:space="preserve">
+    <value>Import from Notion</value>
+  </data>
+  <data name="History_NoResults_Format" xml:space="preserve">
+    <value>Nothing matches “{0}”.</value>
+  </data>
+  <data name="Detail_Back" xml:space="preserve">
+    <value>‹ History</value>
+  </data>
+  <data name="Detail_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Detail_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Detail_Meta_Format" xml:space="preserve">
+    <value>{0} words · {1}</value>
+  </data>
+  <data name="Detail_Meta_One_Format" xml:space="preserve">
+    <value>1 word · {0}</value>
+  </data>
+  <data name="Detail_Delete_Title" xml:space="preserve">
+    <value>Delete this entry?</value>
+  </data>
+  <data name="Detail_Delete_Message_Format" xml:space="preserve">
+    <value>“{0}” from {1} will be removed from this device. The copy already uploaded to Notion stays there.</value>
+  </data>
+  <data name="Detail_Delete_Confirm" xml:space="preserve">
+    <value>Delete entry</value>
+  </data>
+  <data name="Detail_Delete_Keep" xml:space="preserve">
+    <value>Keep it</value>
+  </data>
+  <data name="Editor_Back_Generic" xml:space="preserve">
+    <value>‹ Back</value>
+  </data>
+  <data name="Notion_Connect_Back" xml:space="preserve">
+    <value>‹ Settings</value>
+  </data>
+  <data name="Notion_Eyebrow" xml:space="preserve">
+    <value>Notion</value>
+  </data>
+  <data name="Notion_Connect_Title" xml:space="preserve">
+    <value>Connect your Notion database</value>
+  </data>
+  <data name="Notion_Connect_Body" xml:space="preserve">
+    <value>Grimoire copies each day's entry into a Notion database page. Paste your personal access token to turn upload and import on.</value>
+  </data>
+  <data name="Notion_Connect_Note" xml:space="preserve">
+    <value>The token stays on this device. Remove it any time in Settings.</value>
+  </data>
+  <data name="Notion_Connect_Cta" xml:space="preserve">
+    <value>Connect Notion</value>
+  </data>
+  <data name="Notion_Connect_Retry" xml:space="preserve">
+    <value>Try again</value>
+  </data>
+  <data name="Notion_Connect_Error" xml:space="preserve">
+    <value>Notion refused the token. Check that the integration is shared with this database, then try again.</value>
+  </data>
+  <data name="Upload_Back" xml:space="preserve">
+    <value>‹ Today</value>
+  </data>
+  <data name="Upload_Eyebrow" xml:space="preserve">
+    <value>Upload to Notion</value>
+  </data>
+  <data name="Upload_Heading_Idle_Format" xml:space="preserve">
+    <value>{0} entries ready to upload</value>
+  </data>
+  <data name="Upload_Heading_Idle_One" xml:space="preserve">
+    <value>1 entry ready to upload</value>
+  </data>
+  <data name="Upload_Heading_Empty" xml:space="preserve">
+    <value>Nothing waiting to upload</value>
+  </data>
+  <data name="Upload_Heading_Running" xml:space="preserve">
+    <value>Uploading your journal…</value>
+  </data>
+  <data name="Upload_Heading_Done" xml:space="preserve">
+    <value>All entries are in Notion</value>
+  </data>
+  <data name="Upload_Heading_Failed" xml:space="preserve">
+    <value>Upload could not finish</value>
+  </data>
+  <data name="Upload_Sub_Idle" xml:space="preserve">
+    <value>Entries upload one page per day into your Notion database.</value>
+  </data>
+  <data name="Upload_Sub_Empty" xml:space="preserve">
+    <value>Every entry on this device already has a matching Notion page.</value>
+  </data>
+  <data name="Upload_Sub_Done" xml:space="preserve">
+    <value>Every entry on this device now has a matching Notion page.</value>
+  </data>
+  <data name="Upload_Sub_Failed" xml:space="preserve">
+    <value>Nothing was lost — Grimoire keeps the queue and retries when you are back online.</value>
+  </data>
+  <data name="Upload_Status_Ready" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="Upload_Status_Uploading" xml:space="preserve">
+    <value>Uploading</value>
+  </data>
+  <data name="Upload_Status_Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="Upload_Status_Stopped" xml:space="preserve">
+    <value>Stopped</value>
+  </data>
+  <data name="Upload_Item_Queued" xml:space="preserve">
+    <value>Queued</value>
+  </data>
+  <data name="Upload_Item_Sending" xml:space="preserve">
+    <value>Sending…</value>
+  </data>
+  <data name="Upload_Item_Uploaded" xml:space="preserve">
+    <value>Uploaded</value>
+  </data>
+  <data name="Upload_Item_Retry" xml:space="preserve">
+    <value>Waiting to retry</value>
+  </data>
+  <data name="Upload_Cta_Start_Format" xml:space="preserve">
+    <value>Upload {0} entries</value>
+  </data>
+  <data name="Upload_Cta_Start_One" xml:space="preserve">
+    <value>Upload 1 entry</value>
+  </data>
+  <data name="Upload_Cta_Running" xml:space="preserve">
+    <value>Uploading…</value>
+  </data>
+  <data name="Upload_Cta_Done" xml:space="preserve">
+    <value>Back to today</value>
+  </data>
+  <data name="Upload_Cta_Retry" xml:space="preserve">
+    <value>Retry upload</value>
+  </data>
+  <data name="Upload_Done_Banner_Format" xml:space="preserve">
+    <value>{0} entries are now in Notion. Last sync: just now.</value>
+  </data>
+  <data name="Upload_Done_Banner_One" xml:space="preserve">
+    <value>1 entry is now in Notion. Last sync: just now.</value>
+  </data>
+  <data name="Upload_Failed_Banner" xml:space="preserve">
+    <value>Upload stopped. Your entries are safe on this device — try again when you are back online.</value>
+  </data>
+  <data name="Notion_NotConnected_Title" xml:space="preserve">
+    <value>Notion is not connected yet</value>
+  </data>
+  <data name="Notion_NotConnected_Body" xml:space="preserve">
+    <value>Add your Notion personal access token to upload entries and import them back.</value>
+  </data>
+  <data name="Import_Back" xml:space="preserve">
+    <value>‹ History</value>
+  </data>
+  <data name="Import_Eyebrow" xml:space="preserve">
+    <value>Import from Notion</value>
+  </data>
+  <data name="Import_Heading_Scanning" xml:space="preserve">
+    <value>Looking for pages…</value>
+  </data>
+  <data name="Import_Heading_Found_Format" xml:space="preserve">
+    <value>{0} pages found in Notion</value>
+  </data>
+  <data name="Import_Heading_Found_One" xml:space="preserve">
+    <value>1 page found in Notion</value>
+  </data>
+  <data name="Import_Heading_None" xml:space="preserve">
+    <value>No pages in Notion yet</value>
+  </data>
+  <data name="Import_Body_Format" xml:space="preserve">
+    <value>Choose which pages to bring in — {0} of these already exist on this device.</value>
+  </data>
+  <data name="Import_Body_NoConflicts" xml:space="preserve">
+    <value>Choose which pages to bring in.</value>
+  </data>
+  <data name="Import_Body_None" xml:space="preserve">
+    <value>Upload an entry first, then it will show up here.</value>
+  </data>
+  <data name="Import_Scanning_Label" xml:space="preserve">
+    <value>Reading your Notion database…</value>
+  </data>
+  <data name="Import_Flag_Conflict" xml:space="preserve">
+    <value>Already on this device — conflict</value>
+  </data>
+  <data name="Import_Flag_New" xml:space="preserve">
+    <value>New — no local entry</value>
+  </data>
+  <data name="Import_Cta_Format" xml:space="preserve">
+    <value>Import {0} entries</value>
+  </data>
+  <data name="Import_Cta_One" xml:space="preserve">
+    <value>Import 1 entry</value>
+  </data>
+  <data name="Conflict_Back" xml:space="preserve">
+    <value>‹ Import</value>
+  </data>
+  <data name="Conflict_Eyebrow_Format" xml:space="preserve">
+    <value>Conflict {0} of {1}</value>
+  </data>
+  <data name="Conflict_Title_Format" xml:space="preserve">
+    <value>Two entries for {0}</value>
+  </data>
+  <data name="Conflict_Body" xml:space="preserve">
+    <value>You already have an entry for this date. Choose which version to keep — nothing is overwritten until you confirm.</value>
+  </data>
+  <data name="Conflict_Device_Format" xml:space="preserve">
+    <value>On this device · {0} words</value>
+  </data>
+  <data name="Conflict_Notion_Format" xml:space="preserve">
+    <value>From Notion · {0} words</value>
+  </data>
+  <data name="Conflict_Choice_Device" xml:space="preserve">
+    <value>Keep the entry on this device</value>
+  </data>
+  <data name="Conflict_Choice_Device_Note" xml:space="preserve">
+    <value>The Notion version is discarded</value>
+  </data>
+  <data name="Conflict_Choice_Incoming" xml:space="preserve">
+    <value>Use the version from Notion</value>
+  </data>
+  <data name="Conflict_Choice_Incoming_Note" xml:space="preserve">
+    <value>Your local entry is replaced</value>
+  </data>
+  <data name="Conflict_Choice_Both" xml:space="preserve">
+    <value>Keep both</value>
+  </data>
+  <data name="Conflict_Choice_Both_Note" xml:space="preserve">
+    <value>The Notion version is added as a second entry for that day</value>
+  </data>
+  <data name="Conflict_ApplyAll" xml:space="preserve">
+    <value>Apply this choice to the other conflicts too</value>
+  </data>
+  <data name="Conflict_Skip" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="Conflict_Resolve" xml:space="preserve">
+    <value>Resolve and continue</value>
+  </data>
+  <data name="ImportDone_Title_Format" xml:space="preserve">
+    <value>{0} entries returned to your journal.</value>
+  </data>
+  <data name="ImportDone_Title_One" xml:space="preserve">
+    <value>1 entry returned to your journal.</value>
+  </data>
+  <data name="ImportDone_Body_Format" xml:space="preserve">
+    <value>{0} imported as new pages · {1} conflicts resolved. Last sync: just now.</value>
+  </data>
+  <data name="ImportDone_History" xml:space="preserve">
+    <value>Open history</value>
+  </data>
+  <data name="ImportDone_Today" xml:space="preserve">
+    <value>Back to today</value>
+  </data>
+  <data name="Settings_Back" xml:space="preserve">
+    <value>‹ Today</value>
+  </data>
+  <data name="Settings_Sync_Eyebrow" xml:space="preserve">
+    <value>Sync</value>
+  </data>
+  <data name="Settings_Sync_Notion" xml:space="preserve">
+    <value>Notion</value>
+  </data>
+  <data name="Settings_Sync_Connected" xml:space="preserve">
+    <value>● Connected</value>
+  </data>
+  <data name="Settings_Sync_Disconnected" xml:space="preserve">
+    <value>○ Not connected</value>
+  </data>
+  <data name="Settings_Sync_Line_Format" xml:space="preserve">
+    <value>Journal · last upload {0} · {1} pages</value>
+  </data>
+  <data name="Settings_Sync_Line_One" xml:space="preserve">
+    <value>Journal · last upload {0} · 1 page</value>
+  </data>
+  <data name="Settings_Sync_Line_Never" xml:space="preserve">
+    <value>Journal · nothing uploaded yet</value>
+  </data>
+  <data name="Settings_Sync_Line_Disconnected" xml:space="preserve">
+    <value>Add your Notion access token to upload or import.</value>
+  </data>
+  <data name="Settings_Sync_UploadNow" xml:space="preserve">
+    <value>Upload now</value>
+  </data>
+  <data name="Settings_Sync_Import" xml:space="preserve">
+    <value>Import…</value>
+  </data>
+  <data name="Settings_Sync_Enable" xml:space="preserve">
+    <value>Add access token to enable</value>
+  </data>
+  <data name="Settings_Token_Eyebrow" xml:space="preserve">
+    <value>Notion access token</value>
+  </data>
+  <data name="Settings_Token_Body" xml:space="preserve">
+    <value>Your Notion personal access token. Stored on this device only — upload and import need it.</value>
+  </data>
+  <data name="Settings_Token_Caption" xml:space="preserve">
+    <value>Token</value>
+  </data>
+  <data name="Settings_Token_NotSet" xml:space="preserve">
+    <value>Not set</value>
+  </data>
+  <data name="Settings_Token_Change" xml:space="preserve">
+    <value>Change or remove token</value>
+  </data>
+  <data name="Settings_Token_Add" xml:space="preserve">
+    <value>Add access token</value>
+  </data>
+  <data name="Settings_Reminder_Eyebrow" xml:space="preserve">
+    <value>Reminder</value>
+  </data>
+  <data name="Settings_Reminder_Title" xml:space="preserve">
+    <value>Evening reminder</value>
+  </data>
+  <data name="Settings_Reminder_On" xml:space="preserve">
+    <value>Saved for 9:30 pm · notifications are not scheduled yet</value>
+  </data>
+  <data name="Settings_Reminder_Off" xml:space="preserve">
+    <value>Off — no notifications.</value>
+  </data>
+  <data name="Settings_Footer_Format" xml:space="preserve">
+    <value>Grimoire {0} · entries stored locally on this device</value>
+  </data>
+  <data name="Notion_Connect_Remove" xml:space="preserve">
+    <value>Remove token</value>
+  </data>
+</root>

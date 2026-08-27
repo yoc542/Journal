@@ -3,53 +3,170 @@
     x:Class="JournalApp.Views.SettingsPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:JournalApp.Views"
     xmlns:vm="clr-namespace:JournalApp.ViewModels"
-    xmlns:strings="clr-namespace:JournalApp.Resources.Strings"
+    xmlns:localize="clr-namespace:JournalApp.Extensions"
     x:DataType="vm:SettingsViewModel"
-    Title="{x:Static strings:AppResources.Settings_Title}">
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource NightBase}">
 
-    <ScrollView Background="{AppThemeBinding Light={StaticResource DawnGradient}, Dark={StaticResource TwilightGradient}}">
-        <VerticalStackLayout Padding="16,24" Spacing="12">
+    <ContentPage.Resources>
+        <views:NightSkyDrawable x:Key="NightSky" />
+    </ContentPage.Resources>
 
-            <Label Text="🔑" FontSize="22" HorizontalOptions="Center" Opacity="0.85" />
-            <Label Text="{x:Static strings:AppResources.Settings_Title}" Style="{StaticResource Headline}" />
-            <Label Text="{x:Static strings:AppResources.Settings_Subtitle}" Style="{StaticResource SubHeadline}" />
+    <Grid Background="{StaticResource NightSkyGradient}">
 
-            <Border Style="{StaticResource MagicCard}" Margin="0,12,0,0">
-                <VerticalStackLayout Spacing="10">
+        <GraphicsView Drawable="{StaticResource NightSky}" InputTransparent="True" />
 
-                    <Grid ColumnDefinitions="*,Auto">
-                        <Label Grid.Column="0" Text="{x:Static strings:AppResources.Settings_Token_Label}" FontSize="14" VerticalOptions="Center" />
-                        <Label
-                            Grid.Column="1"
-                            Text="{Binding StatusLabel}"
-                            FontSize="12"
-                            Opacity="0.7"
-                            VerticalOptions="Center"
-                            TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
-                    </Grid>
+        <ScrollView>
+            <VerticalStackLayout Padding="24,12,24,30" Spacing="22">
 
-                    <Entry
-                        Text="{Binding Token}"
-                        Placeholder="{x:Static strings:AppResources.Settings_Token_Placeholder}"
-                        IsPassword="True"
-                        IsEnabled="{Binding IsNotBusy}" />
-
-                    <Label Text="{x:Static strings:AppResources.Settings_Token_Help}" FontSize="12" Opacity="0.6" />
-
+                <VerticalStackLayout Spacing="12">
                     <Button
-                        Text="{x:Static strings:AppResources.Settings_Save}"
-                        Command="{Binding SaveCommand}"
-                        IsEnabled="{Binding IsNotBusy}" />
+                        Text="{localize:Translate Settings_Back}"
+                        Style="{StaticResource GhostCta}"
+                        HorizontalOptions="Start"
+                        Padding="4,0"
+                        HeightRequest="34"
+                        Command="{Binding BackCommand}" />
 
-                    <Button
-                        Text="{x:Static strings:AppResources.Settings_Clear}"
-                        Command="{Binding ClearCommand}"
-                        BackgroundColor="Transparent"
-                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}" />
-
+                    <Label Text="{localize:Translate Settings_Title}" Style="{StaticResource DisplaySmall}" />
                 </VerticalStackLayout>
-            </Border>
-        </VerticalStackLayout>
-    </ScrollView>
+
+                <!-- ==================== Sync ==================== -->
+                <VerticalStackLayout Spacing="9">
+                    <Label Text="{localize:Translate Settings_Sync_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
+
+                    <Border Style="{StaticResource CardPanel}" StrokeShape="RoundRectangle 15" Padding="15">
+                        <VerticalStackLayout Spacing="2">
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label
+                                    Grid.Column="0"
+                                    Text="{localize:Translate Settings_Sync_Notion}"
+                                    FontFamily="KarlaRegular"
+                                    FontSize="14.5"
+                                    TextColor="{StaticResource Cream}" />
+                                <Label
+                                    Grid.Column="1"
+                                    Text="{Binding SyncStatus}"
+                                    FontFamily="KarlaRegular"
+                                    FontSize="11.5"
+                                    VerticalOptions="Center"
+                                    TextColor="{StaticResource Lilac}"
+                                    Opacity="0.6">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsConnected}" Value="True">
+                                            <Setter Property="TextColor" Value="{StaticResource Verdant}" />
+                                            <Setter Property="Opacity" Value="0.95" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+
+                            <Label Text="{Binding SyncLine}" Style="{StaticResource Caption}" FontSize="11.5" />
+
+                            <!-- Connected: the two things sync can do -->
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="9" Margin="0,11,0,0" IsVisible="{Binding IsConnected}">
+                                <Button
+                                    Grid.Column="0"
+                                    Text="{localize:Translate Settings_Sync_UploadNow}"
+                                    Style="{StaticResource ChipButton}"
+                                    FontSize="13"
+                                    HeightRequest="40"
+                                    CornerRadius="11"
+                                    Command="{Binding OpenUploadCommand}" />
+                                <Button
+                                    Grid.Column="1"
+                                    Text="{localize:Translate Settings_Sync_Import}"
+                                    Style="{StaticResource ChipButton}"
+                                    FontSize="13"
+                                    HeightRequest="40"
+                                    CornerRadius="11"
+                                    Command="{Binding OpenImportCommand}" />
+                            </Grid>
+
+                            <!-- Not connected: the one thing that unlocks them -->
+                            <Button
+                                Text="{localize:Translate Settings_Sync_Enable}"
+                                Style="{StaticResource GoldChipButton}"
+                                Margin="0,11,0,0"
+                                IsVisible="{Binding IsNotConnected}"
+                                Command="{Binding OpenConnectCommand}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- ==================== Access token ==================== -->
+                <VerticalStackLayout Spacing="9">
+                    <Label Text="{localize:Translate Settings_Token_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
+
+                    <Border
+                        StrokeShape="RoundRectangle 15"
+                        Stroke="{StaticResource Gold}"
+                        StrokeThickness="1"
+                        BackgroundColor="#231D26"
+                        Padding="15">
+                        <VerticalStackLayout Spacing="11">
+
+                            <Label
+                                Text="{localize:Translate Settings_Token_Body}"
+                                FontFamily="KarlaRegular"
+                                FontSize="12.5"
+                                LineHeight="1.5"
+                                TextColor="{StaticResource Cream}"
+                                Opacity="0.85" />
+
+                            <Border
+                                StrokeShape="RoundRectangle 11"
+                                StrokeThickness="0"
+                                BackgroundColor="{StaticResource NightCard}"
+                                Padding="12,11">
+                                <VerticalStackLayout Spacing="3">
+                                    <Label Text="{localize:Translate Settings_Token_Caption}" Style="{StaticResource EyebrowMuted}" FontSize="10" CharacterSpacing="1.6" />
+                                    <Label
+                                        Text="{Binding TokenMasked}"
+                                        FontFamily="KarlaRegular"
+                                        FontSize="13.5"
+                                        TextColor="{StaticResource Cream}"
+                                        Opacity="0.92" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <Button
+                                Text="{Binding TokenActionLabel}"
+                                Style="{StaticResource GoldChipButton}"
+                                Command="{Binding OpenConnectCommand}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- ==================== Reminder ==================== -->
+                <VerticalStackLayout Spacing="9">
+                    <Label Text="{localize:Translate Settings_Reminder_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
+
+                    <Border Style="{StaticResource CardPanel}" StrokeShape="RoundRectangle 15" Padding="15">
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="3" VerticalOptions="Center">
+                                <Label
+                                    Text="{localize:Translate Settings_Reminder_Title}"
+                                    FontFamily="KarlaRegular"
+                                    FontSize="14.5"
+                                    TextColor="{StaticResource Cream}" />
+                                <Label Text="{Binding ReminderNote}" Style="{StaticResource Caption}" FontSize="11.5" />
+                            </VerticalStackLayout>
+
+                            <Switch
+                                Grid.Column="1"
+                                Style="{StaticResource NightSwitch}"
+                                IsToggled="{Binding ReminderEnabled}"
+                                VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <Label Text="{Binding FooterLabel}" Style="{StaticResource Caption}" FontSize="11.5" Opacity="0.45" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
 </ContentPage>

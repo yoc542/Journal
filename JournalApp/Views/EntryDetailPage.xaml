@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="JournalApp.Views.EntryDetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:JournalApp.Views"
+    xmlns:vm="clr-namespace:JournalApp.ViewModels"
+    xmlns:localize="clr-namespace:JournalApp.Extensions"
+    x:DataType="vm:EntryDetailViewModel"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource NightBase}">
+
+    <ContentPage.Resources>
+        <views:NightSkyDrawable x:Key="NightSky" />
+    </ContentPage.Resources>
+
+    <Grid Background="{StaticResource NightSkyGradient}">
+
+        <GraphicsView Drawable="{StaticResource NightSky}" InputTransparent="True" />
+
+        <Grid RowDefinitions="Auto,*">
+
+            <!-- Header: back to history, plus the entry's actions -->
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="20,10,20,12">
+                <Button
+                    Grid.Column="0"
+                    Text="{localize:Translate Detail_Back}"
+                    Style="{StaticResource GhostCta}"
+                    Padding="4,0"
+                    HeightRequest="34"
+                    Command="{Binding BackCommand}" />
+
+                <HorizontalStackLayout Grid.Column="2" Spacing="8">
+                    <Button
+                        Text="{localize:Translate Detail_Edit}"
+                        Style="{StaticResource ChipButton}"
+                        Command="{Binding EditCommand}" />
+                    <Button
+                        Text="{localize:Translate Detail_Delete}"
+                        Style="{StaticResource DangerChipButton}"
+                        Command="{Binding OpenDeleteCommand}" />
+                </HorizontalStackLayout>
+            </Grid>
+
+            <BoxView Grid.Row="0" HeightRequest="1" VerticalOptions="End" Color="{StaticResource Orchid}" Opacity="0.14" />
+
+            <!-- The entry, read back -->
+            <ScrollView Grid.Row="1">
+                <VerticalStackLayout Padding="26,24,26,40" Spacing="16">
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="{Binding DateLabel}" Style="{StaticResource Eyebrow}" FontSize="10" />
+                        <Label Text="{Binding Title}" Style="{StaticResource DisplaySmall}" FontSize="30" />
+                        <Label Text="{Binding MetaLabel}" Style="{StaticResource Caption}" FontSize="11.5" />
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="10">
+                        <BoxView Grid.Column="0" HeightRequest="1" VerticalOptions="Center" Color="{StaticResource GoldDeep}" Opacity="0.4" />
+                        <Label Grid.Column="1" Text="✦" FontSize="10" TextColor="{StaticResource GoldDeep}" Opacity="0.85" />
+                        <BoxView Grid.Column="2" HeightRequest="1" VerticalOptions="Center" Color="{StaticResource GoldDeep}" Opacity="0.4" />
+                    </Grid>
+
+                    <Label Text="{Binding Body}" Style="{StaticResource ReadingBody}" />
+                </VerticalStackLayout>
+            </ScrollView>
+        </Grid>
+
+        <!-- ==================== Delete confirmation sheet ==================== -->
+        <Grid IsVisible="{Binding IsDeleteOpen}" BackgroundColor="#B80A0618" Padding="18">
+
+            <!-- Tapping the scrim keeps the entry, matching the sheet's own "Keep it" -->
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseDeleteCommand}" />
+            </Grid.GestureRecognizers>
+
+            <Border Style="{StaticResource SheetPanel}">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="{localize:Translate Detail_Delete_Title}" Style="{StaticResource DisplaySmall}" FontSize="26" />
+                    <Label Text="{Binding DeleteMessage}" Style="{StaticResource Body}" FontSize="13.5" />
+
+                    <VerticalStackLayout Spacing="9" Margin="0,2,0,0">
+                        <Button
+                            Text="{localize:Translate Detail_Delete_Confirm}"
+                            Style="{StaticResource DangerCta}"
+                            Command="{Binding ConfirmDeleteCommand}" />
+                        <Button
+                            Text="{localize:Translate Detail_Delete_Keep}"
+                            Style="{StaticResource SecondaryCta}"
+                            HeightRequest="46"
+                            CornerRadius="13"
+                            Command="{Binding CloseDeleteCommand}" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
+</ContentPage>

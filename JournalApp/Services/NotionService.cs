@@ -1,9 +1,8 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Security.Cryptography;
 using System.Text.Json.Nodes;
 using JournalApp.Models;
-using JournalApp.Resources.Strings;
+using JournalApp.Localization;
 
 namespace JournalApp.Services;
 
@@ -11,6 +10,7 @@ namespace JournalApp.Services;
 public class NotionService
 {
     private const string TitleProperty = "Name"; // Notion requires exactly one title property.
+    private const string EntryDateProperty = "Entry Date";
     private const string JournalTitle = "Journal";
 
     private readonly HttpClient _Http;
@@ -30,6 +30,22 @@ public class NotionService
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
         using var response = await _Http.SendAsync(request);
         return response.IsSuccessStatusCode;
+    }
+
+    /// <summary>Whether a token has been stored (or supplied through the environment).</summary>
+    public static async Task<bool> IsConnectedAsync() =>
+        !string.IsNullOrWhiteSpace(await SecureSettings.GetNotionTokenAsync());
+
+    /// <summary>Validates a token, stores it, and makes sure the Journal database exists.
+    /// Returns false when Notion rejects the token, in which case nothing is saved.</summary>
+    public async Task<bool> ConnectAsync(string token)
+    {
+        if (!await IsTokenValidAsync(token))
+            return false;
+
+        await SecureSettings.SetNotionTokenAsync(token);
+        await EnsureJournalDatabaseAsync();
+        return true;
     }
 
     /// <summary>
@@ -60,6 +76,7 @@ public class NotionService
             var parentPageId = await EnsureJournalPageAsync();
             var databaseId = await CreateJournalDatabaseAsync(parentPageId);
             CacheJournalIds(databaseId, await GetFirstDataSourceIdAsync(databaseId));
+            AppSettings.NotionEntryDateReady = true;
         }
         finally
         {
@@ -74,16 +91,21 @@ public class NotionService
     public async Task<string> UploadEntryAsync(JournalEntry entry)
     {
         await AuthorizeAsync();
+        await EnsureEntryDatePropertyAsync();
 
         var properties = new JsonObject
         {
             [TitleProperty] = TitleValue($"Day {entry.DayNumber}"),
             ["Day Number"] = new JsonObject { ["number"] = entry.DayNumber },
+            [EntryDateProperty] = new JsonObject
+            {
+                ["date"] = new JsonObject { ["start"] = entry.EntryDate.ToString("yyyy-MM-dd") }
+            },
             ["Uploaded Date Time"] = new JsonObject
             {
                 ["date"] = new JsonObject { ["start"] = DateTime.Now.ToString("o") }
             },
-            ["Journal Text"] = new JsonObject { ["rich_text"] = RichText(EncryptionService.Encrypt(entry.Text)) }
+            ["Journal Text"] = new JsonObject { ["rich_text"] = RichText(entry.Text) }
         };
 
         if (!string.IsNullOrEmpty(entry.NotionPageId))
@@ -106,7 +128,7 @@ public class NotionService
         return json?["id"]?.GetValue<string>() ?? string.Empty;
     }
 
-    /// <summary>Fetches every row from the Notion "Journal" database, decrypting its text.</summary>
+    /// <summary>Fetches every row from the Notion "Journal" database.</summary>
     public async Task<List<JournalEntry>> FetchEntriesAsync()
     {
         await AuthorizeAsync();
@@ -118,28 +140,62 @@ public class NotionService
         foreach (var page in json?["results"]?.AsArray() ?? new JsonArray())
         {
             var props = page?["properties"];
-            var cipherText = string.Concat((props?["Journal Text"]?["rich_text"]?.AsArray() ?? [])
+            var text = string.Concat((props?["Journal Text"]?["rich_text"]?.AsArray() ?? [])
                 .Select(t => t?["plain_text"]?.GetValue<string>() ?? string.Empty));
 
-            if (string.IsNullOrEmpty(cipherText))
+            if (string.IsNullOrEmpty(text))
                 continue;
 
             entries.Add(new JournalEntry
             {
                 DayNumber = (int)(props?["Day Number"]?["number"]?.GetValue<double>() ?? 0),
-                Text = TryDecrypt(cipherText),
+                EntryDate = ReadEntryDate(props),
+                Text = text,
                 NotionPageId = page?["id"]?.GetValue<string>()
             });
         }
         return entries;
     }
 
-    /// <summary>Decrypts text, falling back to the raw value for legacy rows uploaded before encryption was added.</summary>
-    private static string TryDecrypt(string text)
+    /// <summary>
+    /// Which calendar day a Notion row belongs to. Rows written before "Entry Date" existed fall
+    /// back to the upload timestamp's date, and finally to today, so an old database still imports.
+    /// </summary>
+    private static DateTime ReadEntryDate(JsonNode? props)
     {
-        try { return EncryptionService.Decrypt(text); }
-        catch (FormatException) { return text; }
-        catch (CryptographicException) { return text; }
+        var candidates = new[]
+        {
+            props?[EntryDateProperty]?["date"]?["start"]?.GetValue<string>(),
+            props?["Uploaded Date Time"]?["date"]?["start"]?.GetValue<string>(),
+        };
+
+        foreach (var value in candidates)
+            if (DateTime.TryParse(value, out var parsed))
+                return parsed.Date;
+
+        return DateTime.Today;
+    }
+
+    /// <summary>
+    /// Adds the "Entry Date" property to an existing Journal data source. Databases created by
+    /// older versions of the app lack it, and Notion rejects writes to unknown properties.
+    /// Notion merges the schema, so this is idempotent; the result is cached in preferences.
+    /// </summary>
+    private async Task EnsureEntryDatePropertyAsync()
+    {
+        if (AppSettings.NotionEntryDateReady)
+            return;
+
+        var dataSourceId = await RequireDataSourceIdAsync();
+        await PatchJsonAsync($"data_sources/{dataSourceId}", new JsonObject
+        {
+            ["properties"] = new JsonObject
+            {
+                [EntryDateProperty] = new JsonObject { ["date"] = new JsonObject() }
+            }
+        });
+
+        AppSettings.NotionEntryDateReady = true;
     }
 
     // --- first-launch setup ---
@@ -215,6 +271,7 @@ public class NotionService
             [TitleProperty] = new JsonObject { ["title"] = new JsonObject() },
             ["Day Number"] = new JsonObject { ["number"] = new JsonObject() },
             ["Uploaded Date Time"] = new JsonObject { ["date"] = new JsonObject() },
+            [EntryDateProperty] = new JsonObject { ["date"] = new JsonObject() },
             ["Journal Text"] = new JsonObject { ["rich_text"] = new JsonObject() }
         };
 

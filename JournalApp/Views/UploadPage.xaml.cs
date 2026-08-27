@@ -2,11 +2,11 @@ using JournalApp.ViewModels;
 
 namespace JournalApp.Views;
 
-public partial class JournalListPage : ContentPage
+public partial class UploadPage : ContentPage
 {
-    private readonly JournalListViewModel _ViewModel;
+    private readonly UploadViewModel _ViewModel;
 
-    public JournalListPage(JournalListViewModel viewModel)
+    public UploadPage(UploadViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = _ViewModel = viewModel;
@@ -15,6 +15,6 @@ public partial class JournalListPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _ViewModel.LoadCommand.ExecuteAsync(null);
+        await _ViewModel.LoadAsync();
     }
 }

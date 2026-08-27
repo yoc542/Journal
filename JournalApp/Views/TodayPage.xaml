@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="JournalApp.Views.TodayPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:JournalApp.Views"
+    xmlns:vm="clr-namespace:JournalApp.ViewModels"
+    xmlns:localize="clr-namespace:JournalApp.Extensions"
+    x:DataType="vm:TodayViewModel"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource NightBase}">
+
+    <ContentPage.Resources>
+        <views:NightSkyDrawable x:Key="NightSky" />
+    </ContentPage.Resources>
+
+    <Grid Background="{StaticResource NightSkyGradient}">
+
+        <GraphicsView Drawable="{StaticResource NightSky}" InputTransparent="True" />
+
+        <ScrollView>
+            <VerticalStackLayout Padding="26,16,26,24" Spacing="16">
+
+                <!-- Greeting -->
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
+                        <Label Text="{Binding DateLabel}" Style="{StaticResource Eyebrow}" />
+                        <Label Text="{Binding Greeting}" Style="{StaticResource DisplaySmall}" FontSize="30" />
+                    </VerticalStackLayout>
+
+                    <Button
+                        Grid.Column="1"
+                        Text="⚙"
+                        FontSize="15"
+                        WidthRequest="38"
+                        HeightRequest="38"
+                        Padding="0"
+                        VerticalOptions="Center"
+                        Style="{StaticResource SecondaryCta}"
+                        Command="{Binding OpenSettingsCommand}" />
+                </Grid>
+
+                <!-- Today's page -->
+                <Border Style="{StaticResource PageCard}">
+                    <VerticalStackLayout Spacing="14">
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <Label
+                                Grid.Column="0"
+                                Text="{localize:Translate Today_Page_Eyebrow}"
+                                Style="{StaticResource EyebrowMuted}"
+                                FontSize="11"
+                                Opacity="0.7"
+                                VerticalOptions="Center" />
+                            <Label Grid.Column="1" Text="{Binding SaveStatus}" Style="{StaticResource SaveStatus}" />
+                        </Grid>
+
+                        <Label
+                            Text="{Binding Preview}"
+                            FontFamily="CormorantRegular"
+                            FontSize="19"
+                            LineHeight="1.5"
+                            TextColor="{StaticResource Cream}"
+                            Opacity="0.92" />
+
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <Button
+                                Grid.Column="0"
+                                Text="{Binding ContinueLabel}"
+                                Style="{StaticResource PrimaryCta}"
+                                FontSize="15"
+                                HeightRequest="48"
+                                CornerRadius="13"
+                                Command="{Binding ContinueWritingCommand}" />
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding WordCountLabel}"
+                                Style="{StaticResource Caption}"
+                                VerticalOptions="Center" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Shortcuts -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+
+                    <Border Grid.Column="0" Style="{StaticResource Tile}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenUploadCommand}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="↑" FontSize="16" TextColor="{StaticResource Cream}" />
+                            <Label Text="{localize:Translate Today_Upload_Title}" Style="{StaticResource TileTitle}" />
+                            <Label Text="{Binding PendingLabel}" Style="{StaticResource Caption}" FontSize="11" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1" Style="{StaticResource Tile}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenHistoryCommand}" />
+                        </Border.GestureRecognizers>
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="◫" FontSize="16" TextColor="{StaticResource Cream}" />
+                            <Label Text="{localize:Translate Today_History_Title}" Style="{StaticResource TileTitle}" />
+                            <Label Text="{Binding HistoryCountLabel}" Style="{StaticResource Caption}" FontSize="11" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- This week -->
+                <VerticalStackLayout Spacing="9">
+                    <Label Text="{localize:Translate Today_Week_Eyebrow}" Style="{StaticResource EyebrowMuted}" />
+
+                    <FlexLayout Direction="Row" BindableLayout.ItemsSource="{Binding Week}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:WeekDay">
+                                <Border
+                                    FlexLayout.Grow="1"
+                                    FlexLayout.Basis="0"
+                                    Margin="3,0"
+                                    Padding="0,9"
+                                    StrokeShape="RoundRectangle 11"
+                                    Stroke="{StaticResource Orchid}"
+                                    StrokeThickness="1"
+                                    BackgroundColor="{StaticResource NightCard}"
+                                    Opacity="0.9">
+                                    <VerticalStackLayout Spacing="6">
+                                        <Label
+                                            Text="{Binding Initial}"
+                                            Style="{StaticResource Caption}"
+                                            FontSize="10"
+                                            HorizontalOptions="Center" />
+                                        <Label
+                                            Text="{Binding Mark}"
+                                            FontSize="12"
+                                            HorizontalOptions="Center"
+                                            TextColor="{StaticResource Orchid}"
+                                            Opacity="0.45">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsWritten}" Value="True">
+                                                    <Setter Property="TextColor" Value="{StaticResource Gold}" />
+                                                    <Setter Property="Opacity" Value="0.95" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

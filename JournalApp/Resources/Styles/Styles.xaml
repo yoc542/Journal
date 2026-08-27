@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
@@ -445,4 +445,268 @@
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
 
+
+    <!-- ==== Grimoire onboarding styles ==== -->
+
+    <Style TargetType="Label" x:Key="Eyebrow">
+        <Setter Property="FontFamily" Value="KarlaSemiBold" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="CharacterSpacing" Value="2.2" />
+        <Setter Property="TextTransform" Value="Uppercase" />
+        <Setter Property="TextColor" Value="{StaticResource Gold}" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Display">
+        <Setter Property="FontFamily" Value="CormorantSemiBold" />
+        <Setter Property="FontSize" Value="42" />
+        <Setter Property="LineHeight" Value="1.06" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="DisplaySmall" BasedOn="{StaticResource Display}">
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="LineHeight" Value="1.14" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Body">
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="LineHeight" Value="1.5" />
+        <Setter Property="TextColor" Value="{StaticResource Lilac}" />
+        <Setter Property="Opacity" Value="0.8" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Caption" BasedOn="{StaticResource Body}">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Opacity" Value="0.62" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="FieldLabel" BasedOn="{StaticResource Body}">
+        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="Opacity" Value="0.75" />
+    </Style>
+
+    <!-- Rounded field wrapper: Entry itself cannot round its corners in MAUI -->
+    <Style TargetType="Border" x:Key="Field">
+        <Setter Property="Stroke" Value="{StaticResource Orchid}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="BackgroundColor" Value="{StaticResource NightCard}" />
+        <Setter Property="Padding" Value="12,0" />
+        <Setter Property="HeightRequest" Value="52" />
+    </Style>
+
+    <Style TargetType="Entry" x:Key="FieldEntry">
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource Orchid}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="CardPanel">
+        <Setter Property="Stroke" Value="{StaticResource Orchid}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 14" />
+        <Setter Property="BackgroundColor" Value="{StaticResource NightCard}" />
+        <Setter Property="Padding" Value="16,14" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="PrimaryCta">
+        <Setter Property="Background" Value="{StaticResource DuskGradient}" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="FontFamily" Value="KarlaSemiBold" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="HeightRequest" Value="54" />
+        <Setter Property="BorderWidth" Value="0" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="SecondaryCta">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="HeightRequest" Value="50" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderColor" Value="{StaticResource Orchid}" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="GhostCta" BasedOn="{StaticResource SecondaryCta}">
+        <Setter Property="BorderColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Lilac}" />
+        <Setter Property="HeightRequest" Value="44" />
+    </Style>
+
+    <Style TargetType="Switch" x:Key="NightSwitch">
+        <Setter Property="OnColor" Value="#7A5199" />
+        <Setter Property="ThumbColor" Value="{StaticResource Cream}" />
+    </Style>
+
+    <!-- ==== Grimoire daily-journal styles ==== -->
+
+    <Style TargetType="Label" x:Key="EyebrowMuted" BasedOn="{StaticResource Eyebrow}">
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="CharacterSpacing" Value="2" />
+        <Setter Property="TextColor" Value="{StaticResource Lilac}" />
+        <Setter Property="Opacity" Value="0.55" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="SaveStatus">
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="11.5" />
+        <Setter Property="TextColor" Value="{StaticResource Gold}" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <!-- Today's page: squarer corners and a gold edge, so it reads as paper rather than a chip -->
+    <Style TargetType="Border" x:Key="PageCard">
+        <Setter Property="Stroke" Value="{StaticResource GoldDeep}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 6" />
+        <Setter Property="Background" Value="{StaticResource ParchmentGradient}" />
+        <Setter Property="Padding" Value="18" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="Tile" BasedOn="{StaticResource CardPanel}">
+        <Setter Property="Padding" Value="14" />
+        <Setter Property="Opacity" Value="0.94" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="TileTitle">
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+    </Style>
+
+    <!-- The written page itself: serif, generous, no chrome -->
+    <Style TargetType="Editor" x:Key="EditorBody">
+        <Setter Property="FontFamily" Value="CormorantRegular" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource Orchid}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="AutoSize" Value="Disabled" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="FooterCta" BasedOn="{StaticResource PrimaryCta}">
+        <Setter Property="FontSize" Value="13.5" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="11" />
+        <Setter Property="Padding" Value="18,0" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="FooterGhostCta" BasedOn="{StaticResource SecondaryCta}">
+        <Setter Property="FontSize" Value="13.5" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="11" />
+        <Setter Property="Padding" Value="16,0" />
+    </Style>
+
+    <!-- ==== Grimoire history styles ==== -->
+
+    <!-- Compact header action, e.g. Import / Edit / Delete -->
+    <Style TargetType="Button" x:Key="ChipButton">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="HeightRequest" Value="34" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="Padding" Value="13,0" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderColor" Value="{StaticResource Orchid}" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="GoldChipButton" BasedOn="{StaticResource ChipButton}">
+        <Setter Property="BorderColor" Value="{StaticResource Gold}" />
+        <Setter Property="TextColor" Value="{StaticResource Gold}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="11" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="DangerChipButton" BasedOn="{StaticResource ChipButton}">
+        <Setter Property="BorderColor" Value="{StaticResource EmberDeep}" />
+        <Setter Property="TextColor" Value="{StaticResource Ember}" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="DangerCta" BasedOn="{StaticResource PrimaryCta}">
+        <Setter Property="Background" Value="{StaticResource EmberGradient}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="HeightRequest" Value="50" />
+        <Setter Property="CornerRadius" Value="13" />
+    </Style>
+
+    <!-- One row in the history list -->
+    <Style TargetType="Border" x:Key="EntryRow" BasedOn="{StaticResource CardPanel}">
+        <Setter Property="StrokeShape" Value="RoundRectangle 15" />
+        <Setter Property="Padding" Value="14" />
+        <Setter Property="Opacity" Value="0.94" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="EntryDay">
+        <Setter Property="FontFamily" Value="CormorantSemiBold" />
+        <Setter Property="FontSize" Value="23" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="EntryDow" BasedOn="{StaticResource Eyebrow}">
+        <Setter Property="FontSize" Value="9.5" />
+        <Setter Property="CharacterSpacing" Value="1.2" />
+        <Setter Property="TextColor" Value="{StaticResource Lilac}" />
+        <Setter Property="Opacity" Value="0.6" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="EntryTitle">
+        <Setter Property="FontFamily" Value="CormorantSemiBold" />
+        <Setter Property="FontSize" Value="17" />
+        <Setter Property="LineHeight" Value="1.25" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+    </Style>
+
+    <!-- Reading an entry back: the same serif as the editor, looser leading -->
+    <Style TargetType="Label" x:Key="ReadingBody">
+        <Setter Property="FontFamily" Value="CormorantRegular" />
+        <Setter Property="FontSize" Value="18.5" />
+        <Setter Property="LineHeight" Value="1.7" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="Opacity" Value="0.92" />
+    </Style>
+
+    <!-- Bottom sheet for the delete confirmation -->
+    <Style TargetType="Border" x:Key="SheetPanel">
+        <Setter Property="StrokeShape" Value="RoundRectangle 22" />
+        <Setter Property="Stroke" Value="{StaticResource EmberDeep}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="BackgroundColor" Value="#2E1A34" />
+        <Setter Property="Padding" Value="22" />
+        <Setter Property="VerticalOptions" Value="End" />
+    </Style>
+
+    <!-- ==== Grimoire Notion-group styles ==== -->
+
+    <!-- A tappable radio/checkbox row on the conflict screen -->
+    <Style TargetType="Border" x:Key="ChoiceRow">
+        <Setter Property="StrokeShape" Value="RoundRectangle 13" />
+        <Setter Property="Stroke" Value="{StaticResource Orchid}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="BackgroundColor" Value="{StaticResource NightCard}" />
+        <Setter Property="Padding" Value="14,13" />
+        <Setter Property="Opacity" Value="0.9" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="ChoiceDot">
+        <Setter Property="HeightRequest" Value="18" />
+        <Setter Property="WidthRequest" Value="18" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 9" />
+        <Setter Property="Stroke" Value="{StaticResource Gold}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
 </ResourceDictionary>
