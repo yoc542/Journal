@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using JournalApp.Data;
 using JournalApp.Localization;
 using JournalApp.Models;
-using JournalApp.Services;
+using JournalApp.Views;
 
 namespace JournalApp.ViewModels;
 
@@ -14,7 +14,6 @@ public partial class JournalEditorViewModel : ObservableObject
     private const int AutoSaveDelayMs = 900;
 
     private readonly JournalDatabase _Database;
-    private readonly NotionService _Notion;
 
     private JournalEntry _Entry = new();
     private CancellationTokenSource? _AutoSave;
@@ -45,11 +44,7 @@ public partial class JournalEditorViewModel : ObservableObject
         ? AppResources.Editor_WordCount_One
         : string.Format(AppResources.Editor_WordCount_Format, WordCount);
 
-    public JournalEditorViewModel(JournalDatabase database, NotionService notion)
-    {
-        _Database = database;
-        _Notion = notion;
-    }
+    public JournalEditorViewModel(JournalDatabase database) => _Database = database;
 
     partial void OnTextChanged(string value)
     {
@@ -143,35 +138,12 @@ public partial class JournalEditorViewModel : ObservableObject
         SaveStatus = FormatSavedAt(_Entry.UpdatedAt);
     }
 
-    /// <summary>Footer action: commit the page, then push it to Notion.</summary>
+    /// <summary>Footer action: commit the page, then hand off to the upload screen.</summary>
     [RelayCommand]
     private async Task UploadAsync()
     {
-        if (IsBusy)
-            return;
-
         await SaveAsync();
-
-        if (_Entry.Id == 0)
-            return;
-
-        try
-        {
-            IsBusy = true;
-            _Entry.NotionPageId = await _Notion.UploadEntryAsync(_Entry);
-            _Entry.IsUploaded = true;
-            await _Database.SaveEntryAsync(_Entry);
-            await Shell.Current.DisplayAlertAsync(
-                AppResources.Upload_SuccessTitle, AppResources.Upload_SuccessMessage, AppResources.OK);
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlertAsync(AppResources.Upload_FailTitle, ex.Message, AppResources.OK);
-        }
-        finally
-        {
-            IsBusy = false;
-        }
+        await Shell.Current.GoToAsync(nameof(UploadPage));
     }
 
     [RelayCommand]

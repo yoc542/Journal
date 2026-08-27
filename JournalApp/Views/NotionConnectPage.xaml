@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="JournalApp.Views.NotionConnectPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:JournalApp.Views"
+    xmlns:vm="clr-namespace:JournalApp.ViewModels"
+    xmlns:localize="clr-namespace:JournalApp.Extensions"
+    x:DataType="vm:NotionConnectViewModel"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource NightBase}">
+
+    <ContentPage.Resources>
+        <views:NightSkyDrawable x:Key="NightSky" />
+    </ContentPage.Resources>
+
+    <Grid Background="{StaticResource NightSkyGradient}">
+
+        <GraphicsView Drawable="{StaticResource NightSky}" InputTransparent="True" />
+
+        <ScrollView>
+            <Grid RowDefinitions="Auto,*,Auto" Padding="26,12,26,34" RowSpacing="18">
+
+                <Button
+                    Grid.Row="0"
+                    Text="{localize:Translate Notion_Connect_Back}"
+                    Style="{StaticResource GhostCta}"
+                    HorizontalOptions="Start"
+                    Padding="4,0"
+                    HeightRequest="34"
+                    Command="{Binding BackCommand}" />
+
+                <VerticalStackLayout Grid.Row="1" Spacing="18">
+
+                    <VerticalStackLayout Spacing="9">
+                        <Label Text="{localize:Translate Notion_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
+                        <Label Text="{localize:Translate Notion_Connect_Title}" Style="{StaticResource DisplaySmall}" />
+                        <Label Text="{localize:Translate Notion_Connect_Body}" Style="{StaticResource Body}" FontSize="13.5" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="7">
+                        <Label Text="{localize:Translate Onboarding_Token_Label}" Style="{StaticResource FieldLabel}" />
+                        <Border Style="{StaticResource Field}" HeightRequest="50">
+                            <Entry
+                                Style="{StaticResource FieldEntry}"
+                                FontSize="15"
+                                Text="{Binding Token}"
+                                IsPassword="True"
+                                IsEnabled="{Binding IsNotBusy}"
+                                Placeholder="{localize:Translate Settings_Token_Placeholder}" />
+                        </Border>
+                        <Label Text="{localize:Translate Onboarding_Token_Help}" Style="{StaticResource Caption}" FontSize="11.5" />
+                    </VerticalStackLayout>
+
+                    <!-- Reassurance panel: gold rather than alarming -->
+                    <Border
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource Gold}"
+                        StrokeThickness="1"
+                        BackgroundColor="#1F1A2A"
+                        Padding="14,13">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Label Grid.Column="0" Text="✦" FontSize="13" TextColor="{StaticResource Gold}" />
+                            <Label
+                                Grid.Column="1"
+                                Text="{localize:Translate Notion_Connect_Note}"
+                                Style="{StaticResource Body}"
+                                FontSize="12.5"
+                                Opacity="0.85" />
+                        </Grid>
+                    </Border>
+
+                    <Border
+                        IsVisible="{Binding HasError}"
+                        StrokeShape="RoundRectangle 12"
+                        Stroke="{StaticResource EmberDeep}"
+                        StrokeThickness="1"
+                        BackgroundColor="#3A1E28"
+                        Padding="14,13">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="9">
+                            <Label Grid.Column="0" Text="⚠" FontSize="13" TextColor="{StaticResource Ember}" />
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding ErrorMessage}"
+                                FontFamily="KarlaRegular"
+                                FontSize="13"
+                                LineHeight="1.45"
+                                TextColor="{StaticResource Ember}" />
+                        </Grid>
+                    </Border>
+
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Gold}" />
+                </VerticalStackLayout>
+
+                <Button
+                    Grid.Row="2"
+                    Text="{Binding ButtonLabel}"
+                    Style="{StaticResource PrimaryCta}"
+                    Command="{Binding ConnectCommand}"
+                    IsEnabled="{Binding IsNotBusy}" />
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -46,6 +46,16 @@ public class JournalDatabase
         return await db.Table<JournalEntry>().CountAsync();
     }
 
+    /// <summary>Entries not yet pushed to Notion, oldest first, as the upload queue.</summary>
+    public async Task<List<JournalEntry>> GetPendingEntriesAsync()
+    {
+        var db = await GetConnectionAsync();
+        return await db.Table<JournalEntry>()
+            .Where(e => !e.IsUploaded)
+            .OrderBy(e => e.EntryDate)
+            .ToListAsync();
+    }
+
     /// <summary>How many entries have not reached Notion yet.</summary>
     public async Task<int> GetPendingUploadCountAsync()
     {

@@ -24,6 +24,14 @@ public static class AppSettings
         set => Preferences.Set(nameof(NotionDataSourceId), value ?? string.Empty);
     }
 
+    /// <summary>Set once the Notion data source is known to have the "Entry Date" property,
+    /// so the one-off schema patch is not re-sent on every upload.</summary>
+    public static bool NotionEntryDateReady
+    {
+        get => Preferences.Get(nameof(NotionEntryDateReady), false);
+        set => Preferences.Set(nameof(NotionEntryDateReady), value);
+    }
+
     /// <summary>Set once the user has finished (or skipped through) the onboarding wizard.</summary>
     public static bool SetupCompleted
     {

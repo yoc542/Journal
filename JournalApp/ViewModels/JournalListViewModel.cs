@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.Input;
 using JournalApp.Data;
 using JournalApp.Localization;
 using JournalApp.Models;
-using JournalApp.Services;
 using JournalApp.Views;
 
 namespace JournalApp.ViewModels;
@@ -21,14 +20,10 @@ public class MonthGroup : List<JournalEntry>
 public partial class JournalListViewModel : ObservableObject
 {
     private readonly JournalDatabase _Database;
-    private readonly NotionService _Notion;
 
     private List<JournalEntry> _All = new();
 
     [ObservableProperty] private ObservableCollection<MonthGroup> _Months = new();
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsNotBusy))]
-    private bool _IsBusy;
     [ObservableProperty] private string _NoResultsMessage = string.Empty;
 
     [ObservableProperty]
@@ -40,18 +35,10 @@ public partial class JournalListViewModel : ObservableObject
 
     [ObservableProperty] private string _Query = string.Empty;
 
-    public JournalListViewModel(JournalDatabase database, NotionService notion)
-    {
-        _Database = database;
-        _Notion = notion;
-    }
+    public JournalListViewModel(JournalDatabase database) => _Database = database;
 
     /// <summary>Nothing has ever been written, so the search box and list are pointless.</summary>
     public bool IsEmpty => !HasEntries;
-
-    public bool IsNotBusy => !IsBusy;
-
-    public bool IsImportVisible => Constants.DeveloperMode;
 
     partial void OnQueryChanged(string value) => ApplyFilter();
 
@@ -98,33 +85,5 @@ public partial class JournalListViewModel : ObservableObject
     private static Task BackAsync() => Shell.Current.GoToAsync("..");
 
     [RelayCommand]
-    private async Task ImportFromNotionAsync()
-    {
-        if (IsBusy)
-            return;
-
-        try
-        {
-            IsBusy = true;
-            var imported = await _Notion.FetchEntriesAsync();
-            foreach (var entry in imported)
-            {
-                entry.IsUploaded = true;
-                await _Database.SaveEntryAsync(entry);
-            }
-            await LoadAsync();
-            await Shell.Current.DisplayAlertAsync(
-                AppResources.Import_SuccessTitle,
-                string.Format(AppResources.Import_SuccessMessage_Format, imported.Count),
-                AppResources.OK);
-        }
-        catch (Exception ex)
-        {
-            await Shell.Current.DisplayAlertAsync(AppResources.Import_FailTitle, ex.Message, AppResources.OK);
-        }
-        finally
-        {
-            IsBusy = false;
-        }
-    }
+    private static Task ImportAsync() => Shell.Current.GoToAsync(nameof(ImportPage));
 }

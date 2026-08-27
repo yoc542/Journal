@@ -114,14 +114,11 @@ public partial class OnboardingViewModel : ObservableObject
             IsBusy = true;
             ErrorMessage = string.Empty;
 
-            if (!await _Notion.IsTokenValidAsync(token))
+            if (!await _Notion.ConnectAsync(token))
             {
                 ErrorMessage = AppResources.Onboarding_Token_ErrorRejected;
                 return;
             }
-
-            await SecureSettings.SetNotionTokenAsync(token);
-            await _Notion.EnsureJournalDatabaseAsync();
 
             IsConnected = true;
             Step = OnboardingStep.Done;

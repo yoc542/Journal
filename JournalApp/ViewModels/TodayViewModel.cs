@@ -109,10 +109,11 @@ public partial class TodayViewModel : ObservableObject
     [RelayCommand]
     private static Task ContinueWritingAsync() => Shell.Current.GoToAsync(nameof(JournalEditorPage));
 
-    /// <summary>Both tiles land on the history list for now; the upload tile gets its own
-    /// progress screen when the Notion group is built.</summary>
     [RelayCommand]
     private static Task OpenHistoryAsync() => Shell.Current.GoToAsync(nameof(JournalListPage));
+
+    [RelayCommand]
+    private static Task OpenUploadAsync() => Shell.Current.GoToAsync(nameof(UploadPage));
 
     [RelayCommand]
     private static Task OpenSettingsAsync() => Shell.Current.GoToAsync(nameof(SettingsPage));

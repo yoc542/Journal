@@ -36,12 +36,6 @@
                         Style="{StaticResource ChipButton}"
                         Command="{Binding EditCommand}" />
                     <Button
-                        Text="{localize:Translate Detail_Upload}"
-                        Style="{StaticResource ChipButton}"
-                        Padding="11,0"
-                        Command="{Binding UploadCommand}"
-                        IsEnabled="{Binding IsNotBusy}" />
-                    <Button
                         Text="{localize:Translate Detail_Delete}"
                         Style="{StaticResource DangerChipButton}"
                         Command="{Binding OpenDeleteCommand}" />
@@ -70,8 +64,6 @@
                 </VerticalStackLayout>
             </ScrollView>
         </Grid>
-
-        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Gold}" VerticalOptions="Center" />
 
         <!-- ==================== Delete confirmation sheet ==================== -->
         <Grid IsVisible="{Binding IsDeleteOpen}" BackgroundColor="#B80A0618" Padding="18">

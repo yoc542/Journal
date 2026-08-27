@@ -86,7 +86,7 @@
 
                     <Border Grid.Column="0" Style="{StaticResource Tile}">
                         <Border.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding OpenHistoryCommand}" />
+                            <TapGestureRecognizer Command="{Binding OpenUploadCommand}" />
                         </Border.GestureRecognizers>
                         <VerticalStackLayout Spacing="5">
                             <Label Text="↑" FontSize="16" TextColor="{StaticResource Cream}" />

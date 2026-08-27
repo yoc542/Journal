@@ -38,9 +38,7 @@
                         Grid.Column="2"
                         Text="{localize:Translate History_Import}"
                         Style="{StaticResource ChipButton}"
-                        IsVisible="{Binding IsImportVisible}"
-                        IsEnabled="{Binding IsNotBusy}"
-                        Command="{Binding ImportFromNotionCommand}" />
+                        Command="{Binding ImportCommand}" />
                 </Grid>
 
                 <Label Text="{localize:Translate History_Title}" Style="{StaticResource DisplaySmall}" />
@@ -52,8 +50,6 @@
                         Text="{Binding Query}"
                         Placeholder="{localize:Translate History_Search_Placeholder}" />
                 </Border>
-
-                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Gold}" />
 
                 <Label
                     Text="{Binding NoResultsMessage}"
@@ -162,8 +158,7 @@
                         Style="{StaticResource SecondaryCta}"
                         HeightRequest="48"
                         CornerRadius="13"
-                        IsVisible="{Binding IsImportVisible}"
-                        Command="{Binding ImportFromNotionCommand}" />
+                        Command="{Binding ImportCommand}" />
                 </VerticalStackLayout>
             </VerticalStackLayout>
         </Grid>

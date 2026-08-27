@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="JournalApp.Views.UploadPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:JournalApp.Views"
+    xmlns:vm="clr-namespace:JournalApp.ViewModels"
+    xmlns:localize="clr-namespace:JournalApp.Extensions"
+    x:DataType="vm:UploadViewModel"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource NightBase}">
+
+    <ContentPage.Resources>
+        <views:NightSkyDrawable x:Key="NightSky" />
+    </ContentPage.Resources>
+
+    <Grid Background="{StaticResource NightSkyGradient}">
+
+        <GraphicsView Drawable="{StaticResource NightSky}" InputTransparent="True" />
+
+        <!-- ==================== Notion not connected ==================== -->
+        <Grid RowDefinitions="Auto,*" IsVisible="{Binding IsNotConnected}">
+            <Button
+                Grid.Row="0"
+                Text="{localize:Translate Upload_Back}"
+                Style="{StaticResource GhostCta}"
+                HorizontalOptions="Start"
+                Margin="22,12,0,0"
+                Padding="4,0"
+                HeightRequest="34"
+                Command="{Binding BackCommand}" />
+
+            <VerticalStackLayout Grid.Row="1" Padding="30,0,30,60" Spacing="16" VerticalOptions="Center">
+                <Label Text="{localize:Translate Upload_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
+                <Label Text="{localize:Translate Notion_NotConnected_Title}" Style="{StaticResource DisplaySmall}" />
+                <Label Text="{localize:Translate Notion_NotConnected_Body}" Style="{StaticResource Body}" FontSize="14" />
+                <Button
+                    Text="{localize:Translate Notion_Connect_Cta}"
+                    Style="{StaticResource PrimaryCta}"
+                    Margin="0,6,0,0"
+                    Command="{Binding ConnectCommand}" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- ==================== Upload queue ==================== -->
+        <ScrollView IsVisible="{Binding IsConnected}">
+            <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" Padding="26,12,26,34" RowSpacing="18">
+
+                <Button
+                    Grid.Row="0"
+                    Text="{localize:Translate Upload_Back}"
+                    Style="{StaticResource GhostCta}"
+                    HorizontalOptions="Start"
+                    Padding="4,0"
+                    HeightRequest="34"
+                    Command="{Binding BackCommand}" />
+
+                <VerticalStackLayout Grid.Row="1" Spacing="8">
+                    <Label Text="{localize:Translate Upload_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
+                    <Label Text="{Binding Heading}" Style="{StaticResource DisplaySmall}" FontSize="31" />
+                    <Label Text="{Binding Subheading}" Style="{StaticResource Body}" FontSize="13.5" />
+                </VerticalStackLayout>
+
+                <!-- Progress card -->
+                <Border Grid.Row="2" Style="{StaticResource CardPanel}" StrokeShape="RoundRectangle 16" IsVisible="{Binding HasQueue}">
+                    <VerticalStackLayout Spacing="9">
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0" Text="{Binding StatusLabel}" Style="{StaticResource Caption}" FontSize="12" />
+                            <Label Grid.Column="1" Text="{Binding PercentLabel}" Style="{StaticResource Caption}" FontSize="12" />
+                        </Grid>
+
+                        <ProgressBar
+                            Progress="{Binding Progress}"
+                            ProgressColor="{StaticResource Gold}"
+                            BackgroundColor="{StaticResource NightHaze}"
+                            HeightRequest="6" />
+
+                        <VerticalStackLayout Spacing="0" Margin="0,6,0,0" BindableLayout.ItemsSource="{Binding Queue}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:UploadQueueItem">
+                                    <Grid ColumnDefinitions="*,Auto" Padding="0,9">
+                                        <BoxView
+                                            Grid.ColumnSpan="2"
+                                            HeightRequest="1"
+                                            VerticalOptions="Start"
+                                            Color="{StaticResource Orchid}"
+                                            Opacity="0.12" />
+
+                                        <Label
+                                            Grid.Column="0"
+                                            Text="{Binding DateLabel}"
+                                            FontFamily="KarlaRegular"
+                                            FontSize="13"
+                                            TextColor="{StaticResource Cream}"
+                                            VerticalOptions="Center" />
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="{Binding StateLabel}"
+                                            FontFamily="KarlaRegular"
+                                            FontSize="11.5"
+                                            VerticalOptions="Center"
+                                            TextColor="{StaticResource Lilac}"
+                                            Opacity="0.6">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsSending}" Value="True">
+                                                    <Setter Property="TextColor" Value="{StaticResource Gold}" />
+                                                    <Setter Property="Opacity" Value="0.9" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsUploaded}" Value="True">
+                                                    <Setter Property="TextColor" Value="{StaticResource Verdant}" />
+                                                    <Setter Property="Opacity" Value="0.9" />
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsBlocked}" Value="True">
+                                                    <Setter Property="TextColor" Value="{StaticResource Ember}" />
+                                                    <Setter Property="Opacity" Value="0.9" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Outcome banners -->
+                <VerticalStackLayout Grid.Row="3" Spacing="10">
+
+                    <Border
+                        IsVisible="{Binding IsDone}"
+                        StrokeShape="RoundRectangle 14"
+                        Stroke="{StaticResource Verdant}"
+                        StrokeThickness="1"
+                        BackgroundColor="#172A20"
+                        Padding="14">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Label Grid.Column="0" Text="✓" FontSize="13" TextColor="{StaticResource Verdant}" />
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding DoneBanner}"
+                                FontFamily="KarlaRegular"
+                                FontSize="13"
+                                LineHeight="1.5"
+                                TextColor="{StaticResource Verdant}" />
+                        </Grid>
+                    </Border>
+
+                    <Border
+                        IsVisible="{Binding IsFailed}"
+                        StrokeShape="RoundRectangle 14"
+                        Stroke="{StaticResource EmberDeep}"
+                        StrokeThickness="1"
+                        BackgroundColor="#3A1E28"
+                        Padding="14">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
+                            <Label Grid.Column="0" Text="⚠" FontSize="13" TextColor="{StaticResource Ember}" />
+                            <Label
+                                Grid.Column="1"
+                                Text="{localize:Translate Upload_Failed_Banner}"
+                                FontFamily="KarlaRegular"
+                                FontSize="13"
+                                LineHeight="1.5"
+                                TextColor="{StaticResource Ember}" />
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+
+                <Button
+                    Grid.Row="4"
+                    Text="{Binding ButtonLabel}"
+                    Style="{StaticResource PrimaryCta}"
+                    Command="{Binding StartCommand}"
+                    IsEnabled="{Binding IsNotRunning}" />
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>

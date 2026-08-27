@@ -34,6 +34,9 @@ public static class MauiProgram
         builder.Services.AddTransient<OnboardingViewModel>();
         builder.Services.AddTransient<TodayViewModel>();
         builder.Services.AddTransient<EntryDetailViewModel>();
+        builder.Services.AddTransient<NotionConnectViewModel>();
+        builder.Services.AddTransient<UploadViewModel>();
+        builder.Services.AddTransient<ImportViewModel>();
 
         // Views
         builder.Services.AddTransient<JournalListPage>();
@@ -42,6 +45,9 @@ public static class MauiProgram
         builder.Services.AddTransient<OnboardingPage>();
         builder.Services.AddTransient<TodayPage>();
         builder.Services.AddTransient<EntryDetailPage>();
+        builder.Services.AddTransient<NotionConnectPage>();
+        builder.Services.AddTransient<UploadPage>();
+        builder.Services.AddTransient<ImportPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

@@ -679,4 +679,26 @@
         <Setter Property="Padding" Value="22" />
         <Setter Property="VerticalOptions" Value="End" />
     </Style>
+
+    <!-- ==== Grimoire Notion-group styles ==== -->
+
+    <!-- A tappable radio/checkbox row on the conflict screen -->
+    <Style TargetType="Border" x:Key="ChoiceRow">
+        <Setter Property="StrokeShape" Value="RoundRectangle 13" />
+        <Setter Property="Stroke" Value="{StaticResource Orchid}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="BackgroundColor" Value="{StaticResource NightCard}" />
+        <Setter Property="Padding" Value="14,13" />
+        <Setter Property="Opacity" Value="0.9" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="ChoiceDot">
+        <Setter Property="HeightRequest" Value="18" />
+        <Setter Property="WidthRequest" Value="18" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 9" />
+        <Setter Property="Stroke" Value="{StaticResource Gold}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
 </ResourceDictionary>

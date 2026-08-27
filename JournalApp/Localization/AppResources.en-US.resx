@@ -73,35 +73,8 @@
   <data name="History_Empty_Subtitle" xml:space="preserve">
     <value>Your history fills in one evening at a time. Write today's entry, or import what you already keep in Notion.</value>
   </data>
-  <data name="Menu_Cancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
   <data name="Menu_UploadToNotion" xml:space="preserve">
     <value>Upload to Notion</value>
-  </data>
-  <data name="Upload_AlreadyTitle" xml:space="preserve">
-    <value>Already uploaded</value>
-  </data>
-  <data name="Upload_AlreadyMessage" xml:space="preserve">
-    <value>This entry was already uploaded to Notion. Upload again?</value>
-  </data>
-  <data name="Upload_Confirm" xml:space="preserve">
-    <value>Upload</value>
-  </data>
-  <data name="Upload_SuccessTitle" xml:space="preserve">
-    <value>Uploaded</value>
-  </data>
-  <data name="Upload_SuccessMessage" xml:space="preserve">
-    <value>Entry uploaded to Notion.</value>
-  </data>
-  <data name="Upload_FailTitle" xml:space="preserve">
-    <value>Upload failed</value>
-  </data>
-  <data name="Import_SuccessTitle" xml:space="preserve">
-    <value>Imported</value>
-  </data>
-  <data name="Import_SuccessMessage_Format" xml:space="preserve">
-    <value>Imported {0} entries from Notion.</value>
   </data>
   <data name="Import_FailTitle" xml:space="preserve">
     <value>Import failed</value>
@@ -368,9 +341,6 @@ every evening.</value>
   <data name="Detail_Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
-  <data name="Detail_Upload" xml:space="preserve">
-    <value>↑</value>
-  </data>
   <data name="Detail_Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
@@ -394,5 +364,221 @@ every evening.</value>
   </data>
   <data name="Editor_Back_Generic" xml:space="preserve">
     <value>‹ Back</value>
+  </data>
+  <data name="Notion_Connect_Back" xml:space="preserve">
+    <value>‹ Settings</value>
+  </data>
+  <data name="Notion_Eyebrow" xml:space="preserve">
+    <value>Notion</value>
+  </data>
+  <data name="Notion_Connect_Title" xml:space="preserve">
+    <value>Connect your Notion database</value>
+  </data>
+  <data name="Notion_Connect_Body" xml:space="preserve">
+    <value>Grimoire copies each day's entry into a Notion database page. Paste your personal access token to turn upload and import on.</value>
+  </data>
+  <data name="Notion_Connect_Note" xml:space="preserve">
+    <value>The token stays on this device. Remove it any time in Settings.</value>
+  </data>
+  <data name="Notion_Connect_Cta" xml:space="preserve">
+    <value>Connect Notion</value>
+  </data>
+  <data name="Notion_Connect_Retry" xml:space="preserve">
+    <value>Try again</value>
+  </data>
+  <data name="Notion_Connect_Error" xml:space="preserve">
+    <value>Notion refused the token. Check that the integration is shared with this database, then try again.</value>
+  </data>
+  <data name="Upload_Back" xml:space="preserve">
+    <value>‹ Today</value>
+  </data>
+  <data name="Upload_Eyebrow" xml:space="preserve">
+    <value>Upload to Notion</value>
+  </data>
+  <data name="Upload_Heading_Idle_Format" xml:space="preserve">
+    <value>{0} entries ready to upload</value>
+  </data>
+  <data name="Upload_Heading_Idle_One" xml:space="preserve">
+    <value>1 entry ready to upload</value>
+  </data>
+  <data name="Upload_Heading_Empty" xml:space="preserve">
+    <value>Nothing waiting to upload</value>
+  </data>
+  <data name="Upload_Heading_Running" xml:space="preserve">
+    <value>Uploading your journal…</value>
+  </data>
+  <data name="Upload_Heading_Done" xml:space="preserve">
+    <value>All entries are in Notion</value>
+  </data>
+  <data name="Upload_Heading_Failed" xml:space="preserve">
+    <value>Upload could not finish</value>
+  </data>
+  <data name="Upload_Sub_Idle" xml:space="preserve">
+    <value>Entries upload one page per day into your Notion database.</value>
+  </data>
+  <data name="Upload_Sub_Empty" xml:space="preserve">
+    <value>Every entry on this device already has a matching Notion page.</value>
+  </data>
+  <data name="Upload_Sub_Done" xml:space="preserve">
+    <value>Every entry on this device now has a matching Notion page.</value>
+  </data>
+  <data name="Upload_Sub_Failed" xml:space="preserve">
+    <value>Nothing was lost — Grimoire keeps the queue and retries when you are back online.</value>
+  </data>
+  <data name="Upload_Status_Ready" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="Upload_Status_Uploading" xml:space="preserve">
+    <value>Uploading</value>
+  </data>
+  <data name="Upload_Status_Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="Upload_Status_Stopped" xml:space="preserve">
+    <value>Stopped</value>
+  </data>
+  <data name="Upload_Item_Queued" xml:space="preserve">
+    <value>Queued</value>
+  </data>
+  <data name="Upload_Item_Sending" xml:space="preserve">
+    <value>Sending…</value>
+  </data>
+  <data name="Upload_Item_Uploaded" xml:space="preserve">
+    <value>Uploaded</value>
+  </data>
+  <data name="Upload_Item_Retry" xml:space="preserve">
+    <value>Waiting to retry</value>
+  </data>
+  <data name="Upload_Cta_Start_Format" xml:space="preserve">
+    <value>Upload {0} entries</value>
+  </data>
+  <data name="Upload_Cta_Start_One" xml:space="preserve">
+    <value>Upload 1 entry</value>
+  </data>
+  <data name="Upload_Cta_Running" xml:space="preserve">
+    <value>Uploading…</value>
+  </data>
+  <data name="Upload_Cta_Done" xml:space="preserve">
+    <value>Back to today</value>
+  </data>
+  <data name="Upload_Cta_Retry" xml:space="preserve">
+    <value>Retry upload</value>
+  </data>
+  <data name="Upload_Done_Banner_Format" xml:space="preserve">
+    <value>{0} entries are now in Notion. Last sync: just now.</value>
+  </data>
+  <data name="Upload_Done_Banner_One" xml:space="preserve">
+    <value>1 entry is now in Notion. Last sync: just now.</value>
+  </data>
+  <data name="Upload_Failed_Banner" xml:space="preserve">
+    <value>Upload stopped. Your entries are safe on this device — try again when you are back online.</value>
+  </data>
+  <data name="Notion_NotConnected_Title" xml:space="preserve">
+    <value>Notion is not connected yet</value>
+  </data>
+  <data name="Notion_NotConnected_Body" xml:space="preserve">
+    <value>Add your Notion personal access token to upload entries and import them back.</value>
+  </data>
+  <data name="Import_Back" xml:space="preserve">
+    <value>‹ History</value>
+  </data>
+  <data name="Import_Eyebrow" xml:space="preserve">
+    <value>Import from Notion</value>
+  </data>
+  <data name="Import_Heading_Scanning" xml:space="preserve">
+    <value>Looking for pages…</value>
+  </data>
+  <data name="Import_Heading_Found_Format" xml:space="preserve">
+    <value>{0} pages found in Notion</value>
+  </data>
+  <data name="Import_Heading_Found_One" xml:space="preserve">
+    <value>1 page found in Notion</value>
+  </data>
+  <data name="Import_Heading_None" xml:space="preserve">
+    <value>No pages in Notion yet</value>
+  </data>
+  <data name="Import_Body_Format" xml:space="preserve">
+    <value>Choose which pages to bring in — {0} of these already exist on this device.</value>
+  </data>
+  <data name="Import_Body_NoConflicts" xml:space="preserve">
+    <value>Choose which pages to bring in.</value>
+  </data>
+  <data name="Import_Body_None" xml:space="preserve">
+    <value>Upload an entry first, then it will show up here.</value>
+  </data>
+  <data name="Import_Scanning_Label" xml:space="preserve">
+    <value>Reading your Notion database…</value>
+  </data>
+  <data name="Import_Flag_Conflict" xml:space="preserve">
+    <value>Already on this device — conflict</value>
+  </data>
+  <data name="Import_Flag_New" xml:space="preserve">
+    <value>New — no local entry</value>
+  </data>
+  <data name="Import_Cta_Format" xml:space="preserve">
+    <value>Import {0} entries</value>
+  </data>
+  <data name="Import_Cta_One" xml:space="preserve">
+    <value>Import 1 entry</value>
+  </data>
+  <data name="Conflict_Back" xml:space="preserve">
+    <value>‹ Import</value>
+  </data>
+  <data name="Conflict_Eyebrow_Format" xml:space="preserve">
+    <value>Conflict {0} of {1}</value>
+  </data>
+  <data name="Conflict_Title_Format" xml:space="preserve">
+    <value>Two entries for {0}</value>
+  </data>
+  <data name="Conflict_Body" xml:space="preserve">
+    <value>You already have an entry for this date. Choose which version to keep — nothing is overwritten until you confirm.</value>
+  </data>
+  <data name="Conflict_Device_Format" xml:space="preserve">
+    <value>On this device · {0} words</value>
+  </data>
+  <data name="Conflict_Notion_Format" xml:space="preserve">
+    <value>From Notion · {0} words</value>
+  </data>
+  <data name="Conflict_Choice_Device" xml:space="preserve">
+    <value>Keep the entry on this device</value>
+  </data>
+  <data name="Conflict_Choice_Device_Note" xml:space="preserve">
+    <value>The Notion version is discarded</value>
+  </data>
+  <data name="Conflict_Choice_Incoming" xml:space="preserve">
+    <value>Use the version from Notion</value>
+  </data>
+  <data name="Conflict_Choice_Incoming_Note" xml:space="preserve">
+    <value>Your local entry is replaced</value>
+  </data>
+  <data name="Conflict_Choice_Both" xml:space="preserve">
+    <value>Keep both</value>
+  </data>
+  <data name="Conflict_Choice_Both_Note" xml:space="preserve">
+    <value>The Notion version is added as a second entry for that day</value>
+  </data>
+  <data name="Conflict_ApplyAll" xml:space="preserve">
+    <value>Apply this choice to the other conflicts too</value>
+  </data>
+  <data name="Conflict_Skip" xml:space="preserve">
+    <value>Skip</value>
+  </data>
+  <data name="Conflict_Resolve" xml:space="preserve">
+    <value>Resolve and continue</value>
+  </data>
+  <data name="ImportDone_Title_Format" xml:space="preserve">
+    <value>{0} entries returned to your journal.</value>
+  </data>
+  <data name="ImportDone_Title_One" xml:space="preserve">
+    <value>1 entry returned to your journal.</value>
+  </data>
+  <data name="ImportDone_Body_Format" xml:space="preserve">
+    <value>{0} imported as new pages · {1} conflicts resolved. Last sync: just now.</value>
+  </data>
+  <data name="ImportDone_History" xml:space="preserve">
+    <value>Open history</value>
+  </data>
+  <data name="ImportDone_Today" xml:space="preserve">
+    <value>Back to today</value>
   </data>
 </root>
