@@ -101,27 +101,6 @@
                                 Placeholder="{localize:Translate Onboarding_Name_Placeholder}" />
                         </Border>
                     </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="10">
-                        <Label Text="{localize:Translate Onboarding_Reminder_Label}" Style="{StaticResource FieldLabel}" />
-                        <Border Style="{StaticResource CardPanel}">
-                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                                <VerticalStackLayout Grid.Column="0" Spacing="3" VerticalOptions="Center">
-                                    <Label
-                                        Text="{localize:Translate Onboarding_Reminder_Title}"
-                                        FontFamily="KarlaRegular"
-                                        FontSize="15"
-                                        TextColor="{StaticResource Cream}" />
-                                    <Label Text="{localize:Translate Onboarding_Reminder_Body}" Style="{StaticResource Caption}" />
-                                </VerticalStackLayout>
-                                <Switch
-                                    Grid.Column="1"
-                                    Style="{StaticResource NightSwitch}"
-                                    IsToggled="{Binding ReminderEnabled}"
-                                    VerticalOptions="Center" />
-                            </Grid>
-                        </Border>
-                    </VerticalStackLayout>
                 </VerticalStackLayout>
 
                 <Button

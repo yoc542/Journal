@@ -33,6 +33,44 @@
                     <Label Text="{localize:Translate Settings_Title}" Style="{StaticResource DisplaySmall}" />
                 </VerticalStackLayout>
 
+                <!-- ==================== Your name ==================== -->
+                <VerticalStackLayout Spacing="9">
+                    <Label Text="{localize:Translate Settings_Name_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
+
+                    <Border Style="{StaticResource CardPanel}" StrokeShape="RoundRectangle 15" Padding="15">
+                        <VerticalStackLayout Spacing="11">
+
+                            <Label Text="{localize:Translate Settings_Name_Body}" Style="{StaticResource Caption}" FontSize="11.5" />
+
+                            <Border Style="{StaticResource Field}">
+                                <Entry
+                                    Style="{StaticResource FieldEntry}"
+                                    Text="{Binding UserName}"
+                                    Placeholder="{localize:Translate Settings_Name_Placeholder}"
+                                    ReturnCommand="{Binding SaveNameCommand}" />
+                            </Border>
+
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                <Button
+                                    Grid.Column="0"
+                                    Text="{localize:Translate Settings_Name_Save}"
+                                    Style="{StaticResource ChipButton}"
+                                    FontSize="13"
+                                    HeightRequest="40"
+                                    CornerRadius="11"
+                                    Command="{Binding SaveNameCommand}" />
+                                <Label
+                                    Grid.Column="1"
+                                    Text="{Binding NameNote}"
+                                    Style="{StaticResource Caption}"
+                                    FontSize="11.5"
+                                    VerticalOptions="Center"
+                                    IsVisible="{Binding HasNameNote}" />
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
                 <!-- ==================== Sync ==================== -->
                 <VerticalStackLayout Spacing="9">
                     <Label Text="{localize:Translate Settings_Sync_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
@@ -138,30 +176,6 @@
                                 Style="{StaticResource GoldChipButton}"
                                 Command="{Binding OpenConnectCommand}" />
                         </VerticalStackLayout>
-                    </Border>
-                </VerticalStackLayout>
-
-                <!-- ==================== Reminder ==================== -->
-                <VerticalStackLayout Spacing="9">
-                    <Label Text="{localize:Translate Settings_Reminder_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
-
-                    <Border Style="{StaticResource CardPanel}" StrokeShape="RoundRectangle 15" Padding="15">
-                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                            <VerticalStackLayout Grid.Column="0" Spacing="3" VerticalOptions="Center">
-                                <Label
-                                    Text="{localize:Translate Settings_Reminder_Title}"
-                                    FontFamily="KarlaRegular"
-                                    FontSize="14.5"
-                                    TextColor="{StaticResource Cream}" />
-                                <Label Text="{Binding ReminderNote}" Style="{StaticResource Caption}" FontSize="11.5" />
-                            </VerticalStackLayout>
-
-                            <Switch
-                                Grid.Column="1"
-                                Style="{StaticResource NightSwitch}"
-                                IsToggled="{Binding ReminderEnabled}"
-                                VerticalOptions="Center" />
-                        </Grid>
                     </Border>
                 </VerticalStackLayout>
 

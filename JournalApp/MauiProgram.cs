@@ -1,4 +1,4 @@
-using JournalApp.Data;
+﻿using JournalApp.Data;
 using JournalApp.Services;
 using JournalApp.ViewModels;
 using JournalApp.Views;
@@ -49,10 +49,36 @@ public static class MauiProgram
         builder.Services.AddTransient<UploadPage>();
         builder.Services.AddTransient<ImportPage>();
 
+        RemoveNativeEntryBorder();
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
 
         return builder.Build();
+    }
+
+
+    private static void RemoveNativeEntryBorder()
+    {
+        Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoNativeBorder", (handler, _) =>
+        {
+#if ANDROID
+            handler.PlatformView.Background = null;
+#elif IOS || MACCATALYST
+            handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+#elif WINDOWS
+            var none = new Microsoft.UI.Xaml.Thickness(0);
+            var transparent = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Transparent);
+
+            handler.PlatformView.BorderThickness = none;
+
+            handler.PlatformView.Resources["TextControlBorderThemeThickness"] = none;
+            handler.PlatformView.Resources["TextControlBorderThemeThicknessFocused"] = none;
+            handler.PlatformView.Resources["TextControlBackground"] = transparent;
+            handler.PlatformView.Resources["TextControlBackgroundPointerOver"] = transparent;
+            handler.PlatformView.Resources["TextControlBackgroundFocused"] = transparent;
+#endif
+        });
     }
 }

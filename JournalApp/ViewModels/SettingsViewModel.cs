@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JournalApp.Data;
@@ -16,18 +16,24 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty] private string _SyncStatus = string.Empty;
     [ObservableProperty] private string _SyncLine = string.Empty;
     [ObservableProperty] private string _TokenActionLabel = string.Empty;
-    [ObservableProperty] private string _ReminderNote = string.Empty;
     [ObservableProperty] private string _FooterLabel = string.Empty;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasNameNote))]
+    private string _NameNote = string.Empty;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsNotConnected))]
     private bool _IsConnected;
 
-    [ObservableProperty] private bool _ReminderEnabled;
+    /// <summary>Name being edited; only written to settings when the user saves.</summary>
+    [ObservableProperty] private string _UserName = string.Empty;
 
     public SettingsViewModel(JournalDatabase database) => _Database = database;
 
     public bool IsNotConnected => !IsConnected;
+
+    public bool HasNameNote => NameNote.Length > 0;
 
     public async Task LoadAsync()
     {
@@ -45,10 +51,8 @@ public partial class SettingsViewModel : ObservableObject
 
         SyncLine = await BuildSyncLineAsync();
 
-        ReminderEnabled = AppSettings.ReminderEnabled;
-        ReminderNote = ReminderEnabled
-            ? AppResources.Settings_Reminder_On
-            : AppResources.Settings_Reminder_Off;
+        UserName = AppSettings.UserName;
+        NameNote = string.Empty;
 
         FooterLabel = string.Format(AppResources.Settings_Footer_Format, AppInfo.VersionString);
     }
@@ -76,12 +80,15 @@ public partial class SettingsViewModel : ObservableObject
             ? "••••••••"
             : $"{token[..4]}•••••••••••••••• {token[^4..]}";
 
-    partial void OnReminderEnabledChanged(bool value)
+    /// <summary>Clears the "saved" note as soon as the field is edited again.</summary>
+    partial void OnUserNameChanged(string value) => NameNote = string.Empty;
+
+    [RelayCommand]
+    private void SaveName()
     {
-        AppSettings.ReminderEnabled = value;
-        ReminderNote = value
-            ? AppResources.Settings_Reminder_On
-            : AppResources.Settings_Reminder_Off;
+        UserName = (UserName ?? string.Empty).Trim();
+        AppSettings.UserName = UserName;
+        NameNote = AppResources.Settings_Name_Saved;
     }
 
     [RelayCommand]

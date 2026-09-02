@@ -1,4 +1,4 @@
-namespace JournalApp.Services;
+﻿namespace JournalApp.Services;
 
 /// <summary>Small key/value settings persisted via MAUI Preferences.</summary>
 public static class AppSettings
@@ -51,12 +51,5 @@ public static class AppSettings
     {
         get => Preferences.Get(nameof(UserName), string.Empty);
         set => Preferences.Set(nameof(UserName), value ?? string.Empty);
-    }
-
-    /// <summary>Whether the evening writing reminder is switched on.</summary>
-    public static bool ReminderEnabled
-    {
-        get => Preferences.Get(nameof(ReminderEnabled), true);
-        set => Preferences.Set(nameof(ReminderEnabled), value);
     }
 }

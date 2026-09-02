@@ -1,4 +1,4 @@
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JournalApp.Localization;
 using JournalApp.Services;
@@ -25,7 +25,6 @@ public partial class OnboardingViewModel : ObservableObject
     private OnboardingStep _Step = OnboardingStep.Welcome;
 
     [ObservableProperty] private string _Name = string.Empty;
-    [ObservableProperty] private bool _ReminderEnabled = true;
     [ObservableProperty] private string _Token = string.Empty;
 
     [ObservableProperty]
@@ -65,7 +64,6 @@ public partial class OnboardingViewModel : ObservableObject
     public void Load()
     {
         Name = AppSettings.UserName;
-        ReminderEnabled = AppSettings.ReminderEnabled;
     }
 
     [RelayCommand]
@@ -78,12 +76,11 @@ public partial class OnboardingViewModel : ObservableObject
         Step = Step == OnboardingStep.Token ? OnboardingStep.Profile : OnboardingStep.Welcome;
     }
 
-    /// <summary>Profile step → token step, persisting the name and reminder choice.</summary>
+    /// <summary>Profile step → token step, persisting the name.</summary>
     [RelayCommand]
     private void Continue()
     {
         AppSettings.UserName = (Name ?? string.Empty).Trim();
-        AppSettings.ReminderEnabled = ReminderEnabled;
         ErrorMessage = string.Empty;
         Step = OnboardingStep.Token;
     }
