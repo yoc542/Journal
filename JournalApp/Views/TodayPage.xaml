@@ -111,13 +111,11 @@
                 <VerticalStackLayout Spacing="9">
                     <Label Text="{localize:Translate Today_Week_Eyebrow}" Style="{StaticResource EyebrowMuted}" />
 
-                    <FlexLayout Direction="Row" BindableLayout.ItemsSource="{Binding Week}">
+                    <Grid ColumnDefinitions="*,*,*,*,*,*,*" ColumnSpacing="6" BindableLayout.ItemsSource="{Binding Week}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate x:DataType="vm:WeekDay">
                                 <Border
-                                    FlexLayout.Grow="1"
-                                    FlexLayout.Basis="0"
-                                    Margin="3,0"
+                                    Grid.Column="{Binding Index}"
                                     Padding="0,9"
                                     StrokeShape="RoundRectangle 11"
                                     Stroke="{StaticResource Orchid}"
@@ -147,7 +145,7 @@
                                 </Border>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
-                    </FlexLayout>
+                    </Grid>
                 </VerticalStackLayout>
             </VerticalStackLayout>
         </ScrollView>

@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -10,7 +10,7 @@ using JournalApp.Views;
 namespace JournalApp.ViewModels;
 
 /// <summary>One cell of the Today screen's week strip.</summary>
-public sealed record WeekDay(string Initial, string Mark, bool IsWritten);
+public sealed record WeekDay(int Index, string Initial, string Mark, bool IsWritten);
 
 public partial class TodayViewModel : ObservableObject
 {
@@ -82,6 +82,7 @@ public partial class TodayViewModel : ObservableObject
             var isWritten = written.Contains(date);
             var abbreviation = date.ToString("ddd", CultureInfo.CurrentCulture);
             days.Add(new WeekDay(
+                i,
                 abbreviation.Length > 0 ? abbreviation[..1] : string.Empty,
                 isWritten ? "✦" : "·",
                 isWritten));

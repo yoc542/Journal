@@ -26,7 +26,11 @@ public class JournalEntry
     /// <summary>Notion page ID this entry was uploaded to, if any. Reused to update the same row instead of duplicating it.</summary>
     public string? NotionPageId { get; set; }
 
-    /// <summary>First non-empty line, used as the list title.</summary>
+    /// <summary>Sequential day heading ("Day 12"), used as the history and detail title.</summary>
+    [Ignore]
+    public string DayTitle => string.Format(AppResources.Entry_DayTitle_Format, DayNumber);
+
+    /// <summary>First non-empty line, used to label a Notion page on the import screen.</summary>
     [Ignore]
     public string DisplayTitle
     {

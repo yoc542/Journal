@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -60,6 +60,9 @@
   </resheader>
   <data name="Entry_Day_Format" xml:space="preserve">
     <value>Day {0} of your story</value>
+  </data>
+  <data name="Entry_DayTitle_Format" xml:space="preserve">
+    <value>Day {0}</value>
   </data>
   <data name="Editor_Placeholder" xml:space="preserve">
     <value>Write freely. Nobody reads this but you.</value>
@@ -318,7 +321,7 @@ every evening.</value>
     <value>Delete this entry?</value>
   </data>
   <data name="Detail_Delete_Message_Format" xml:space="preserve">
-    <value>“{0}” from {1} will be removed from this device. The copy already uploaded to Notion stays there.</value>
+    <value>{0} from {1} will be removed from this device. The copy already uploaded to Notion stays there.</value>
   </data>
   <data name="Detail_Delete_Confirm" xml:space="preserve">
     <value>Delete entry</value>

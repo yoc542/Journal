@@ -29,7 +29,7 @@ public partial class EntryDetailViewModel : ObservableObject
         _Entry = await _Database.GetEntryAsync(EntryId) ?? new JournalEntry();
 
         DateLabel = _Entry.FullDateLabel;
-        Title = _Entry.DisplayTitle;
+        Title = _Entry.DayTitle;
         Body = _Entry.Text;
         MetaLabel = _Entry.WordCount == 1
             ? string.Format(AppResources.Detail_Meta_One_Format, _Entry.SyncLabel)

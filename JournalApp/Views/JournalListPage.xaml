@@ -89,9 +89,9 @@
 
                                 <VerticalStackLayout Grid.Column="1" Spacing="5">
                                     <Label
-                                        Text="{Binding DisplayTitle}"
+                                        Text="{Binding DayTitle}"
                                         Style="{StaticResource EntryTitle}"
-                                        MaxLines="2"
+                                        MaxLines="1"
                                         LineBreakMode="TailTruncation" />
                                     <Label
                                         Text="{Binding Excerpt}"
