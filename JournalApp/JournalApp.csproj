@@ -1,12 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net10.0-android;net10.0-ios</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
+			$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
 
 		<!-- Note for MacCatalyst:
-		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
-		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
+		The default runtime is maccatalyst-x64, except in Release config, in which case the default is
+		maccatalyst-x64;maccatalyst-arm64.
+		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular
+		<RuntimeIdentifier>.
 		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
 		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
 		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
@@ -25,17 +28,28 @@
 		<ApplicationId>com.companyname.journalapp</ApplicationId>
 
 		<!-- Versions -->
-		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
 
-		<!-- To develop, package, and publish an app to the Microsoft Store, see: https://aka.ms/MauiTemplateUnpackaged -->
+		<!-- To develop, package, and publish an app to the Microsoft Store, see:
+		https://aka.ms/MauiTemplateUnpackaged -->
 		<WindowsPackageType>None</WindowsPackageType>
 
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">15.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
-		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion
+			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+			15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion
+			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">
+			15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion
+			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+			21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion
+			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+			10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion
+			Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+			10.0.17763.0</TargetPlatformMinVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -48,7 +62,7 @@
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
 		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
-		
+
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
@@ -68,28 +82,29 @@
 	     @(Compile) before then, so the Windows head would fail with CS0234. -->
 	<Target Name="GenerateAppResourcesClass" BeforeTargets="XamlPreCompile;BeforeCompile">
 		<GenerateResource Sources="@(_AppResourcesResx)"
-		                  ExecuteAsTool="false"
-		                  UsePreserializedResources="$(GenerateResourceUsePreserializedResources)"
-		                  OutputResources="$(IntermediateOutputPath)AppResources.StronglyTyped.resources"
-		                  StateFile="$(IntermediateOutputPath)AppResources.StronglyTyped.cache"
-		                  StronglyTypedLanguage="CSharp"
-		                  StronglyTypedNamespace="JournalApp.Localization"
-		                  StronglyTypedClassName="AppResources"
-		                  StronglyTypedFileName="$(IntermediateOutputPath)AppResources.Designer.cs" />
+			ExecuteAsTool="false"
+			UsePreserializedResources="$(GenerateResourceUsePreserializedResources)"
+			OutputResources="$(IntermediateOutputPath)AppResources.StronglyTyped.resources"
+			StateFile="$(IntermediateOutputPath)AppResources.StronglyTyped.cache"
+			StronglyTypedLanguage="CSharp"
+			StronglyTypedNamespace="JournalApp.Localization"
+			StronglyTypedClassName="AppResources"
+			StronglyTypedFileName="$(IntermediateOutputPath)AppResources.Designer.cs" />
 		<ItemGroup>
 			<Compile Include="$(IntermediateOutputPath)AppResources.Designer.cs" />
-			<FileWrites Include="$(IntermediateOutputPath)AppResources.Designer.cs;$(IntermediateOutputPath)AppResources.StronglyTyped.resources;$(IntermediateOutputPath)AppResources.StronglyTyped.cache" />
+			<FileWrites
+				Include="$(IntermediateOutputPath)AppResources.Designer.cs;$(IntermediateOutputPath)AppResources.StronglyTyped.resources;$(IntermediateOutputPath)AppResources.StronglyTyped.cache" />
 		</ItemGroup>
 	</Target>
 
 	<ItemGroup>
-		<PackageReference Include="DotNetEnv" Version="3.2.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="10.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.11" />
-		<!-- Override the vulnerable e_sqlite3 native libs pulled in transitively (GHSA-2m69-gcr7-jv3q). -->
+		<!-- Override the vulnerable e_sqlite3 native libs pulled in transitively
+		(GHSA-2m69-gcr7-jv3q). -->
 		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="3.53.3" />
 		<PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.android" Version="2.1.12" />
 	</ItemGroup>
