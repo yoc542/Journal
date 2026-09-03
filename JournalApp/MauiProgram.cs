@@ -37,7 +37,7 @@ public static class MauiProgram
         builder.Services.AddTransient<NotionConnectViewModel>();
         builder.Services.AddTransient<UploadViewModel>();
         builder.Services.AddTransient<ImportViewModel>();
-        builder.Services.AddTransient<PinSetupViewModel>();
+        builder.Services.AddTransient<PinViewModel>();
         builder.Services.AddTransient<LockViewModel>();
 
         // Views

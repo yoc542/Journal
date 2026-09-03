@@ -9,6 +9,8 @@ public static class Constants
 
     public const int PinLength = 4;
 
+    public const string PinBackspaceKey = "back";
+
     public const string NotionVersion = "2026-03-11";
 
 }
