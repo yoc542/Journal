@@ -633,6 +633,20 @@
         <Setter Property="TextColor" Value="{StaticResource Ember}" />
     </Style>
 
+    <!-- ==== PIN pad ==== -->
+
+    <Style TargetType="Button" x:Key="PinKey">
+        <Setter Property="BackgroundColor" Value="{StaticResource NightCard}" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="FontFamily" Value="CormorantRegular" />
+        <Setter Property="FontSize" Value="25" />
+        <Setter Property="HeightRequest" Value="58" />
+        <Setter Property="CornerRadius" Value="15" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderColor" Value="{StaticResource Orchid}" />
+    </Style>
+
     <Style TargetType="Button" x:Key="DangerCta" BasedOn="{StaticResource PrimaryCta}">
         <Setter Property="Background" Value="{StaticResource EmberGradient}" />
         <Setter Property="FontSize" Value="15" />

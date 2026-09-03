@@ -26,6 +26,12 @@ public partial class SettingsViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsNotConnected))]
     private bool _IsConnected;
 
+    [ObservableProperty] private bool _HasPin;
+
+    [ObservableProperty] private string _PinMasked = string.Empty;
+    [ObservableProperty] private string _PinNote = string.Empty;
+    [ObservableProperty] private string _PinActionLabel = string.Empty;
+
     /// <summary>Name being edited; only written to settings when the user saves.</summary>
     [ObservableProperty] private string _UserName = string.Empty;
 
@@ -52,6 +58,11 @@ public partial class SettingsViewModel : ObservableObject
             : AppResources.Settings_Sync_Disconnected;
 
         SyncLine = await BuildSyncLineAsync();
+
+        HasPin = AppSettings.PinSet;
+        PinMasked = HasPin ? AppResources.Settings_Lock_Masked : AppResources.Settings_Lock_Unset_Mark;
+        PinNote = HasPin ? AppResources.Settings_Lock_Note_Set : AppResources.Settings_Lock_Note_Unset;
+        PinActionLabel = HasPin ? AppResources.Settings_Lock_Reset : AppResources.Settings_Lock_Set;
 
         UserName = AppSettings.UserName;
         NameNote = string.Empty;
@@ -101,6 +112,12 @@ public partial class SettingsViewModel : ObservableObject
 
     [RelayCommand]
     private static Task OpenConnectAsync() => Shell.Current.GoToAsync(nameof(NotionConnectPage));
+
+    [RelayCommand]
+    private static Task OpenPinAsync() => Shell.Current.GoToAsync(nameof(PinPage));
+
+    [RelayCommand]
+    private static Task LockNowAsync() => Shell.Current.GoToAsync($"//{nameof(LockPage)}");
 
     [RelayCommand]
     private static Task BackAsync() => Shell.Current.GoToAsync("..");

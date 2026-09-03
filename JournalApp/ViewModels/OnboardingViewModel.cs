@@ -11,6 +11,7 @@ public enum OnboardingStep
 {
     Welcome,
     Profile,
+    Pin,
     Token,
     Done,
 }
@@ -20,8 +21,8 @@ public partial class OnboardingViewModel : ObservableObject
     private readonly NotionService _Notion;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsWelcome), nameof(IsProfile), nameof(IsToken), nameof(IsDone),
-        nameof(StepLabel), nameof(IsSecondStep))]
+    [NotifyPropertyChangedFor(nameof(IsWelcome), nameof(IsProfile), nameof(IsPin), nameof(IsToken),
+        nameof(IsDone), nameof(StepLabel))]
     private OnboardingStep _Step = OnboardingStep.Welcome;
 
     [ObservableProperty] private string _Name = string.Empty;
@@ -35,17 +36,33 @@ public partial class OnboardingViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _IsBusy;
 
-    public OnboardingViewModel(NotionService notion) => _Notion = notion;
+    public OnboardingViewModel(NotionService notion)
+    {
+        _Notion = notion;
+        Pin.Completed = () =>
+        {
+            Step = OnboardingStep.Token;
+            return Task.CompletedTask;
+        };
+    }
+
+    /// <summary>Drives the keypad shown on the PIN step; the wizard moves on once it saves.</summary>
+    public PinViewModel Pin { get; } = new();
 
     public int MaxUserNameLength => Constants.MaxUserNameLength;
 
     public bool IsWelcome => Step == OnboardingStep.Welcome;
     public bool IsProfile => Step == OnboardingStep.Profile;
+    public bool IsPin => Step == OnboardingStep.Pin;
     public bool IsToken => Step == OnboardingStep.Token;
     public bool IsDone => Step == OnboardingStep.Done;
 
-    public bool IsSecondStep => Step == OnboardingStep.Token;
-    public string StepLabel => string.Format(AppResources.Onboarding_Step_Format, IsSecondStep ? 2 : 1);
+    public string StepLabel => string.Format(AppResources.Onboarding_Step_Format, Step switch
+    {
+        OnboardingStep.Pin => 2,
+        OnboardingStep.Token => 3,
+        _ => 1,
+    });
 
     public bool HasError => ErrorMessage.Length > 0;
     public bool IsNotBusy => !IsBusy;
@@ -75,16 +92,25 @@ public partial class OnboardingViewModel : ObservableObject
     private void Back()
     {
         ErrorMessage = string.Empty;
-        Step = Step == OnboardingStep.Token ? OnboardingStep.Profile : OnboardingStep.Welcome;
+        Step = Step switch
+        {
+            OnboardingStep.Token => OnboardingStep.Pin,
+            OnboardingStep.Pin => OnboardingStep.Profile,
+            _ => OnboardingStep.Welcome,
+        };
+
+        if (Step == OnboardingStep.Pin)
+            Pin.Load();
     }
 
-    /// <summary>Profile step → token step, persisting the name.</summary>
+    /// <summary>Profile step → PIN step, persisting the name.</summary>
     [RelayCommand]
     private void Continue()
     {
         AppSettings.UserName = (Name ?? string.Empty).Trim();
         ErrorMessage = string.Empty;
-        Step = OnboardingStep.Token;
+        Pin.Load();
+        Step = OnboardingStep.Pin;
     }
 
     [RelayCommand]

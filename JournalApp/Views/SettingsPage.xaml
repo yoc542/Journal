@@ -180,6 +180,53 @@
                     </Border>
                 </VerticalStackLayout>
 
+                <!-- ==================== Lock ==================== -->
+                <VerticalStackLayout Spacing="9">
+                    <Label Text="{localize:Translate Settings_Lock_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
+
+                    <Border Style="{StaticResource CardPanel}" StrokeShape="RoundRectangle 15" Padding="15">
+                        <VerticalStackLayout Spacing="11">
+
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                    <Label
+                                        Text="{localize:Translate Settings_Lock_Title}"
+                                        FontFamily="KarlaRegular"
+                                        FontSize="14.5"
+                                        TextColor="{StaticResource Cream}" />
+                                    <Label Text="{Binding PinNote}" Style="{StaticResource Caption}" FontSize="11.5" />
+                                </VerticalStackLayout>
+
+                                <Label
+                                    Grid.Column="1"
+                                    Text="{Binding PinMasked}"
+                                    FontFamily="KarlaRegular"
+                                    FontSize="15"
+                                    CharacterSpacing="4"
+                                    VerticalOptions="Start"
+                                    TextColor="{StaticResource Gold}" />
+                            </Grid>
+
+                            <Grid ColumnDefinitions="*,*" ColumnSpacing="9">
+                                <Button
+                                    Grid.Column="0"
+                                    Text="{Binding PinActionLabel}"
+                                    Style="{StaticResource GoldChipButton}"
+                                    Command="{Binding OpenPinCommand}" />
+                                <Button
+                                    Grid.Column="1"
+                                    Text="{localize:Translate Settings_Lock_Now}"
+                                    Style="{StaticResource ChipButton}"
+                                    FontSize="13"
+                                    HeightRequest="40"
+                                    CornerRadius="11"
+                                    IsVisible="{Binding HasPin}"
+                                    Command="{Binding LockNowCommand}" />
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
                 <Label Text="{Binding FooterLabel}" Style="{StaticResource Caption}" FontSize="11.5" Opacity="0.45" />
             </VerticalStackLayout>
         </ScrollView>

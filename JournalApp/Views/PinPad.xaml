@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="JournalApp.Views.PinPad"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:JournalApp"
+    xmlns:views="clr-namespace:JournalApp.Views">
+
+    <VerticalStackLayout x:Name="Body" Spacing="14" x:DataType="views:PinPad">
+
+        <!-- One dot per digit, filled as the PIN is typed -->
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="16" Padding="0,8,0,2"
+                               BindableLayout.ItemsSource="{Binding Dots}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate x:DataType="views:PinDot">
+                    <Border
+                        WidthRequest="15"
+                        HeightRequest="15"
+                        StrokeShape="RoundRectangle 8"
+                        Stroke="{StaticResource Gold}"
+                        StrokeThickness="1"
+                        BackgroundColor="Transparent">
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding IsFilled}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{StaticResource Gold}" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                    </Border>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </HorizontalStackLayout>
+
+        <Border
+            IsVisible="{Binding HasError}"
+            StrokeShape="RoundRectangle 12"
+            Stroke="{StaticResource EmberDeep}"
+            StrokeThickness="1"
+            BackgroundColor="#3A1E28"
+            Padding="13,11">
+            <Label
+                Text="{Binding ErrorMessage}"
+                FontFamily="KarlaRegular"
+                FontSize="12.5"
+                LineHeight="1.45"
+                TextColor="{StaticResource Ember}" />
+        </Border>
+
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,*,*" RowSpacing="10" ColumnSpacing="10">
+            <Button Grid.Row="0" Grid.Column="0" Text="1" Style="{StaticResource PinKey}" Command="{Binding KeyCommand}" CommandParameter="1" />
+            <Button Grid.Row="0" Grid.Column="1" Text="2" Style="{StaticResource PinKey}" Command="{Binding KeyCommand}" CommandParameter="2" />
+            <Button Grid.Row="0" Grid.Column="2" Text="3" Style="{StaticResource PinKey}" Command="{Binding KeyCommand}" CommandParameter="3" />
+            <Button Grid.Row="1" Grid.Column="0" Text="4" Style="{StaticResource PinKey}" Command="{Binding KeyCommand}" CommandParameter="4" />
+            <Button Grid.Row="1" Grid.Column="1" Text="5" Style="{StaticResource PinKey}" Command="{Binding KeyCommand}" CommandParameter="5" />
+            <Button Grid.Row="1" Grid.Column="2" Text="6" Style="{StaticResource PinKey}" Command="{Binding KeyCommand}" CommandParameter="6" />
+            <Button Grid.Row="2" Grid.Column="0" Text="7" Style="{StaticResource PinKey}" Command="{Binding KeyCommand}" CommandParameter="7" />
+            <Button Grid.Row="2" Grid.Column="1" Text="8" Style="{StaticResource PinKey}" Command="{Binding KeyCommand}" CommandParameter="8" />
+            <Button Grid.Row="2" Grid.Column="2" Text="9" Style="{StaticResource PinKey}" Command="{Binding KeyCommand}" CommandParameter="9" />
+            <Button Grid.Row="3" Grid.Column="1" Text="0" Style="{StaticResource PinKey}" Command="{Binding KeyCommand}" CommandParameter="0" />
+            <Button Grid.Row="3" Grid.Column="2" Text="⌫" Style="{StaticResource PinKey}" FontSize="20" Command="{Binding KeyCommand}" CommandParameter="{x:Static local:Constants.PinBackspaceKey}" />
+        </Grid>
+    </VerticalStackLayout>
+</ContentView>

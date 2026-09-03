@@ -37,6 +37,8 @@ public static class MauiProgram
         builder.Services.AddTransient<NotionConnectViewModel>();
         builder.Services.AddTransient<UploadViewModel>();
         builder.Services.AddTransient<ImportViewModel>();
+        builder.Services.AddTransient<PinSetupViewModel>();
+        builder.Services.AddTransient<LockViewModel>();
 
         // Views
         builder.Services.AddTransient<JournalListPage>();
@@ -48,6 +50,8 @@ public static class MauiProgram
         builder.Services.AddTransient<NotionConnectPage>();
         builder.Services.AddTransient<UploadPage>();
         builder.Services.AddTransient<ImportPage>();
+        builder.Services.AddTransient<PinPage>();
+        builder.Services.AddTransient<LockPage>();
 
         RemoveNativeEntryBorder();
 

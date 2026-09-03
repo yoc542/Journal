@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
@@ -117,7 +117,7 @@ every evening.</value>
     <value>I already have a journal</value>
   </data>
   <data name="Onboarding_Step_Format" xml:space="preserve">
-    <value>Step {0} of 2</value>
+    <value>Step {0} of 3</value>
   </data>
   <data name="Onboarding_Setup_Eyebrow" xml:space="preserve">
     <value>Setup</value>
@@ -616,5 +616,77 @@ every evening.</value>
   </data>
   <data name="Notion_Connect_Remove" xml:space="preserve">
     <value>Remove token</value>
+  </data>
+  <data name="Pin_Setup_Eyebrow" xml:space="preserve">
+    <value>Protect the journal</value>
+  </data>
+  <data name="Pin_Setup_Title" xml:space="preserve">
+    <value>Choose a four-digit PIN</value>
+  </data>
+  <data name="Pin_Setup_Body" xml:space="preserve">
+    <value>Asked every time the journal opens. Kept on this device — there is no way to recover it, so pick something you will remember.</value>
+  </data>
+  <data name="Pin_Confirm_Eyebrow" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="Pin_Confirm_Title" xml:space="preserve">
+    <value>Enter it once more</value>
+  </data>
+  <data name="Pin_Confirm_Body" xml:space="preserve">
+    <value>Type the same four digits again so nothing is lost to a slip of the thumb.</value>
+  </data>
+  <data name="Pin_Change_Eyebrow" xml:space="preserve">
+    <value>Reset PIN</value>
+  </data>
+  <data name="Pin_Change_Title" xml:space="preserve">
+    <value>Choose a new PIN</value>
+  </data>
+  <data name="Pin_Error_Mismatch" xml:space="preserve">
+    <value>Those didn't match. Choose your PIN again.</value>
+  </data>
+  <data name="Pin_Step_Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Lock_Greeting_Format" xml:space="preserve">
+    <value>Welcome back, {0}.</value>
+  </data>
+  <data name="Lock_Greeting" xml:space="preserve">
+    <value>Welcome back.</value>
+  </data>
+  <data name="Lock_Body" xml:space="preserve">
+    <value>Enter your four-digit PIN to open the journal.</value>
+  </data>
+  <data name="Lock_Error" xml:space="preserve">
+    <value>Wrong PIN. Try again.</value>
+  </data>
+  <data name="Lock_Error_Wait" xml:space="preserve">
+    <value>Wrong PIN. Try again in a moment.</value>
+  </data>
+  <data name="Settings_Lock_Eyebrow" xml:space="preserve">
+    <value>Lock</value>
+  </data>
+  <data name="Settings_Lock_Title" xml:space="preserve">
+    <value>App PIN</value>
+  </data>
+  <data name="Settings_Lock_Note_Set" xml:space="preserve">
+    <value>Asked each time the journal opens.</value>
+  </data>
+  <data name="Settings_Lock_Note_Unset" xml:space="preserve">
+    <value>Not set — the journal opens without a PIN.</value>
+  </data>
+  <data name="Settings_Lock_Masked" xml:space="preserve">
+    <value>••••</value>
+  </data>
+  <data name="Settings_Lock_Unset_Mark" xml:space="preserve">
+    <value>—</value>
+  </data>
+  <data name="Settings_Lock_Reset" xml:space="preserve">
+    <value>Reset PIN</value>
+  </data>
+  <data name="Settings_Lock_Set" xml:space="preserve">
+    <value>Set a PIN</value>
+  </data>
+  <data name="Settings_Lock_Now" xml:space="preserve">
+    <value>Lock now</value>
   </data>
 </root>

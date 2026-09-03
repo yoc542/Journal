@@ -1,4 +1,4 @@
-using JournalApp.Services;
+﻿using JournalApp.Services;
 using JournalApp.Views;
 
 namespace JournalApp;
@@ -15,9 +15,11 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(UploadPage), typeof(UploadPage));
         Routing.RegisterRoute(nameof(ImportPage), typeof(ImportPage));
         Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
+        Routing.RegisterRoute(nameof(PinPage), typeof(PinPage));
 
-        // Onboarding is the first ShellContent, so returning users skip straight to their journal.
-        if (AppSettings.SetupCompleted)
-            CurrentItem = TodayShell;
+        // First launch walks the wizard; afterwards the PIN, when there is one, guards the journal.
+        CurrentItem = !AppSettings.SetupCompleted ? OnboardingShell
+            : AppSettings.PinSet ? LockShell
+            : TodayShell;
     }
 }

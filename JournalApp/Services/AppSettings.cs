@@ -46,6 +46,14 @@ public static class AppSettings
         set => Preferences.Set(nameof(SetupCompleted), value);
     }
 
+    /// <summary>Whether an app PIN exists. Mirrors the keystore entry written by
+    /// <see cref="SecureSettings.SetPinAsync"/> so the shell can pick its start page synchronously.</summary>
+    public static bool PinSet
+    {
+        get => Preferences.Get(nameof(PinSet), false);
+        set => Preferences.Set(nameof(PinSet), value);
+    }
+
     /// <summary>Name the user gave during setup, used to greet them on the Today screen.</summary>
     public static string UserName
     {

@@ -77,9 +77,10 @@
                         Style="{StaticResource SecondaryCta}"
                         Command="{Binding BackCommand}" />
 
-                    <Grid Grid.Column="1" ColumnDefinitions="*,*" ColumnSpacing="6" VerticalOptions="Center">
+                    <Grid Grid.Column="1" ColumnDefinitions="*,*,*" ColumnSpacing="6" VerticalOptions="Center">
                         <BoxView Grid.Column="0" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
                         <BoxView Grid.Column="1" HeightRequest="3" CornerRadius="2" Color="{StaticResource Orchid}" Opacity="0.3" />
+                        <BoxView Grid.Column="2" HeightRequest="3" CornerRadius="2" Color="{StaticResource Orchid}" Opacity="0.3" />
                     </Grid>
 
                     <Label Grid.Column="2" Text="{Binding StepLabel}" Style="{StaticResource Caption}" VerticalOptions="Center" />
@@ -112,7 +113,45 @@
             </Grid>
         </ScrollView>
 
-        <!-- ==================== Step 2: Notion token ==================== -->
+        <!-- ==================== Step 2: app PIN ==================== -->
+        <ScrollView IsVisible="{Binding IsPin}">
+            <Grid RowDefinitions="Auto,Auto,Auto" Padding="26,20,26,26" RowSpacing="16">
+
+                <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                    <Button
+                        Grid.Column="0"
+                        Text="‹"
+                        FontSize="20"
+                        WidthRequest="38"
+                        HeightRequest="38"
+                        Padding="0"
+                        Style="{StaticResource SecondaryCta}"
+                        Command="{Binding BackCommand}" />
+
+                    <Grid Grid.Column="1" ColumnDefinitions="*,*,*" ColumnSpacing="6" VerticalOptions="Center">
+                        <BoxView Grid.Column="0" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
+                        <BoxView Grid.Column="1" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
+                        <BoxView Grid.Column="2" HeightRequest="3" CornerRadius="2" Color="{StaticResource Orchid}" Opacity="0.3" />
+                    </Grid>
+
+                    <Label Grid.Column="2" Text="{Binding StepLabel}" Style="{StaticResource Caption}" VerticalOptions="Center" />
+                </Grid>
+
+                <VerticalStackLayout Grid.Row="1" Spacing="9">
+                    <Label Text="{Binding Pin.Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
+                    <Label Text="{Binding Pin.Title}" Style="{StaticResource DisplaySmall}" FontSize="31" />
+                    <Label Text="{Binding Pin.Body}" Style="{StaticResource Body}" FontSize="13" />
+                </VerticalStackLayout>
+
+                <views:PinPad
+                    Grid.Row="2"
+                    FilledCount="{Binding Pin.EnteredLength}"
+                    ErrorMessage="{Binding Pin.ErrorMessage}"
+                    KeyCommand="{Binding Pin.KeyCommand}" />
+            </Grid>
+        </ScrollView>
+
+        <!-- ==================== Step 3: Notion token ==================== -->
         <ScrollView IsVisible="{Binding IsToken}">
             <Grid RowDefinitions="Auto,*,Auto" Padding="26,20,26,34" RowSpacing="20">
 
@@ -127,9 +166,10 @@
                         Style="{StaticResource SecondaryCta}"
                         Command="{Binding BackCommand}" />
 
-                    <Grid Grid.Column="1" ColumnDefinitions="*,*" ColumnSpacing="6" VerticalOptions="Center">
+                    <Grid Grid.Column="1" ColumnDefinitions="*,*,*" ColumnSpacing="6" VerticalOptions="Center">
                         <BoxView Grid.Column="0" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
                         <BoxView Grid.Column="1" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
+                        <BoxView Grid.Column="2" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
                     </Grid>
 
                     <Label Grid.Column="2" Text="{Binding StepLabel}" Style="{StaticResource Caption}" VerticalOptions="Center" />
