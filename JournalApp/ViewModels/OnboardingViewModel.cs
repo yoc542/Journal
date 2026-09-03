@@ -37,6 +37,8 @@ public partial class OnboardingViewModel : ObservableObject
 
     public OnboardingViewModel(NotionService notion) => _Notion = notion;
 
+    public int MaxUserNameLength => Constants.MaxUserNameLength;
+
     public bool IsWelcome => Step == OnboardingStep.Welcome;
     public bool IsProfile => Step == OnboardingStep.Profile;
     public bool IsToken => Step == OnboardingStep.Token;

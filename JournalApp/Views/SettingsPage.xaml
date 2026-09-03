@@ -46,6 +46,7 @@
                                 <Entry
                                     Style="{StaticResource FieldEntry}"
                                     Text="{Binding UserName}"
+                                    MaxLength="{Binding MaxUserNameLength}"
                                     Placeholder="{localize:Translate Settings_Name_Placeholder}"
                                     ReturnCommand="{Binding SaveNameCommand}" />
                             </Border>

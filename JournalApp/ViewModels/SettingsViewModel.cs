@@ -31,6 +31,8 @@ public partial class SettingsViewModel : ObservableObject
 
     public SettingsViewModel(JournalDatabase database) => _Database = database;
 
+    public int MaxUserNameLength => Constants.MaxUserNameLength;
+
     public bool IsNotConnected => !IsConnected;
 
     public bool HasNameNote => NameNote.Length > 0;
