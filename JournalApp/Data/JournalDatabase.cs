@@ -86,8 +86,12 @@ public class JournalDatabase
             return entry.Id;
         }
 
-        var last = await db.Table<JournalEntry>().OrderByDescending(e => e.DayNumber).FirstOrDefaultAsync();
-        entry.DayNumber = (last?.DayNumber ?? 0) + 1;
+        if (entry.DayNumber == 0)
+        {
+            var last = await db.Table<JournalEntry>().OrderByDescending(e => e.DayNumber).FirstOrDefaultAsync();
+            entry.DayNumber = (last?.DayNumber ?? 0) + 1;
+        }
+
         await db.InsertAsync(entry);
         return entry.Id;
     }

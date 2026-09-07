@@ -9,10 +9,8 @@ public class JournalEntry
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
-    /// <summary>Sequential, human-friendly number assigned on creation (survives deletes of other rows).</summary>
     public int DayNumber { get; set; }
 
-    /// <summary>The calendar day this entry belongs to (date-only). One entry per day.</summary>
     public DateTime EntryDate { get; set; } = DateTime.Today;
 
     public string Text { get; set; } = string.Empty;
