@@ -36,18 +36,15 @@ public partial class OnboardingViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _IsBusy;
 
-    public OnboardingViewModel(NotionService notion)
+    public OnboardingViewModel(NotionService notion, PinViewModel pin)
     {
         _Notion = notion;
-        Pin.Completed = () =>
-        {
-            Step = OnboardingStep.Token;
-            return Task.CompletedTask;
-        };
+        Pin = pin;
+        Pin.PinSaved += (_, _) => Step = OnboardingStep.Token;
     }
 
     /// <summary>Drives the keypad shown on the PIN step; the wizard moves on once it saves.</summary>
-    public PinViewModel Pin { get; } = new();
+    public PinViewModel Pin { get; }
 
     public int MaxUserNameLength => Constants.MaxUserNameLength;
 
@@ -165,10 +162,6 @@ public partial class OnboardingViewModel : ObservableObject
         IsConnected = false;
         Step = OnboardingStep.Done;
     }
-
-    /// <summary>"I already have a journal" — leave setup without walking the wizard.</summary>
-    [RelayCommand]
-    private Task ExistingAsync() => FinishAsync();
 
     [RelayCommand]
     private Task FinishAsync()

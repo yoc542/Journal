@@ -7,12 +7,12 @@ using JournalApp.Localization;
 
 namespace JournalApp.Services;
 
-/// <summary>Minimal Notion REST client for the "Journal" database (2026-03-11 data-source model).</summary>
+/// <summary>Minimal Notion REST client for the "JournalGrimoire" database (2026-03-11 data-source model).</summary>
 public class NotionService
 {
     private const string TitleProperty = "Name"; // Notion requires exactly one title property.
     private const string EntryDateProperty = "Entry Date";
-    private const string JournalTitle = "Journal";
+    private const string JournalTitle = "JournalGrimoire";
 
     private readonly HttpClient _Http;
     private readonly SemaphoreSlim _SetupGate = new(1, 1);
@@ -50,8 +50,8 @@ public class NotionService
     }
 
     /// <summary>
-    /// First-launch setup: reuse the cached data source, else find the "Journal" database in the
-    /// workspace, else create a workspace-level page and a "Journal" database underneath it.
+    /// First-launch setup: reuse the cached data source, else find the "JournalGrimoire" database in the
+    /// workspace, else create a workspace-level page and a "JournalGrimoire" database underneath it.
     /// </summary>
     public async Task EnsureJournalDatabaseAsync()
     {
@@ -145,7 +145,7 @@ public class NotionService
         return json?["id"]?.GetValue<string>() ?? string.Empty;
     }
 
-    /// <summary>Fetches every row from the Notion "Journal" database.</summary>
+    /// <summary>Fetches every row from the Notion "JournalGrimoire" database.</summary>
     public async Task<List<JournalEntry>> FetchEntriesAsync()
     {
         try
@@ -206,13 +206,6 @@ public class NotionService
         return DateTime.Today;
     }
 
-    /// <summary>
-    /// Adds the "Entry Date" property to an existing Journal data source. Databases created by
-    /// older versions of the app lack it, and Notion rejects writes to unknown properties.
-    /// The schema is read first: a database this device merely found (rather than created) usually
-    /// already has the property, and skipping the write keeps uploads working for integrations
-    /// without the "Update content" capability. The result is cached in preferences.
-    /// </summary>
     private async Task EnsureEntryDatePropertyAsync()
     {
         if (AppSettings.NotionEntryDateReady)
@@ -237,11 +230,7 @@ public class NotionService
 
     private static bool IsSetupComplete => !string.IsNullOrEmpty(AppSettings.NotionDataSourceId);
 
-    /// <summary>
-    /// Forgets the cached Journal IDs so the next call rebuilds the database. Without this a
-    /// database deleted in Notion leaves an ID that <see cref="IsSetupComplete"/> keeps trusting,
-    /// and every upload 404s until the app's stored preferences are cleared by hand.
-    /// </summary>
+
     private static void ForgetJournalIds()
     {
         AppSettings.NotionParentPageId = null;
@@ -256,7 +245,7 @@ public class NotionService
         AppSettings.NotionDataSourceId = dataSourceId;
     }
 
-    /// <summary>Locates an existing "Journal" data source so a re-installed app reuses it instead of creating a second one.</summary>
+    /// <summary>Locates an existing "JournalGrimoire" data source so a re-installed app reuses it instead of creating a second one.</summary>
     private async Task<(string DatabaseId, string DataSourceId)?> FindJournalDataSourceAsync()
     {
         var payload = new JsonObject

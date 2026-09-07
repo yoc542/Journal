@@ -11,17 +11,22 @@
     BackgroundColor="{StaticResource NightBase}">
 
     <ContentPage.Resources>
-        <views:NightSkyDrawable x:Key="NightSky" />
+        <views:NightSkyDrawable x:Key="NightSky"/>
     </ContentPage.Resources>
 
     <Grid Background="{StaticResource NightSkyGradient}">
 
-        <GraphicsView Drawable="{StaticResource NightSky}" InputTransparent="True" />
+        <GraphicsView Drawable="{StaticResource NightSky}"
+                      InputTransparent="True"/>
 
         <!-- ==================== Welcome ==================== -->
-        <Grid IsVisible="{Binding IsWelcome}" RowDefinitions="*,Auto" Padding="30,40,30,46">
+        <Grid IsVisible="{Binding IsWelcome}"
+              RowDefinitions="*,Auto"
+              Padding="30,40,30,46">
 
-            <VerticalStackLayout Grid.Row="0" Spacing="16" VerticalOptions="End">
+            <VerticalStackLayout Grid.Row="0"
+                                 Spacing="16"
+                                 VerticalOptions="End">
 
                 <Border
                     HeightRequest="74"
@@ -37,36 +42,44 @@
                         FontSize="32"
                         TextColor="{StaticResource Cream}"
                         HorizontalOptions="Center"
-                        VerticalOptions="Center" />
+                        VerticalOptions="Center"/>
                 </Border>
 
-                <Label Text="{localize:Translate Onboarding_Welcome_Title}" Style="{StaticResource Display}" />
+                <Label Text="{localize:Translate Onboarding_Welcome_Title}"
+                       Style="{StaticResource Display}"/>
 
-                <BoxView HeightRequest="1" WidthRequest="120" HorizontalOptions="Start" Color="{StaticResource GoldDeep}" Opacity="0.75" />
+                <BoxView HeightRequest="1"
+                         WidthRequest="120"
+                         HorizontalOptions="Start"
+                         Color="{StaticResource GoldDeep}"
+                         Opacity="0.75"/>
 
                 <Label
                     Text="{localize:Translate Onboarding_Welcome_Body}"
                     Style="{StaticResource Body}"
-                    MaximumWidthRequest="290" />
+                    MaximumWidthRequest="290"/>
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="1" Spacing="12" Margin="0,26,0,0">
-                <Button
-                    Text="{localize:Translate Onboarding_Welcome_Begin}"
-                    Style="{StaticResource PrimaryCta}"
-                    Command="{Binding BeginCommand}" />
-                <Button
-                    Text="{localize:Translate Onboarding_Welcome_Existing}"
-                    Style="{StaticResource SecondaryCta}"
-                    Command="{Binding ExistingCommand}" />
-            </VerticalStackLayout>
+
+            <Button
+                Grid.Row="1"
+                Margin="0,26,0,0"
+                Text="{localize:Translate Onboarding_Welcome_Begin}"
+                Style="{StaticResource PrimaryCta}"
+                Command="{Binding BeginCommand}"/>
+
+
         </Grid>
 
         <!-- ==================== Step 1: profile ==================== -->
         <ScrollView IsVisible="{Binding IsProfile}">
-            <Grid RowDefinitions="Auto,*,Auto" Padding="26,20,26,34" RowSpacing="24">
+            <Grid RowDefinitions="Auto,*,Auto"
+                  Padding="26,20,26,34"
+                  RowSpacing="24">
 
-                <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                <Grid Grid.Row="0"
+                      ColumnDefinitions="Auto,*,Auto"
+                      ColumnSpacing="10">
                     <Button
                         Grid.Column="0"
                         Text="‹"
@@ -75,32 +88,53 @@
                         HeightRequest="38"
                         Padding="0"
                         Style="{StaticResource SecondaryCta}"
-                        Command="{Binding BackCommand}" />
+                        Command="{Binding BackCommand}"/>
 
-                    <Grid Grid.Column="1" ColumnDefinitions="*,*,*" ColumnSpacing="6" VerticalOptions="Center">
-                        <BoxView Grid.Column="0" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
-                        <BoxView Grid.Column="1" HeightRequest="3" CornerRadius="2" Color="{StaticResource Orchid}" Opacity="0.3" />
-                        <BoxView Grid.Column="2" HeightRequest="3" CornerRadius="2" Color="{StaticResource Orchid}" Opacity="0.3" />
+                    <Grid Grid.Column="1"
+                          ColumnDefinitions="*,*,*"
+                          ColumnSpacing="6"
+                          VerticalOptions="Center">
+                        <BoxView Grid.Column="0"
+                                 HeightRequest="3"
+                                 CornerRadius="2"
+                                 Color="{StaticResource Gold}"/>
+                        <BoxView Grid.Column="1"
+                                 HeightRequest="3"
+                                 CornerRadius="2"
+                                 Color="{StaticResource Orchid}"
+                                 Opacity="0.3"/>
+                        <BoxView Grid.Column="2"
+                                 HeightRequest="3"
+                                 CornerRadius="2"
+                                 Color="{StaticResource Orchid}"
+                                 Opacity="0.3"/>
                     </Grid>
 
-                    <Label Grid.Column="2" Text="{Binding StepLabel}" Style="{StaticResource Caption}" VerticalOptions="Center" />
+                    <Label Grid.Column="2"
+                           Text="{Binding StepLabel}"
+                           Style="{StaticResource Caption}"
+                           VerticalOptions="Center"/>
                 </Grid>
 
-                <VerticalStackLayout Grid.Row="1" Spacing="22">
+                <VerticalStackLayout Grid.Row="1"
+                                     Spacing="22">
 
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="{localize:Translate Onboarding_Setup_Eyebrow}" Style="{StaticResource Eyebrow}" />
-                        <Label Text="{localize:Translate Onboarding_Profile_Title}" Style="{StaticResource DisplaySmall}" />
+                        <Label Text="{localize:Translate Onboarding_Setup_Eyebrow}"
+                               Style="{StaticResource Eyebrow}"/>
+                        <Label Text="{localize:Translate Onboarding_Profile_Title}"
+                               Style="{StaticResource DisplaySmall}"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="8">
-                        <Label Text="{localize:Translate Onboarding_Name_Label}" Style="{StaticResource FieldLabel}" />
+                        <Label Text="{localize:Translate Onboarding_Name_Label}"
+                               Style="{StaticResource FieldLabel}"/>
                         <Border Style="{StaticResource Field}">
                             <Entry
                                 Style="{StaticResource FieldEntry}"
                                 Text="{Binding Name}"
                                 MaxLength="{Binding MaxUserNameLength}"
-                                Placeholder="{localize:Translate Onboarding_Name_Placeholder}" />
+                                Placeholder="{localize:Translate Onboarding_Name_Placeholder}"/>
                         </Border>
                     </VerticalStackLayout>
                 </VerticalStackLayout>
@@ -109,15 +143,19 @@
                     Grid.Row="2"
                     Text="{localize:Translate Onboarding_Continue}"
                     Style="{StaticResource PrimaryCta}"
-                    Command="{Binding ContinueCommand}" />
+                    Command="{Binding ContinueCommand}"/>
             </Grid>
         </ScrollView>
 
         <!-- ==================== Step 2: app PIN ==================== -->
         <ScrollView IsVisible="{Binding IsPin}">
-            <Grid RowDefinitions="Auto,Auto,Auto" Padding="26,20,26,26" RowSpacing="16">
+            <Grid RowDefinitions="Auto,Auto,Auto"
+                  Padding="26,20,26,26"
+                  RowSpacing="16">
 
-                <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                <Grid Grid.Row="0"
+                      ColumnDefinitions="Auto,*,Auto"
+                      ColumnSpacing="10">
                     <Button
                         Grid.Column="0"
                         Text="‹"
@@ -126,36 +164,63 @@
                         HeightRequest="38"
                         Padding="0"
                         Style="{StaticResource SecondaryCta}"
-                        Command="{Binding BackCommand}" />
+                        Command="{Binding BackCommand}"/>
 
-                    <Grid Grid.Column="1" ColumnDefinitions="*,*,*" ColumnSpacing="6" VerticalOptions="Center">
-                        <BoxView Grid.Column="0" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
-                        <BoxView Grid.Column="1" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
-                        <BoxView Grid.Column="2" HeightRequest="3" CornerRadius="2" Color="{StaticResource Orchid}" Opacity="0.3" />
+                    <Grid Grid.Column="1"
+                          ColumnDefinitions="*,*,*"
+                          ColumnSpacing="6"
+                          VerticalOptions="Center">
+                        <BoxView Grid.Column="0"
+                                 HeightRequest="3"
+                                 CornerRadius="2"
+                                 Color="{StaticResource Gold}"/>
+                        <BoxView Grid.Column="1"
+                                 HeightRequest="3"
+                                 CornerRadius="2"
+                                 Color="{StaticResource Gold}"/>
+                        <BoxView Grid.Column="2"
+                                 HeightRequest="3"
+                                 CornerRadius="2"
+                                 Color="{StaticResource Orchid}"
+                                 Opacity="0.3"/>
                     </Grid>
 
-                    <Label Grid.Column="2" Text="{Binding StepLabel}" Style="{StaticResource Caption}" VerticalOptions="Center" />
+                    <Label Grid.Column="2"
+                           Text="{Binding StepLabel}"
+                           Style="{StaticResource Caption}"
+                           VerticalOptions="Center"/>
                 </Grid>
 
-                <VerticalStackLayout Grid.Row="1" Spacing="9">
-                    <Label Text="{Binding Pin.Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
-                    <Label Text="{Binding Pin.Title}" Style="{StaticResource DisplaySmall}" FontSize="31" />
-                    <Label Text="{Binding Pin.Body}" Style="{StaticResource Body}" FontSize="13" />
+                <VerticalStackLayout Grid.Row="1"
+                                     Spacing="9">
+                    <Label Text="{Binding Pin.Eyebrow}"
+                           Style="{StaticResource Eyebrow}"
+                           FontSize="10"/>
+                    <Label Text="{Binding Pin.Title}"
+                           Style="{StaticResource DisplaySmall}"
+                           FontSize="31"/>
+                    <Label Text="{Binding Pin.Body}"
+                           Style="{StaticResource Body}"
+                           FontSize="13"/>
                 </VerticalStackLayout>
 
                 <views:PinPad
                     Grid.Row="2"
                     FilledCount="{Binding Pin.EnteredLength}"
                     ErrorMessage="{Binding Pin.ErrorMessage}"
-                    KeyCommand="{Binding Pin.KeyCommand}" />
+                    KeyCommand="{Binding Pin.KeyCommand}"/>
             </Grid>
         </ScrollView>
 
         <!-- ==================== Step 3: Notion token ==================== -->
         <ScrollView IsVisible="{Binding IsToken}">
-            <Grid RowDefinitions="Auto,*,Auto" Padding="26,20,26,34" RowSpacing="20">
+            <Grid RowDefinitions="Auto,*,Auto"
+                  Padding="26,20,26,34"
+                  RowSpacing="20">
 
-                <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+                <Grid Grid.Row="0"
+                      ColumnDefinitions="Auto,*,Auto"
+                      ColumnSpacing="10">
                     <Button
                         Grid.Column="0"
                         Text="‹"
@@ -164,36 +229,59 @@
                         HeightRequest="38"
                         Padding="0"
                         Style="{StaticResource SecondaryCta}"
-                        Command="{Binding BackCommand}" />
+                        Command="{Binding BackCommand}"/>
 
-                    <Grid Grid.Column="1" ColumnDefinitions="*,*,*" ColumnSpacing="6" VerticalOptions="Center">
-                        <BoxView Grid.Column="0" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
-                        <BoxView Grid.Column="1" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
-                        <BoxView Grid.Column="2" HeightRequest="3" CornerRadius="2" Color="{StaticResource Gold}" />
+                    <Grid Grid.Column="1"
+                          ColumnDefinitions="*,*,*"
+                          ColumnSpacing="6"
+                          VerticalOptions="Center">
+                        <BoxView Grid.Column="0"
+                                 HeightRequest="3"
+                                 CornerRadius="2"
+                                 Color="{StaticResource Gold}"/>
+                        <BoxView Grid.Column="1"
+                                 HeightRequest="3"
+                                 CornerRadius="2"
+                                 Color="{StaticResource Gold}"/>
+                        <BoxView Grid.Column="2"
+                                 HeightRequest="3"
+                                 CornerRadius="2"
+                                 Color="{StaticResource Gold}"/>
                     </Grid>
 
-                    <Label Grid.Column="2" Text="{Binding StepLabel}" Style="{StaticResource Caption}" VerticalOptions="Center" />
+                    <Label Grid.Column="2"
+                           Text="{Binding StepLabel}"
+                           Style="{StaticResource Caption}"
+                           VerticalOptions="Center"/>
                 </Grid>
 
-                <VerticalStackLayout Grid.Row="1" Spacing="20">
+                <VerticalStackLayout Grid.Row="1"
+                                     Spacing="20">
 
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="{localize:Translate Onboarding_Token_Eyebrow}" Style="{StaticResource Eyebrow}" />
-                        <Label Text="{localize:Translate Onboarding_Token_Title}" Style="{StaticResource DisplaySmall}" />
-                        <Label Text="{localize:Translate Onboarding_Token_Body}" Style="{StaticResource Body}" FontSize="13.5" />
+                        <Label Text="{localize:Translate Onboarding_Token_Eyebrow}"
+                               Style="{StaticResource Eyebrow}"/>
+                        <Label Text="{localize:Translate Onboarding_Token_Title}"
+                               Style="{StaticResource DisplaySmall}"/>
+                        <Label Text="{localize:Translate Onboarding_Token_Body}"
+                               Style="{StaticResource Body}"
+                               FontSize="13.5"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="7">
-                        <Label Text="{localize:Translate Onboarding_Token_Label}" Style="{StaticResource FieldLabel}" />
+                        <Label Text="{localize:Translate Onboarding_Token_Label}"
+                               Style="{StaticResource FieldLabel}"/>
                         <Border Style="{StaticResource Field}">
                             <Entry
                                 Style="{StaticResource FieldEntry}"
                                 Text="{Binding Token}"
                                 IsPassword="True"
                                 IsEnabled="{Binding IsNotBusy}"
-                                Placeholder="{localize:Translate Settings_Token_Placeholder}" />
+                                Placeholder="{localize:Translate Settings_Token_Placeholder}"/>
                         </Border>
-                        <Label Text="{localize:Translate Onboarding_Token_Help}" Style="{StaticResource Caption}" FontSize="11.5" />
+                        <Label Text="{localize:Translate Onboarding_Token_Help}"
+                               Style="{StaticResource Caption}"
+                               FontSize="11.5"/>
                     </VerticalStackLayout>
 
                     <Border
@@ -208,36 +296,43 @@
                             FontFamily="KarlaRegular"
                             FontSize="13"
                             LineHeight="1.4"
-                            TextColor="{StaticResource Ember}" />
+                            TextColor="{StaticResource Ember}"/>
                     </Border>
 
-                    <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource Gold}" />
+                    <ActivityIndicator IsRunning="{Binding IsBusy}"
+                                       IsVisible="{Binding IsBusy}"
+                                       Color="{StaticResource Gold}"/>
                 </VerticalStackLayout>
 
-                <VerticalStackLayout Grid.Row="2" Spacing="10">
+                <VerticalStackLayout Grid.Row="2"
+                                     Spacing="10">
                     <Button
                         Text="{localize:Translate Onboarding_Token_Connect}"
                         Style="{StaticResource PrimaryCta}"
                         Command="{Binding ConnectCommand}"
-                        IsEnabled="{Binding IsNotBusy}" />
+                        IsEnabled="{Binding IsNotBusy}"/>
                     <Button
                         Text="{localize:Translate Onboarding_Token_Skip}"
                         Style="{StaticResource SecondaryCta}"
                         Command="{Binding SkipCommand}"
-                        IsEnabled="{Binding IsNotBusy}" />
+                        IsEnabled="{Binding IsNotBusy}"/>
                     <Label
                         Text="{localize:Translate Onboarding_Token_SkipHint}"
                         Style="{StaticResource Caption}"
                         FontSize="11.5"
-                        HorizontalOptions="Center" />
+                        HorizontalOptions="Center"/>
                 </VerticalStackLayout>
             </Grid>
         </ScrollView>
 
         <!-- ==================== Done ==================== -->
-        <Grid IsVisible="{Binding IsDone}" RowDefinitions="*,Auto" Padding="30,40,30,40">
+        <Grid IsVisible="{Binding IsDone}"
+              RowDefinitions="*,Auto"
+              Padding="30,40,30,40">
 
-            <VerticalStackLayout Grid.Row="0" Spacing="22" VerticalOptions="Center">
+            <VerticalStackLayout Grid.Row="0"
+                                 Spacing="22"
+                                 VerticalOptions="Center">
 
                 <Border
                     HeightRequest="96"
@@ -252,22 +347,27 @@
                         FontSize="34"
                         TextColor="{StaticResource Gold}"
                         HorizontalOptions="Center"
-                        VerticalOptions="Center" />
+                        VerticalOptions="Center"/>
                 </Border>
 
-                <Label Text="{Binding DoneTitle}" Style="{StaticResource DisplaySmall}" FontSize="36" />
-                <Label Text="{Binding DoneBody}" Style="{StaticResource Body}" FontSize="14.5" />
+                <Label Text="{Binding DoneTitle}"
+                       Style="{StaticResource DisplaySmall}"
+                       FontSize="36"/>
+                <Label Text="{Binding DoneBody}"
+                       Style="{StaticResource Body}"
+                       FontSize="14.5"/>
             </VerticalStackLayout>
 
-            <VerticalStackLayout Grid.Row="1" Spacing="11">
+            <VerticalStackLayout Grid.Row="1"
+                                 Spacing="11">
                 <Button
                     Text="{localize:Translate Onboarding_Done_Write}"
                     Style="{StaticResource PrimaryCta}"
-                    Command="{Binding FinishCommand}" />
+                    Command="{Binding FinishCommand}"/>
                 <Button
                     Text="{localize:Translate Onboarding_Done_Settings}"
                     Style="{StaticResource SecondaryCta}"
-                    Command="{Binding OpenSettingsCommand}" />
+                    Command="{Binding OpenSettingsCommand}"/>
             </VerticalStackLayout>
         </Grid>
     </Grid>

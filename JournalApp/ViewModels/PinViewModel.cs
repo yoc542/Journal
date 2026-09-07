@@ -30,12 +30,10 @@ public partial class PinViewModel : ObservableObject
     private bool _IsChanging;
 
     /// <summary>
-    /// Run once the new PIN has been confirmed and saved. Defaults to leaving the screen, which is
-    /// what <see cref="Views.PinPage"/> wants; the onboarding wizard replaces it with its own step.
+    /// Raised once the new PIN has been confirmed and saved. Each host decides what follows:
+    /// <see cref="Views.PinPage"/> leaves the screen, the onboarding wizard moves to its next step.
     /// </summary>
-    public Func<Task> Completed { get; set; } = () => Shell.Current.GoToAsync("..");
-
-    public PinViewModel() => Load();
+    public event EventHandler? PinSaved;
 
     /// <summary>Digits typed so far, which is all the keypad needs to draw its dots.</summary>
     public int EnteredLength => Entered.Length;
@@ -97,11 +95,8 @@ public partial class PinViewModel : ObservableObject
 
         await SecureSettings.SetPinAsync(Entered);
         Restart(string.Empty);
-        await Completed();
+        PinSaved?.Invoke(this, EventArgs.Empty);
     }
-
-    [RelayCommand]
-    private static Task BackAsync() => Shell.Current.GoToAsync("..");
 
     /// <summary>Back to choosing a first PIN, optionally explaining why.</summary>
     private void Restart(string error)
