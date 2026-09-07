@@ -289,7 +289,7 @@ public partial class ImportViewModel : ObservableObject
                     written++;
                     break;
 
-                // Device: the local entry wins, so nothing is written.
+                    // Device: the local entry wins, so nothing is written.
             }
         }
 
@@ -306,7 +306,7 @@ public partial class ImportViewModel : ObservableObject
     private static Task OpenHistoryAsync() => Shell.Current.GoToAsync("..");
 
     [RelayCommand]
-    private static Task OpenTodayAsync() => Shell.Current.GoToAsync($"//{nameof(TodayPage)}");
+    private static Task OpenTodayAsync() => Shell.Current.Navigation.PopToRootAsync();
 
     [RelayCommand]
     private static Task ConnectAsync() => Shell.Current.GoToAsync(nameof(NotionConnectPage));
