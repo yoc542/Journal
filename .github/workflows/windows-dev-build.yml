@@ -1,0 +1,36 @@
+name: Build MAUI Windows Desktop App
+
+on:
+  push:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install .NET MAUI Windows Workload
+        run: dotnet workload install windows
+
+      - name: Restore NuGet Packages
+        run: dotnet restore
+
+      - name: Compile Windows Desktop Package
+        run: |
+          dotnet publish -f net8.0-windows10.0.19041.0 -c Release -p:AppxPackageSigningEnabled=false
+
+      - name: Upload Windows MSIX Artifact to GitHub
+        uses: actions/upload-artifact@v4
+        with:
+          name: maui-windows-app
+          path: |
+            **/*.msix
+            **/*.exe
+          retention-days: 7
