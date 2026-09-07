@@ -1,87 +1,299 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
     x:Class="JournalApp.Views.JournalEditorPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:JournalApp.Views"
     xmlns:vm="clr-namespace:JournalApp.ViewModels"
     xmlns:localize="clr-namespace:JournalApp.Extensions"
+    x:Name="Page"
     x:DataType="vm:JournalEditorViewModel"
     Shell.NavBarIsVisible="False"
     BackgroundColor="{StaticResource NightBase}">
 
-    <Grid RowDefinitions="Auto,Auto,*,Auto" Background="{StaticResource NightSkyGradient}">
+    <Grid Background="{StaticResource NightSkyGradient}">
 
-        <!-- Header: back out to Today, plus the live save status -->
-        <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="16,10,20,12">
-            <Button
-                Grid.Column="0"
-                Text="{Binding BackLabel}"
-                Style="{StaticResource GhostCta}"
-                Padding="6,0"
-                HeightRequest="36"
-                Command="{Binding CloseCommand}" />
+        <Grid RowDefinitions="Auto,Auto,*,Auto">
 
-            <ActivityIndicator
-                Grid.Column="1"
-                HorizontalOptions="End"
-                HeightRequest="12"
-                WidthRequest="12"
-                Margin="0,0,7,0"
-                Color="{StaticResource Gold}"
-                IsRunning="{Binding IsSaving}"
-                IsVisible="{Binding IsSaving}" />
+            <!-- Header: back out to Today, plus the live save status -->
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="16,10,20,12">
+                <Button
+                    Grid.Column="0"
+                    Text="{Binding BackLabel}"
+                    Style="{StaticResource GhostCta}"
+                    Padding="6,0"
+                    HeightRequest="36"
+                    Command="{Binding CloseCommand}" />
 
-            <Label Grid.Column="2" Text="{Binding SaveStatus}" Style="{StaticResource SaveStatus}" />
-        </Grid>
+                <ActivityIndicator
+                    Grid.Column="1"
+                    HorizontalOptions="End"
+                    HeightRequest="12"
+                    WidthRequest="12"
+                    Margin="0,0,7,0"
+                    Color="{StaticResource Gold}"
+                    IsRunning="{Binding IsSaving}"
+                    IsVisible="{Binding IsSaving}" />
 
-        <BoxView Grid.Row="0" HeightRequest="1" VerticalOptions="End" Color="{StaticResource Orchid}" Opacity="0.14" />
-
-        <!-- Which page this is -->
-        <VerticalStackLayout Grid.Row="1" Padding="24,20,24,6" Spacing="4">
-            <Label Text="{Binding DateLabel}" Style="{StaticResource Eyebrow}" FontSize="10" Opacity="0.7" />
-            <Label Text="{Binding HeaderTitle}" Style="{StaticResource DisplaySmall}" FontSize="26" />
-        </VerticalStackLayout>
-
-        <!-- The page itself -->
-        <Grid Grid.Row="2" RowDefinitions="Auto,*" Margin="20,10,20,0" Padding="6,0">
-
-            <Grid Grid.Row="0" ColumnDefinitions="*,Auto,*" ColumnSpacing="9" Padding="0,0,0,10">
-                <BoxView Grid.Column="0" HeightRequest="1" VerticalOptions="Center" Color="{StaticResource GoldDeep}" Opacity="0.45" />
-                <Label Grid.Column="1" Text="❧" FontSize="10" TextColor="{StaticResource GoldDeep}" Opacity="0.85" />
-                <BoxView Grid.Column="2" HeightRequest="1" VerticalOptions="Center" Color="{StaticResource GoldDeep}" Opacity="0.45" />
+                <Label Grid.Column="2" Text="{Binding SaveStatus}" Style="{StaticResource SaveStatus}" />
             </Grid>
 
-            <Editor
-                Grid.Row="1"
-                Style="{StaticResource EditorBody}"
-                Text="{Binding Text}"
-                MaxLength="{Binding MaxLength}"
-                Placeholder="{Binding PlaceholderText}"
-                VerticalOptions="Fill" />
+            <BoxView Grid.Row="0" HeightRequest="1" VerticalOptions="End" Color="{StaticResource Orchid}" Opacity="0.14" />
+
+            <!-- Which page this is -->
+            <VerticalStackLayout Grid.Row="1" Padding="24,20,24,6" Spacing="4">
+                <Label Text="{Binding DateLabel}" Style="{StaticResource Eyebrow}" FontSize="10" Opacity="0.7" />
+                <Label Text="{Binding HeaderTitle}" Style="{StaticResource DisplaySmall}" FontSize="26" />
+            </VerticalStackLayout>
+
+            <!-- The page itself, then what the day was for -->
+            <ScrollView Grid.Row="2">
+                <VerticalStackLayout>
+
+                    <Grid RowDefinitions="Auto,Auto" Margin="20,10,20,0" Padding="6,0">
+
+                        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,*" ColumnSpacing="9" Padding="0,0,0,10">
+                            <BoxView Grid.Column="0" HeightRequest="1" VerticalOptions="Center" Color="{StaticResource GoldDeep}" Opacity="0.45" />
+                            <Label Grid.Column="1" Text="❧" FontSize="10" TextColor="{StaticResource GoldDeep}" Opacity="0.85" />
+                            <BoxView Grid.Column="2" HeightRequest="1" VerticalOptions="Center" Color="{StaticResource GoldDeep}" Opacity="0.45" />
+                        </Grid>
+
+                        <Editor
+                            Grid.Row="1"
+                            Style="{StaticResource EditorBody}"
+                            AutoSize="TextChanges"
+                            MinimumHeightRequest="230"
+                            Text="{Binding Text}"
+                            MaxLength="{Binding MaxLength}"
+                            Placeholder="{Binding PlaceholderText}" />
+                    </Grid>
+
+                    <!-- ==================== What I wanted ==================== -->
+                    <VerticalStackLayout Padding="22,18,22,26" Spacing="12">
+
+                        <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="9">
+                            <BoxView Grid.Column="0" HeightRequest="1" VerticalOptions="Center" Color="{StaticResource GoldDeep}" Opacity="0.28" />
+                            <Label
+                                Grid.Column="1"
+                                Text="{localize:Translate Intent_Section_Header}"
+                                Style="{StaticResource Eyebrow}"
+                                FontSize="10" />
+                            <BoxView Grid.Column="2" HeightRequest="1" VerticalOptions="Center" Color="{StaticResource GoldDeep}" Opacity="0.28" />
+                        </Grid>
+
+                        <VerticalStackLayout Spacing="12" BindableLayout.ItemsSource="{Binding Logs}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:IntentionLogRow">
+                                    <Border Style="{StaticResource LogCard}">
+                                        <VerticalStackLayout Spacing="11">
+
+                                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                                <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                                    <Label Text="{Binding Title}" Style="{StaticResource CardTitle}" />
+                                                    <Label Text="{Binding NoteLabel}" Style="{StaticResource Caption}" FontSize="11" />
+                                                </VerticalStackLayout>
+
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Text="{localize:Translate Intent_Remove}"
+                                                    Style="{StaticResource ChipButton}"
+                                                    WidthRequest="26"
+                                                    HeightRequest="26"
+                                                    CornerRadius="8"
+                                                    Padding="0"
+                                                    FontSize="13"
+                                                    VerticalOptions="Start"
+                                                    Command="{Binding BindingContext.UnpickCommand, Source={x:Reference Page}}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Grid>
+
+                                            <VerticalStackLayout Spacing="6">
+                                                <Label
+                                                    Text="{localize:Translate Intent_Field_Did}"
+                                                    Style="{StaticResource Eyebrow}"
+                                                    FontSize="10"
+                                                    CharacterSpacing="1.6" />
+                                                <Border Style="{StaticResource LogFieldBox}">
+                                                    <Editor
+                                                        Style="{StaticResource LogFieldEditor}"
+                                                        Text="{Binding Did}"
+                                                        MaxLength="{Binding MaxLength}"
+                                                        Placeholder="{localize:Translate Intent_Field_Did_Placeholder}" />
+                                                </Border>
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Spacing="6">
+                                                <Label
+                                                    Text="{localize:Translate Intent_Field_Evidence}"
+                                                    Style="{StaticResource Eyebrow}"
+                                                    FontSize="10"
+                                                    CharacterSpacing="1.6" />
+                                                <Border Style="{StaticResource LogFieldBox}">
+                                                    <Editor
+                                                        Style="{StaticResource LogFieldEditor}"
+                                                        Text="{Binding Evidence}"
+                                                        MaxLength="{Binding MaxLength}"
+                                                        Placeholder="{localize:Translate Intent_Field_Evidence_Placeholder}" />
+                                                </Border>
+                                            </VerticalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+
+                        <Label
+                            Text="{localize:Translate Intent_Editor_None}"
+                            Style="{StaticResource Caption}"
+                            FontSize="12.5"
+                            IsVisible="{Binding HasNoLogs}" />
+
+                        <Border Style="{StaticResource DashedTile}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenPickerCommand}" />
+                            </Border.GestureRecognizers>
+                            <Label Text="{localize:Translate Intent_Editor_Add}" Style="{StaticResource DashedTileText}" />
+                        </Border>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- Footer: word count and the two page actions -->
+            <Grid Grid.Row="3" ColumnDefinitions="*,Auto" Padding="22,12,22,20" BackgroundColor="{StaticResource NightVeil}">
+                <Label
+                    Grid.Column="0"
+                    Text="{Binding WordCountLabel}"
+                    Style="{StaticResource Caption}"
+                    FontSize="11.5"
+                    VerticalOptions="Center" />
+
+                <HorizontalStackLayout Grid.Column="1" Spacing="9">
+                    <Button
+                        Text="{localize:Translate Editor_Close}"
+                        Style="{StaticResource FooterGhostCta}"
+                        Command="{Binding CloseCommand}" />
+                    <Button
+                        Text="{localize:Translate Menu_UploadToNotion}"
+                        Style="{StaticResource FooterCta}"
+                        Command="{Binding UploadCommand}"
+                        IsEnabled="{Binding IsNotBusy}" />
+                </HorizontalStackLayout>
+            </Grid>
+
+            <BoxView Grid.Row="3" HeightRequest="1" VerticalOptions="Start" Color="{StaticResource Orchid}" Opacity="0.14" />
         </Grid>
 
-        <!-- Footer: word count and the two page actions -->
-        <Grid Grid.Row="3" ColumnDefinitions="*,Auto" Padding="22,12,22,20" BackgroundColor="{StaticResource NightVeil}">
-            <Label
-                Grid.Column="0"
-                Text="{Binding WordCountLabel}"
-                Style="{StaticResource Caption}"
-                FontSize="11.5"
-                VerticalOptions="Center" />
+        <!-- ==================== Pick what the day was for ==================== -->
+        <Grid IsVisible="{Binding IsPickerOpen}" BackgroundColor="#BD0A0618" Padding="14">
 
-            <HorizontalStackLayout Grid.Column="1" Spacing="9">
-                <Button
-                    Text="{localize:Translate Editor_Close}"
-                    Style="{StaticResource FooterGhostCta}"
-                    Command="{Binding CloseCommand}" />
-                <Button
-                    Text="{localize:Translate Menu_UploadToNotion}"
-                    Style="{StaticResource FooterCta}"
-                    Command="{Binding UploadCommand}"
-                    IsEnabled="{Binding IsNotBusy}" />
-            </HorizontalStackLayout>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ClosePickerCommand}" />
+            </Grid.GestureRecognizers>
+
+            <Border Style="{StaticResource GoldSheetPanel}" Padding="20" MaximumHeightRequest="640">
+                <ScrollView>
+                    <VerticalStackLayout Spacing="13">
+
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="{localize:Translate Intent_Picker_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
+                            <Label Text="{localize:Translate Intent_Picker_Title}" Style="{StaticResource DisplaySmall}" FontSize="25" />
+                            <Label Text="{localize:Translate Intent_Picker_Subtitle}" Style="{StaticResource Caption}" FontSize="12" />
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="8" BindableLayout.ItemsSource="{Binding PickerRows}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:IntentionPickRow">
+                                    <Border Style="{StaticResource ChoiceRow}">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding BindingContext.TogglePickCommand, Source={x:Reference Page}}"
+                                                CommandParameter="{Binding .}" />
+                                        </Border.GestureRecognizers>
+
+                                        <Border.Triggers>
+                                            <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                                                <Setter Property="Stroke" Value="{StaticResource Gold}" />
+                                            </DataTrigger>
+                                        </Border.Triggers>
+
+                                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                                            <Border Grid.Column="0" Style="{StaticResource CheckBox}" Margin="0,1,0,0">
+                                                <Label
+                                                    Text="{Binding CheckMark}"
+                                                    FontSize="12"
+                                                    TextColor="{StaticResource Gold}"
+                                                    HorizontalOptions="Center"
+                                                    VerticalOptions="Center" />
+                                            </Border>
+
+                                            <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                                <Label Text="{Binding Title}" Style="{StaticResource TileTitle}" FontSize="14.5" />
+                                                <Label Text="{Binding NoteLabel}" Style="{StaticResource Caption}" FontSize="11.5" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+
+                        <Label
+                            Text="{localize:Translate Intent_Picker_Empty}"
+                            Style="{StaticResource Caption}"
+                            FontSize="12.5"
+                            IsVisible="{Binding PickerIsEmpty}" />
+
+                        <Border Style="{StaticResource DashedTile}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding NewIntentionCommand}" />
+                            </Border.GestureRecognizers>
+                            <Label Text="{localize:Translate Intent_Picker_CreateNew}" Style="{StaticResource DashedTileText}" FontSize="13" />
+                        </Border>
+
+                        <Button
+                            Text="{Binding PickerDoneLabel}"
+                            Style="{StaticResource PrimaryCta}"
+                            FontSize="15"
+                            HeightRequest="50"
+                            CornerRadius="13"
+                            Command="{Binding ClosePickerCommand}" />
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
         </Grid>
 
-        <BoxView Grid.Row="3" HeightRequest="1" VerticalOptions="Start" Color="{StaticResource Orchid}" Opacity="0.14" />
+        <!-- ==================== Name a new one ==================== -->
+        <views:IntentionDraftSheet
+            IsVisible="{Binding Draft.IsOpen}"
+            Draft="{Binding Draft}"
+            SaveCommand="{Binding SaveDraftCommand}"
+            CancelCommand="{Binding CancelDraftCommand}" />
+
+        <!-- ==================== Removing a day already written about ==================== -->
+        <Grid IsVisible="{Binding IsUnpickOpen}" BackgroundColor="#C80A0618" Padding="18">
+
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseUnpickCommand}" />
+            </Grid.GestureRecognizers>
+
+            <Border Style="{StaticResource SheetPanel}">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="{localize:Translate Intent_Unpick_Title}" Style="{StaticResource DisplaySmall}" FontSize="26" />
+                    <Label Text="{Binding UnpickMessage}" Style="{StaticResource Body}" FontSize="13.5" />
+
+                    <VerticalStackLayout Spacing="9" Margin="0,2,0,0">
+                        <Button
+                            Text="{localize:Translate Intent_Unpick_Confirm}"
+                            Style="{StaticResource DangerCta}"
+                            Command="{Binding ConfirmUnpickCommand}" />
+                        <Button
+                            Text="{localize:Translate Intent_Unpick_Keep}"
+                            Style="{StaticResource SecondaryCta}"
+                            HeightRequest="46"
+                            CornerRadius="13"
+                            Command="{Binding CloseUnpickCommand}" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
     </Grid>
 </ContentPage>

@@ -5,7 +5,6 @@ using JournalApp.Data;
 using JournalApp.Localization;
 using JournalApp.Models;
 using JournalApp.Services;
-using JournalApp.Views;
 
 namespace JournalApp.ViewModels;
 
@@ -48,6 +47,7 @@ public partial class UploadViewModel : ObservableObject
 {
     private readonly JournalDatabase _Database;
     private readonly NotionService _Notion;
+    private readonly NavigationService _Navigation;
 
     [ObservableProperty] private ObservableCollection<UploadQueueItem> _Queue = new();
     [ObservableProperty] private string _Heading = string.Empty;
@@ -70,10 +70,11 @@ public partial class UploadViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsDone), nameof(IsFailed), nameof(IsNotRunning), nameof(HasQueue))]
     private UploadState _State = UploadState.Idle;
 
-    public UploadViewModel(JournalDatabase database, NotionService notion)
+    public UploadViewModel(JournalDatabase database, NotionService notion, NavigationService navigation)
     {
         _Database = database;
         _Notion = notion;
+        _Navigation = navigation;
     }
 
     public bool IsNotConnected => !IsConnected;
@@ -182,7 +183,8 @@ public partial class UploadViewModel : ObservableObject
             item.MarkSending();
             try
             {
-                item.Entry.NotionPageId = await _Notion.UploadEntryAsync(item.Entry);
+                var intentions = await _Database.GetIntentionLinesAsync(item.Entry.EntryDate);
+                item.Entry.NotionPageId = await _Notion.UploadEntryAsync(item.Entry, intentions);
                 item.Entry.IsUploaded = true;
                 await _Database.SaveEntryAsync(item.Entry);
                 item.MarkUploaded();
@@ -208,8 +210,8 @@ public partial class UploadViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private static Task ConnectAsync() => Shell.Current.GoToAsync(nameof(NotionConnectPage));
+    private Task ConnectAsync() => _Navigation.PushAsync(Routes.NotionConnect);
 
     [RelayCommand]
-    private static Task BackAsync() => Shell.Current.GoToAsync("..");
+    private Task BackAsync() => _Navigation.BackAsync();
 }

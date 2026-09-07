@@ -8,6 +8,7 @@ namespace JournalApp.ViewModels;
 public partial class NotionConnectViewModel : ObservableObject
 {
     private readonly NotionService _Notion;
+    private readonly NavigationService _Navigation;
 
     [ObservableProperty] private string _Token = string.Empty;
 
@@ -22,7 +23,11 @@ public partial class NotionConnectViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _IsBusy;
 
-    public NotionConnectViewModel(NotionService notion) => _Notion = notion;
+    public NotionConnectViewModel(NotionService notion, NavigationService navigation)
+    {
+        _Notion = notion;
+        _Navigation = navigation;
+    }
 
     public async Task LoadAsync() => IsConnected = await NotionService.IsConnectedAsync();
 
@@ -66,7 +71,7 @@ public partial class NotionConnectViewModel : ObservableObject
                 return;
             }
 
-            await Shell.Current.GoToAsync("..");
+            await _Navigation.BackAsync();
         }
         catch
         {
@@ -87,9 +92,9 @@ public partial class NotionConnectViewModel : ObservableObject
 
         await Shell.Current.DisplayAlertAsync(
             AppResources.Settings_ClearedTitle, AppResources.Settings_ClearedMessage, AppResources.OK);
-        await Shell.Current.GoToAsync("..");
+        await _Navigation.BackAsync();
     }
 
     [RelayCommand]
-    private static Task BackAsync() => Shell.Current.GoToAsync("..");
+    private Task BackAsync() => _Navigation.BackAsync();
 }

@@ -1,4 +1,4 @@
-﻿using JournalApp.Services;
+using JournalApp.Services;
 using JournalApp.Views;
 
 namespace JournalApp;
@@ -8,14 +8,15 @@ public partial class AppShell : Shell
     public AppShell()
     {
         InitializeComponent();
-        Routing.RegisterRoute(nameof(JournalEditorPage), typeof(JournalEditorPage));
-        Routing.RegisterRoute(nameof(JournalListPage), typeof(JournalListPage));
-        Routing.RegisterRoute(nameof(EntryDetailPage), typeof(EntryDetailPage));
-        Routing.RegisterRoute(nameof(NotionConnectPage), typeof(NotionConnectPage));
-        Routing.RegisterRoute(nameof(UploadPage), typeof(UploadPage));
-        Routing.RegisterRoute(nameof(ImportPage), typeof(ImportPage));
-        Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
-        Routing.RegisterRoute(nameof(PinPage), typeof(PinPage));
+        Routing.RegisterRoute(Routes.JournalEditor, typeof(JournalEditorPage));
+        Routing.RegisterRoute(Routes.JournalList, typeof(JournalListPage));
+        Routing.RegisterRoute(Routes.EntryDetail, typeof(EntryDetailPage));
+        Routing.RegisterRoute(Routes.NotionConnect, typeof(NotionConnectPage));
+        Routing.RegisterRoute(Routes.Upload, typeof(UploadPage));
+        Routing.RegisterRoute(Routes.Import, typeof(ImportPage));
+        Routing.RegisterRoute(Routes.Settings, typeof(SettingsPage));
+        Routing.RegisterRoute(Routes.Pin, typeof(PinPage));
+        Routing.RegisterRoute(Routes.Intentions, typeof(IntentionsPage));
 
         // First launch walks the wizard; afterwards the PIN, when there is one, guards the journal.
         CurrentItem = !AppSettings.SetupCompleted ? OnboardingShell

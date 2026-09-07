@@ -4,7 +4,7 @@ using SQLite;
 namespace JournalApp.Data;
 
 /// <summary>Local SQLite store. The database file is created lazily on first access.</summary>
-public class JournalDatabase
+public partial class JournalDatabase
 {
     private SQLiteAsyncConnection? _Connection;
 
@@ -16,6 +16,8 @@ public class JournalDatabase
         var path = Path.Combine(FileSystem.AppDataDirectory, "journal.db3");
         _Connection = new SQLiteAsyncConnection(path);
         await _Connection.CreateTableAsync<JournalEntry>();
+        await _Connection.CreateTableAsync<Intention>();
+        await _Connection.CreateTableAsync<IntentionLog>();
         return _Connection;
     }
 

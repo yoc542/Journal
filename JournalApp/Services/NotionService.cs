@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Net.Http.Json;
 using System.Text.Json.Nodes;
 using JournalApp.Models;
@@ -7,12 +8,23 @@ using JournalApp.Localization;
 
 namespace JournalApp.Services;
 
+/// <summary>One row of the Notion journal: the day, plus what the user wanted that day.</summary>
+public sealed record NotionEntry(JournalEntry Entry, List<IntentionLine> Intentions);
+
 /// <summary>Minimal Notion REST client for the "JournalGrimoire" database (2026-03-11 data-source model).</summary>
 public class NotionService
 {
     private const string TitleProperty = "Name"; // Notion requires exactly one title property.
     private const string EntryDateProperty = "Entry Date";
+    private const string IntentionsProperty = "Intentions";
     private const string JournalTitle = "JournalGrimoire";
+
+    // The shape of the "Intentions" property. These markers are read back on import, so they stay
+    // in English whatever the app's language is: the format is data, not display text.
+    private const string IntentionMarker = "▸ ";
+    private const string UidMarker = " · #";
+    private const string DidLabel = "Did: ";
+    private const string EvidenceLabel = "Evidence: ";
 
     private readonly HttpClient _Http;
     private readonly SemaphoreSlim _SetupGate = new(1, 1);
@@ -77,7 +89,7 @@ public class NotionService
             var parentPageId = await EnsureJournalPageAsync();
             var databaseId = await CreateJournalDatabaseAsync(parentPageId);
             CacheJournalIds(databaseId, await GetFirstDataSourceIdAsync(databaseId));
-            AppSettings.NotionEntryDateReady = true;
+            AppSettings.NotionSchemaReady = true;
         }
         finally
         {
@@ -89,11 +101,11 @@ public class NotionService
     /// Uploads an entry. If it was already uploaded (<see cref="JournalEntry.NotionPageId"/> is set), the existing
     /// row is updated in place instead of creating a duplicate. Returns the page ID (new or existing).
     /// </summary>
-    public async Task<string> UploadEntryAsync(JournalEntry entry)
+    public async Task<string> UploadEntryAsync(JournalEntry entry, IReadOnlyList<IntentionLine> intentions)
     {
         try
         {
-            return await SendEntryAsync(entry);
+            return await SendEntryAsync(entry, intentions);
         }
         catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
         {
@@ -101,14 +113,14 @@ public class NotionService
             // IDs and send again, which re-discovers or re-creates the database from scratch.
             ForgetJournalIds();
             entry.NotionPageId = null;
-            return await SendEntryAsync(entry);
+            return await SendEntryAsync(entry, intentions);
         }
     }
 
-    private async Task<string> SendEntryAsync(JournalEntry entry)
+    private async Task<string> SendEntryAsync(JournalEntry entry, IReadOnlyList<IntentionLine> intentions)
     {
         await AuthorizeAsync();
-        await EnsureEntryDatePropertyAsync();
+        await EnsureSchemaAsync();
 
         var properties = new JsonObject
         {
@@ -122,7 +134,9 @@ public class NotionService
             {
                 ["date"] = new JsonObject { ["start"] = DateTime.Now.ToString("o") }
             },
-            ["Journal Text"] = new JsonObject { ["rich_text"] = RichText(entry.Text) }
+            ["Journal Text"] = new JsonObject { ["rich_text"] = RichText(entry.Text) },
+            // Sent even when empty, so un-picking everything clears the day in Notion too.
+            [IntentionsProperty] = new JsonObject { ["rich_text"] = RichText(Render(intentions)) }
         };
 
         if (!string.IsNullOrEmpty(entry.NotionPageId))
@@ -146,7 +160,7 @@ public class NotionService
     }
 
     /// <summary>Fetches every row from the Notion "JournalGrimoire" database.</summary>
-    public async Task<List<JournalEntry>> FetchEntriesAsync()
+    public async Task<List<NotionEntry>> FetchEntriesAsync()
     {
         try
         {
@@ -159,33 +173,41 @@ public class NotionService
         }
     }
 
-    private async Task<List<JournalEntry>> ReadEntriesAsync()
+    private async Task<List<NotionEntry>> ReadEntriesAsync()
     {
         await AuthorizeAsync();
 
         var dataSourceId = await RequireDataSourceIdAsync();
         var json = await PostJsonAsync($"data_sources/{dataSourceId}/query", new JsonObject());
 
-        var entries = new List<JournalEntry>();
+        var entries = new List<NotionEntry>();
         foreach (var page in json?["results"]?.AsArray() ?? new JsonArray())
         {
             var props = page?["properties"];
-            var text = string.Concat((props?["Journal Text"]?["rich_text"]?.AsArray() ?? [])
-                .Select(t => t?["plain_text"]?.GetValue<string>() ?? string.Empty));
+            var text = PlainText(props?["Journal Text"]);
+            var intentions = ParseIntentions(PlainText(props?[IntentionsProperty]));
 
-            if (string.IsNullOrEmpty(text))
+            // A row with neither prose nor anything logged has nothing to bring home.
+            if (string.IsNullOrEmpty(text) && intentions.Count == 0)
                 continue;
 
-            entries.Add(new JournalEntry
-            {
-                DayNumber = (int)(props?["Day Number"]?["number"]?.GetValue<double>() ?? 0),
-                EntryDate = ReadEntryDate(props),
-                Text = text,
-                NotionPageId = page?["id"]?.GetValue<string>()
-            });
+            entries.Add(new NotionEntry(
+                new JournalEntry
+                {
+                    DayNumber = (int)(props?["Day Number"]?["number"]?.GetValue<double>() ?? 0),
+                    EntryDate = ReadEntryDate(props),
+                    Text = text,
+                    NotionPageId = page?["id"]?.GetValue<string>()
+                },
+                intentions));
         }
         return entries;
     }
+
+    /// <summary>Joins a rich-text property back into the string it was chunked from.</summary>
+    private static string PlainText(JsonNode? property) =>
+        string.Concat((property?["rich_text"]?.AsArray() ?? [])
+            .Select(t => t?["plain_text"]?.GetValue<string>() ?? string.Empty));
 
     /// <summary>
     /// Which calendar day a Notion row belongs to. Rows written before "Entry Date" existed fall
@@ -206,24 +228,26 @@ public class NotionService
         return DateTime.Today;
     }
 
-    private async Task EnsureEntryDatePropertyAsync()
+    /// <summary>Adds whichever properties a database made by an older version of the app is missing.</summary>
+    private async Task EnsureSchemaAsync()
     {
-        if (AppSettings.NotionEntryDateReady)
+        if (AppSettings.NotionSchemaReady)
             return;
 
         var dataSourceId = await RequireDataSourceIdAsync();
         var schema = await GetJsonAsync($"data_sources/{dataSourceId}");
+        var missing = new JsonObject();
 
         if (schema?["properties"]?[EntryDateProperty] is null)
-            await PatchJsonAsync($"data_sources/{dataSourceId}", new JsonObject
-            {
-                ["properties"] = new JsonObject
-                {
-                    [EntryDateProperty] = new JsonObject { ["date"] = new JsonObject() }
-                }
-            });
+            missing[EntryDateProperty] = new JsonObject { ["date"] = new JsonObject() };
 
-        AppSettings.NotionEntryDateReady = true;
+        if (schema?["properties"]?[IntentionsProperty] is null)
+            missing[IntentionsProperty] = new JsonObject { ["rich_text"] = new JsonObject() };
+
+        if (missing.Count > 0)
+            await PatchJsonAsync($"data_sources/{dataSourceId}", new JsonObject { ["properties"] = missing });
+
+        AppSettings.NotionSchemaReady = true;
     }
 
     // --- first-launch setup ---
@@ -236,7 +260,7 @@ public class NotionService
         AppSettings.NotionParentPageId = null;
         AppSettings.NotionDatabaseId = null;
         AppSettings.NotionDataSourceId = null;
-        AppSettings.NotionEntryDateReady = false;
+        AppSettings.NotionSchemaReady = false;
     }
 
     private static void CacheJournalIds(string databaseId, string dataSourceId)
@@ -309,7 +333,8 @@ public class NotionService
             ["Day Number"] = new JsonObject { ["number"] = new JsonObject() },
             ["Uploaded Date Time"] = new JsonObject { ["date"] = new JsonObject() },
             [EntryDateProperty] = new JsonObject { ["date"] = new JsonObject() },
-            ["Journal Text"] = new JsonObject { ["rich_text"] = new JsonObject() }
+            ["Journal Text"] = new JsonObject { ["rich_text"] = new JsonObject() },
+            [IntentionsProperty] = new JsonObject { ["rich_text"] = new JsonObject() }
         };
 
         var payload = new JsonObject
@@ -355,6 +380,88 @@ public class NotionService
 
     private static JsonArray TitleText(string text) =>
         new() { new JsonObject { ["type"] = "text", ["text"] = new JsonObject { ["content"] = text } } };
+
+    /// <summary>Renders the day's intentions as the block of text that lands in the "Intentions"
+    /// property: readable in Notion, and structured enough to be read back on import.</summary>
+    private static string Render(IReadOnlyList<IntentionLine> intentions)
+    {
+        var blocks = intentions.Select(i =>
+        {
+            var lines = new List<string> { IntentionMarker + i.Title + UidMarker + i.Uid };
+
+            if (i.Did.Length > 0)
+                lines.Add(DidLabel + i.Did);
+
+            if (i.Evidence.Length > 0)
+                lines.Add(EvidenceLabel + i.Evidence);
+
+            return string.Join("\n", lines);
+        });
+
+        return string.Join("\n\n", blocks);
+    }
+
+    /// <summary>Reads back what <see cref="Render"/> wrote. Anything it cannot make sense of is
+    /// dropped rather than guessed at, since the user may well have edited this text in Notion.</summary>
+    private static List<IntentionLine> ParseIntentions(string text)
+    {
+        var found = new List<IntentionLine>();
+        var did = new StringBuilder();
+        var evidence = new StringBuilder();
+
+        string? title = null;
+        var uid = string.Empty;
+        StringBuilder? field = null;
+
+        void Close()
+        {
+            if (title is not null)
+                found.Add(new IntentionLine(uid, title, did.ToString(), evidence.ToString()));
+
+            title = null;
+            uid = string.Empty;
+            field = null;
+            did.Clear();
+            evidence.Clear();
+        }
+
+        foreach (var raw in text.Replace("\r\n", "\n").Split('\n'))
+        {
+            var line = raw.Trim();
+
+            if (line.StartsWith(IntentionMarker, StringComparison.Ordinal))
+            {
+                Close();
+
+                var head = line[IntentionMarker.Length..];
+                var mark = head.LastIndexOf(UidMarker, StringComparison.Ordinal);
+                title = (mark < 0 ? head : head[..mark]).Trim();
+                uid = mark < 0 ? string.Empty : head[(mark + UidMarker.Length)..].Trim();
+                continue;
+            }
+
+            if (title is null || line.Length == 0)
+                continue;
+
+            if (line.StartsWith(DidLabel, StringComparison.Ordinal))
+                Append(field = did, line[DidLabel.Length..]);
+            else if (line.StartsWith(EvidenceLabel, StringComparison.Ordinal))
+                Append(field = evidence, line[EvidenceLabel.Length..]);
+            else if (field is not null)
+                Append(field, line); // a field that wrapped onto its own line
+        }
+
+        Close();
+        return found.Where(i => i.Title.Length > 0).ToList();
+    }
+
+    private static void Append(StringBuilder field, string text)
+    {
+        if (field.Length > 0)
+            field.Append(' ');
+
+        field.Append(text.Trim());
+    }
 
     /// <summary>Splits text into &lt;=2000-char chunks (Notion's per-rich-text limit).</summary>
     private static JsonArray RichText(string text)

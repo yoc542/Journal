@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using JournalApp.Localization;
 using JournalApp.Services;
-using JournalApp.Views;
 
 namespace JournalApp.ViewModels;
 
@@ -19,6 +18,7 @@ public enum OnboardingStep
 public partial class OnboardingViewModel : ObservableObject
 {
     private readonly NotionService _Notion;
+    private readonly NavigationService _Navigation;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsWelcome), nameof(IsProfile), nameof(IsPin), nameof(IsToken),
@@ -36,9 +36,10 @@ public partial class OnboardingViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _IsBusy;
 
-    public OnboardingViewModel(NotionService notion, PinViewModel pin)
+    public OnboardingViewModel(NotionService notion, PinViewModel pin, NavigationService navigation)
     {
         _Notion = notion;
+        _Navigation = navigation;
         Pin = pin;
         Pin.PinSaved += (_, _) => Step = OnboardingStep.Token;
     }
@@ -167,14 +168,14 @@ public partial class OnboardingViewModel : ObservableObject
     private Task FinishAsync()
     {
         AppSettings.SetupCompleted = true;
-        return Shell.Current.GoToAsync($"//{nameof(TodayPage)}");
+        return _Navigation.ResetToAsync(Routes.Today);
     }
 
     [RelayCommand]
     private async Task OpenSettingsAsync()
     {
         AppSettings.SetupCompleted = true;
-        await Shell.Current.GoToAsync($"//{nameof(TodayPage)}");
-        await Shell.Current.GoToAsync(nameof(SettingsPage));
+        await _Navigation.ResetToAsync(Routes.Today);
+        await _Navigation.PushAsync(Routes.Settings);
     }
 }

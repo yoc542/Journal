@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    x:Class="JournalApp.Views.IntentionDraftSheet"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:JournalApp.Views"
+    xmlns:localize="clr-namespace:JournalApp.Extensions">
+
+    <!-- Scrim: tapping outside the panel abandons the draft -->
+    <Grid x:Name="Body" x:DataType="views:IntentionDraftSheet" BackgroundColor="#BD0A0618" Padding="16">
+
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding CancelCommand}" />
+        </Grid.GestureRecognizers>
+
+        <Border Style="{StaticResource GoldSheetPanel}">
+            <VerticalStackLayout Spacing="14">
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="{localize:Translate Intent_Title}" Style="{StaticResource Eyebrow}" FontSize="10" />
+                    <Label Text="{Binding Draft.Heading}" Style="{StaticResource DisplaySmall}" FontSize="26" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="7">
+                    <Label Text="{localize:Translate Intent_Draft_Title_Label}" Style="{StaticResource FieldLabel}" />
+                    <Border Style="{StaticResource Field}" HeightRequest="50">
+                        <Entry
+                            Style="{StaticResource FieldEntry}"
+                            Text="{Binding Draft.Title}"
+                            MaxLength="{Binding Draft.MaxTitleLength}"
+                            Placeholder="{localize:Translate Intent_Draft_Title_Placeholder}" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="7">
+                    <Label Text="{localize:Translate Intent_Draft_Note_Label}" Style="{StaticResource FieldLabel}" />
+                    <Border Style="{StaticResource Field}" HeightRequest="46">
+                        <Entry
+                            Style="{StaticResource FieldEntry}"
+                            FontSize="14.5"
+                            Text="{Binding Draft.Note}"
+                            MaxLength="{Binding Draft.MaxNoteLength}"
+                            Placeholder="{localize:Translate Intent_Draft_Note_Placeholder}" />
+                    </Border>
+                </VerticalStackLayout>
+
+                <Border
+                    IsVisible="{Binding Draft.HasError}"
+                    StrokeShape="RoundRectangle 12"
+                    Stroke="{StaticResource EmberDeep}"
+                    StrokeThickness="1"
+                    BackgroundColor="#3A1E28"
+                    Padding="14,12">
+                    <Label
+                        Text="{localize:Translate Intent_Draft_Error}"
+                        FontFamily="KarlaRegular"
+                        FontSize="13"
+                        LineHeight="1.4"
+                        TextColor="{StaticResource Ember}" />
+                </Border>
+
+                <VerticalStackLayout Spacing="9">
+                    <Button
+                        Text="{Binding Draft.SaveLabel}"
+                        Style="{StaticResource PrimaryCta}"
+                        FontSize="15.5"
+                        HeightRequest="52"
+                        CornerRadius="13"
+                        Command="{Binding SaveCommand}" />
+                    <Button
+                        Text="{localize:Translate Intent_Draft_Cancel}"
+                        Style="{StaticResource SecondaryCta}"
+                        HeightRequest="46"
+                        CornerRadius="13"
+                        Command="{Binding CancelCommand}" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentView>

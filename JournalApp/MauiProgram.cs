@@ -25,6 +25,7 @@ public static class MauiProgram
 
         // Services
         builder.Services.AddSingleton<JournalDatabase>();
+        builder.Services.AddSingleton<NavigationService>();
         builder.Services.AddSingleton(sp => new NotionService(new HttpClient()));
 
         // ViewModels
@@ -39,6 +40,7 @@ public static class MauiProgram
         builder.Services.AddTransient<ImportViewModel>();
         builder.Services.AddTransient<PinViewModel>();
         builder.Services.AddTransient<LockViewModel>();
+        builder.Services.AddTransient<IntentionsViewModel>();
 
         // Views
         builder.Services.AddTransient<JournalListPage>();
@@ -52,8 +54,9 @@ public static class MauiProgram
         builder.Services.AddTransient<ImportPage>();
         builder.Services.AddTransient<PinPage>();
         builder.Services.AddTransient<LockPage>();
+        builder.Services.AddTransient<IntentionsPage>();
 
-        RemoveNativeEntryBorder();
+        RemoveNativeInputBorder();
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -63,7 +66,9 @@ public static class MauiProgram
     }
 
 
-    private static void RemoveNativeEntryBorder()
+    /// <summary>Both Entry and Editor draw their own native box, which doubles up with the
+    /// MAUI Border the field styles wrap them in.</summary>
+    private static void RemoveNativeInputBorder()
     {
         Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoNativeBorder", (handler, _) =>
         {
@@ -72,17 +77,33 @@ public static class MauiProgram
 #elif IOS || MACCATALYST
             handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
 #elif WINDOWS
-            var none = new Microsoft.UI.Xaml.Thickness(0);
-            var transparent = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Transparent);
+            StripNativeBox(handler.PlatformView);
+#endif
+        });
 
-            handler.PlatformView.BorderThickness = none;
-
-            handler.PlatformView.Resources["TextControlBorderThemeThickness"] = none;
-            handler.PlatformView.Resources["TextControlBorderThemeThicknessFocused"] = none;
-            handler.PlatformView.Resources["TextControlBackground"] = transparent;
-            handler.PlatformView.Resources["TextControlBackgroundPointerOver"] = transparent;
-            handler.PlatformView.Resources["TextControlBackgroundFocused"] = transparent;
+        Microsoft.Maui.Handlers.EditorHandler.Mapper.AppendToMapping("NoNativeBorder", (handler, _) =>
+        {
+#if ANDROID
+            handler.PlatformView.Background = null;
+#elif WINDOWS
+            StripNativeBox(handler.PlatformView);
 #endif
         });
     }
+
+#if WINDOWS
+    private static void StripNativeBox(Microsoft.UI.Xaml.Controls.TextBox view)
+    {
+        var none = new Microsoft.UI.Xaml.Thickness(0);
+        var transparent = new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Transparent);
+
+        view.BorderThickness = none;
+
+        view.Resources["TextControlBorderThemeThickness"] = none;
+        view.Resources["TextControlBorderThemeThicknessFocused"] = none;
+        view.Resources["TextControlBackground"] = transparent;
+        view.Resources["TextControlBackgroundPointerOver"] = transparent;
+        view.Resources["TextControlBackgroundFocused"] = transparent;
+    }
+#endif
 }

@@ -16,6 +16,10 @@ public partial class JournalEditorPage : ContentPage, IQueryAttributable
     {
         if (query.TryGetValue("id", out var value) && int.TryParse(value?.ToString(), out var id))
             _ViewModel.EntryId = id;
+
+        // Today sends the user straight to the picker when nothing is chosen for the day yet.
+        if (query.ContainsKey("picker"))
+            _ViewModel.OpenPickerOnLoad = true;
     }
 
     protected override async void OnAppearing()

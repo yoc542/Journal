@@ -6,6 +6,7 @@
     xmlns:views="clr-namespace:JournalApp.Views"
     xmlns:vm="clr-namespace:JournalApp.ViewModels"
     xmlns:localize="clr-namespace:JournalApp.Extensions"
+    x:Name="Page"
     x:DataType="vm:TodayViewModel"
     Shell.NavBarIsVisible="False"
     BackgroundColor="{StaticResource NightBase}">
@@ -106,6 +107,70 @@
                         </VerticalStackLayout>
                     </Border>
                 </Grid>
+
+                <!-- What I wanted -->
+                <VerticalStackLayout Spacing="9">
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Label
+                            Grid.Column="0"
+                            Text="{localize:Translate Intent_Section_Header}"
+                            Style="{StaticResource EyebrowMuted}"
+                            VerticalOptions="Center" />
+                        <Button
+                            Grid.Column="1"
+                            Text="{localize:Translate Intent_Today_Manage}"
+                            Style="{StaticResource GhostCta}"
+                            FontSize="11.5"
+                            Padding="0"
+                            HeightRequest="20"
+                            TextColor="{StaticResource Gold}"
+                            Command="{Binding OpenIntentionsCommand}" />
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="8" IsVisible="{Binding HasTonight}" BindableLayout.ItemsSource="{Binding Tonight}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="vm:IntentionSummary">
+                                <Border Style="{StaticResource IntentionCard}" Stroke="{StaticResource GoldDeep}" Padding="13,12">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding BindingContext.ContinueWritingCommand, Source={x:Reference Page}}" />
+                                    </Border.GestureRecognizers>
+
+                                    <VerticalStackLayout Spacing="5">
+                                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                            <Label
+                                                Grid.Column="0"
+                                                Text="{Binding Title}"
+                                                Style="{StaticResource CardTitle}"
+                                                FontSize="17" />
+                                            <Label Grid.Column="1" Text="{Binding StateLabel}" Style="{StaticResource CardBadge}" VerticalOptions="Center">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding IsRecorded}" Value="True">
+                                                        <Setter Property="TextColor" Value="{StaticResource Verdant}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding IsUntouched}" Value="True">
+                                                        <Setter Property="TextColor" Value="{StaticResource Lilac}" />
+                                                        <Setter Property="Opacity" Value="0.5" />
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                        </Grid>
+
+                                        <Label Text="{Binding Summary}" Style="{StaticResource Caption}" FontSize="11.5" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+
+                    <Border Style="{StaticResource DashedTile}" IsVisible="{Binding HasNoTonight}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChooseIntentionsCommand}" />
+                        </Border.GestureRecognizers>
+                        <Label Text="{localize:Translate Intent_Today_Choose}" Style="{StaticResource DashedTileText}" FontSize="13" />
+                    </Border>
+                </VerticalStackLayout>
 
                 <!-- This week -->
                 <VerticalStackLayout Spacing="9">

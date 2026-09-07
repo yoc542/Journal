@@ -686,4 +686,211 @@ every evening.</value>
   <data name="Settings_Lock_Now" xml:space="preserve">
     <value>Lock now</value>
   </data>
+  <data name="Intent_Eyebrow" xml:space="preserve">
+    <value>Kept between days</value>
+  </data>
+  <data name="Intent_Title" xml:space="preserve">
+    <value>What I wanted</value>
+  </data>
+  <data name="Intent_Subtitle" xml:space="preserve">
+    <value>The things you are working toward. Write them once, then pick from them on any evening.</value>
+  </data>
+  <data name="Intent_Back" xml:space="preserve">
+    <value>‹ Today</value>
+  </data>
+  <data name="Intent_Tab_Active_Format" xml:space="preserve">
+    <value>Active · {0}</value>
+  </data>
+  <data name="Intent_Tab_Completed_Format" xml:space="preserve">
+    <value>Completed · {0}</value>
+  </data>
+  <data name="Intent_NoDescription" xml:space="preserve">
+    <value>No description</value>
+  </data>
+  <data name="Intent_Meta_Active_Format" xml:space="preserve">
+    <value>Kept since {0} · {1} days logged</value>
+  </data>
+  <data name="Intent_Meta_Active_One_Format" xml:space="preserve">
+    <value>Kept since {0} · 1 day logged</value>
+  </data>
+  <data name="Intent_Meta_Active_None_Format" xml:space="preserve">
+    <value>Kept since {0} · not logged yet</value>
+  </data>
+  <data name="Intent_Meta_Completed_Format" xml:space="preserve">
+    <value>Completed {0} · {1} days logged</value>
+  </data>
+  <data name="Intent_Meta_Completed_One_Format" xml:space="preserve">
+    <value>Completed {0} · 1 day logged</value>
+  </data>
+  <data name="Intent_Meta_Completed_None_Format" xml:space="preserve">
+    <value>Completed {0} · never logged</value>
+  </data>
+  <data name="Intent_Badge_OnToday" xml:space="preserve">
+    <value>On today</value>
+  </data>
+  <data name="Intent_Badge_Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="Intent_Track" xml:space="preserve">
+    <value>Track today</value>
+  </data>
+  <data name="Intent_Tracking" xml:space="preserve">
+    <value>✓ Tracking today</value>
+  </data>
+  <data name="Intent_Complete" xml:space="preserve">
+    <value>✓ Complete</value>
+  </data>
+  <data name="Intent_Reopen" xml:space="preserve">
+    <value>Reopen</value>
+  </data>
+  <data name="Intent_Remove" xml:space="preserve">
+    <value>×</value>
+  </data>
+  <data name="Intent_New" xml:space="preserve">
+    <value>＋ New “what I wanted”</value>
+  </data>
+  <data name="Intent_Empty_Active_Title" xml:space="preserve">
+    <value>Nothing here yet.</value>
+  </data>
+  <data name="Intent_Empty_Active_Body" xml:space="preserve">
+    <value>Start with one — “Improve my fitness”, “Learn programming”, “Build my business”. You will reuse it every evening.</value>
+  </data>
+  <data name="Intent_Empty_Done_Title" xml:space="preserve">
+    <value>No victories yet.</value>
+  </data>
+  <data name="Intent_Empty_Done_Body" xml:space="preserve">
+    <value>Mark something complete and it will rest here, with the days that earned it.</value>
+  </data>
+  <data name="Intent_Delete_Title" xml:space="preserve">
+    <value>Delete this intention?</value>
+  </data>
+  <data name="Intent_Delete_Message_Format" xml:space="preserve">
+    <value>“{0}” will be removed, along with the {1} days you logged against it. Entries already in Notion are left alone.</value>
+  </data>
+  <data name="Intent_Delete_Message_One_Format" xml:space="preserve">
+    <value>“{0}” will be removed, along with the one day you logged against it. Entries already in Notion are left alone.</value>
+  </data>
+  <data name="Intent_Delete_Message_None_Format" xml:space="preserve">
+    <value>“{0}” will be removed. You have not logged any days against it yet.</value>
+  </data>
+  <data name="Intent_Delete_Confirm" xml:space="preserve">
+    <value>Delete it</value>
+  </data>
+  <data name="Intent_Delete_Keep" xml:space="preserve">
+    <value>Keep it</value>
+  </data>
+  <data name="Intent_Draft_New_Heading" xml:space="preserve">
+    <value>Add something you want</value>
+  </data>
+  <data name="Intent_Draft_Edit_Heading" xml:space="preserve">
+    <value>Edit this one</value>
+  </data>
+  <data name="Intent_Draft_Title_Label" xml:space="preserve">
+    <value>The thing you want</value>
+  </data>
+  <data name="Intent_Draft_Title_Placeholder" xml:space="preserve">
+    <value>Improve my fitness</value>
+  </data>
+  <data name="Intent_Draft_Note_Label" xml:space="preserve">
+    <value>What it looks like in practice — optional</value>
+  </data>
+  <data name="Intent_Draft_Note_Placeholder" xml:space="preserve">
+    <value>Move every day, honestly.</value>
+  </data>
+  <data name="Intent_Draft_Error" xml:space="preserve">
+    <value>Give it a name so you can pick it later.</value>
+  </data>
+  <data name="Intent_Draft_Save_New" xml:space="preserve">
+    <value>Add it</value>
+  </data>
+  <data name="Intent_Draft_Save_Edit" xml:space="preserve">
+    <value>Save changes</value>
+  </data>
+  <data name="Intent_Draft_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Intent_Picker_Eyebrow" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="Intent_Picker_Title" xml:space="preserve">
+    <value>What were you working toward?</value>
+  </data>
+  <data name="Intent_Picker_Subtitle" xml:space="preserve">
+    <value>Only what you are still working on. Each one gets its own “what I did” and evidence.</value>
+  </data>
+  <data name="Intent_Picker_CreateNew" xml:space="preserve">
+    <value>＋ Create a new one</value>
+  </data>
+  <data name="Intent_Picker_Empty" xml:space="preserve">
+    <value>Nothing to pick from yet. Create your first one below.</value>
+  </data>
+  <data name="Intent_Picker_Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="Intent_Picker_Done_Format" xml:space="preserve">
+    <value>Done — {0} selected</value>
+  </data>
+  <data name="Intent_Picker_Done_One" xml:space="preserve">
+    <value>Done — 1 selected</value>
+  </data>
+  <data name="Intent_Section_Header" xml:space="preserve">
+    <value>What I wanted</value>
+  </data>
+  <data name="Intent_Field_Did" xml:space="preserve">
+    <value>What I did</value>
+  </data>
+  <data name="Intent_Field_Did_Placeholder" xml:space="preserve">
+    <value>The action you took today.</value>
+  </data>
+  <data name="Intent_Field_Evidence" xml:space="preserve">
+    <value>Evidence that I’m moving toward it</value>
+  </data>
+  <data name="Intent_Field_Evidence_Placeholder" xml:space="preserve">
+    <value>Something measurable or tangible.</value>
+  </data>
+  <data name="Intent_Editor_Add" xml:space="preserve">
+    <value>＋ Add what I wanted</value>
+  </data>
+  <data name="Intent_Editor_None" xml:space="preserve">
+    <value>Nothing chosen for today. Pick one or more of the things you want, then record what you did and the evidence.</value>
+  </data>
+  <data name="Intent_Today_Manage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="Intent_Today_Choose" xml:space="preserve">
+    <value>＋ Choose what you’re working toward</value>
+  </data>
+  <data name="Intent_Today_Prompt" xml:space="preserve">
+    <value>Add what you did and the evidence.</value>
+  </data>
+  <data name="Intent_State_Recorded" xml:space="preserve">
+    <value>Recorded</value>
+  </data>
+  <data name="Intent_State_InProgress" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="Intent_State_Empty" xml:space="preserve">
+    <value>Not filled in</value>
+  </data>
+  <data name="Intent_Detail_Header" xml:space="preserve">
+    <value>What I wanted that day</value>
+  </data>
+  <data name="Intent_Detail_Evidence" xml:space="preserve">
+    <value>Evidence</value>
+  </data>
+  <data name="Intent_Detail_Blank" xml:space="preserve">
+    <value>Nothing written.</value>
+  </data>
+  <data name="Intent_Unpick_Title" xml:space="preserve">
+    <value>Remove this from the day?</value>
+  </data>
+  <data name="Intent_Unpick_Message_Format" xml:space="preserve">
+    <value>What you wrote under “{0}” for this day will be deleted. The intention itself stays in your library.</value>
+  </data>
+  <data name="Intent_Unpick_Confirm" xml:space="preserve">
+    <value>Remove it</value>
+  </data>
+  <data name="Intent_Unpick_Keep" xml:space="preserve">
+    <value>Keep it</value>
+  </data>
 </root>

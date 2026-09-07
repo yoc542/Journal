@@ -2,7 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JournalApp.Localization;
 using JournalApp.Services;
-using JournalApp.Views;
 
 namespace JournalApp.ViewModels;
 
@@ -14,6 +13,8 @@ public partial class LockViewModel : ObservableObject
 
     private static readonly TimeSpan Cooldown = TimeSpan.FromSeconds(15);
 
+    private readonly NavigationService _Navigation;
+
     private int _FailedAttempts;
     private DateTime _BlockedUntil;
 
@@ -24,6 +25,8 @@ public partial class LockViewModel : ObservableObject
     [ObservableProperty] private string _ErrorMessage = string.Empty;
 
     [ObservableProperty] private string _Greeting = string.Empty;
+
+    public LockViewModel(NavigationService navigation) => _Navigation = navigation;
 
     /// <summary>Digits typed so far, which is all the keypad needs to draw its dots.</summary>
     public int EnteredLength => Entered.Length;
@@ -107,5 +110,5 @@ public partial class LockViewModel : ObservableObject
         await UnlockAsync();
     }
 
-    private static Task UnlockAsync() => Shell.Current.GoToAsync($"//{nameof(TodayPage)}");
+    private Task UnlockAsync() => _Navigation.ResetToAsync(Routes.Today);
 }

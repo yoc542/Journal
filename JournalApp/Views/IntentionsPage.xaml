@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="JournalApp.Views.IntentionsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:JournalApp.Views"
+    xmlns:vm="clr-namespace:JournalApp.ViewModels"
+    xmlns:localize="clr-namespace:JournalApp.Extensions"
+    x:Name="Page"
+    x:DataType="vm:IntentionsViewModel"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="{StaticResource NightBase}">
+
+    <ContentPage.Resources>
+        <views:NightSkyDrawable x:Key="NightSky" />
+    </ContentPage.Resources>
+
+    <Grid Background="{StaticResource NightSkyGradient}">
+
+        <GraphicsView Drawable="{StaticResource NightSky}" InputTransparent="True" />
+
+        <ScrollView>
+            <VerticalStackLayout Padding="24,12,24,28" Spacing="11">
+
+                <Button
+                    Text="{localize:Translate Intent_Back}"
+                    Style="{StaticResource GhostCta}"
+                    HorizontalOptions="Start"
+                    Padding="4,0"
+                    HeightRequest="34"
+                    Command="{Binding BackCommand}" />
+
+                <!-- What this drawer is for -->
+                <VerticalStackLayout Spacing="7">
+                    <Label Text="{localize:Translate Intent_Eyebrow}" Style="{StaticResource Eyebrow}" FontSize="10" />
+                    <Label Text="{localize:Translate Intent_Title}" Style="{StaticResource DisplaySmall}" />
+                    <Label Text="{localize:Translate Intent_Subtitle}" Style="{StaticResource Body}" FontSize="13" />
+                </VerticalStackLayout>
+
+                <!-- Still working on it / already done -->
+                <Border Style="{StaticResource TabStrip}" Margin="0,4,0,2">
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="6">
+                        <Button
+                            Grid.Column="0"
+                            Text="{Binding ActiveTabLabel}"
+                            Style="{StaticResource TabButton}"
+                            Command="{Binding ShowActiveCommand}">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding ShowingActive}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="#2E2338" />
+                                    <Setter Property="TextColor" Value="{StaticResource Cream}" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                        <Button
+                            Grid.Column="1"
+                            Text="{Binding CompletedTabLabel}"
+                            Style="{StaticResource TabButton}"
+                            Command="{Binding ShowCompletedCommand}">
+                            <Button.Triggers>
+                                <DataTrigger TargetType="Button" Binding="{Binding ShowingCompleted}" Value="True">
+                                    <Setter Property="BackgroundColor" Value="#2E2338" />
+                                    <Setter Property="TextColor" Value="{StaticResource Cream}" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- The intentions themselves -->
+                <VerticalStackLayout Spacing="10" IsVisible="{Binding HasRows}" BindableLayout.ItemsSource="{Binding Rows}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="vm:IntentionRow">
+                            <Border Style="{StaticResource IntentionCard}">
+                                <VerticalStackLayout Spacing="11">
+
+                                    <!-- Tapping the name opens it for a rename -->
+                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding BindingContext.EditIntentionCommand, Source={x:Reference Page}}"
+                                                CommandParameter="{Binding .}" />
+                                        </Grid.GestureRecognizers>
+
+                                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                            <Label Text="{Binding Title}" Style="{StaticResource CardTitle}" />
+                                            <Label Text="{Binding NoteLabel}" Style="{StaticResource Caption}" FontSize="11.5" />
+                                        </VerticalStackLayout>
+
+                                        <Label Grid.Column="1" Text="{Binding BadgeLabel}" Style="{StaticResource CardBadge}">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding IsCompleted}" Value="True">
+                                                    <Setter Property="TextColor" Value="{StaticResource Verdant}" />
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </Grid>
+
+                                    <Label Text="{Binding MetaLabel}" Style="{StaticResource Caption}" FontSize="11" />
+
+                                    <!-- Still going: pick it for today, finish it, or drop it -->
+                                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" IsVisible="{Binding IsActive}">
+                                        <Button
+                                            Grid.Column="0"
+                                            Text="{Binding TrackLabel}"
+                                            Style="{StaticResource GoldChipButton}"
+                                            HeightRequest="38"
+                                            FontSize="12.5"
+                                            Command="{Binding BindingContext.ToggleTrackCommand, Source={x:Reference Page}}"
+                                            CommandParameter="{Binding .}" />
+                                        <Button
+                                            Grid.Column="1"
+                                            Text="{localize:Translate Intent_Complete}"
+                                            Style="{StaticResource ChipButton}"
+                                            HeightRequest="38"
+                                            BorderColor="{StaticResource Verdant}"
+                                            TextColor="{StaticResource Verdant}"
+                                            Command="{Binding BindingContext.CompleteCommand, Source={x:Reference Page}}"
+                                            CommandParameter="{Binding .}" />
+                                        <Button
+                                            Grid.Column="2"
+                                            Text="{localize:Translate Intent_Remove}"
+                                            Style="{StaticResource DangerChipButton}"
+                                            HeightRequest="38"
+                                            WidthRequest="40"
+                                            Padding="0"
+                                            Command="{Binding BindingContext.OpenDeleteCommand, Source={x:Reference Page}}"
+                                            CommandParameter="{Binding .}" />
+                                    </Grid>
+
+                                    <!-- Finished: put it back, or drop it -->
+                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" IsVisible="{Binding IsCompleted}">
+                                        <Button
+                                            Grid.Column="0"
+                                            Text="{localize:Translate Intent_Reopen}"
+                                            Style="{StaticResource GoldChipButton}"
+                                            HeightRequest="38"
+                                            FontSize="12.5"
+                                            Command="{Binding BindingContext.ReopenCommand, Source={x:Reference Page}}"
+                                            CommandParameter="{Binding .}" />
+                                        <Button
+                                            Grid.Column="1"
+                                            Text="{localize:Translate Intent_Remove}"
+                                            Style="{StaticResource DangerChipButton}"
+                                            HeightRequest="38"
+                                            WidthRequest="40"
+                                            Padding="0"
+                                            Command="{Binding BindingContext.OpenDeleteCommand, Source={x:Reference Page}}"
+                                            CommandParameter="{Binding .}" />
+                                    </Grid>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <!-- Nothing on this tab yet -->
+                <Border
+                    IsVisible="{Binding IsEmpty}"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="{StaticResource Orchid}"
+                    StrokeThickness="1"
+                    StrokeDashArray="5,4"
+                    BackgroundColor="Transparent"
+                    Padding="18,22">
+                    <VerticalStackLayout Spacing="14">
+                        <Label Text="{Binding EmptyTitle}" Style="{StaticResource DisplaySmall}" FontSize="24" />
+                        <Label Text="{Binding EmptyBody}" Style="{StaticResource Body}" FontSize="13" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button
+                    Text="{localize:Translate Intent_New}"
+                    Style="{StaticResource PrimaryCta}"
+                    FontSize="15.5"
+                    HeightRequest="52"
+                    Margin="0,4,0,0"
+                    Command="{Binding NewIntentionCommand}" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- ==================== Delete confirmation ==================== -->
+        <Grid IsVisible="{Binding IsDeleteOpen}" BackgroundColor="#B80A0618" Padding="18">
+
+            <!-- Tapping the scrim keeps the intention, matching the sheet's own "Keep it" -->
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CloseDeleteCommand}" />
+            </Grid.GestureRecognizers>
+
+            <Border Style="{StaticResource SheetPanel}">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="{localize:Translate Intent_Delete_Title}" Style="{StaticResource DisplaySmall}" FontSize="26" />
+                    <Label Text="{Binding DeleteMessage}" Style="{StaticResource Body}" FontSize="13.5" />
+
+                    <VerticalStackLayout Spacing="9" Margin="0,2,0,0">
+                        <Button
+                            Text="{localize:Translate Intent_Delete_Confirm}"
+                            Style="{StaticResource DangerCta}"
+                            Command="{Binding ConfirmDeleteCommand}" />
+                        <Button
+                            Text="{localize:Translate Intent_Delete_Keep}"
+                            Style="{StaticResource SecondaryCta}"
+                            HeightRequest="46"
+                            CornerRadius="13"
+                            Command="{Binding CloseDeleteCommand}" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+        <!-- ==================== Name / rename sheet ==================== -->
+        <views:IntentionDraftSheet
+            IsVisible="{Binding Draft.IsOpen}"
+            Draft="{Binding Draft}"
+            SaveCommand="{Binding SaveDraftCommand}"
+            CancelCommand="{Binding CancelDraftCommand}" />
+    </Grid>
+</ContentPage>

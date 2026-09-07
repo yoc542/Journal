@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ResourceDictionary 
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
@@ -722,5 +722,105 @@
         <Setter Property="StrokeThickness" Value="1" />
         <Setter Property="BackgroundColor" Value="Transparent" />
         <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <!-- ==================== What I wanted ==================== -->
+
+    <!-- Segmented Active/Completed control on the intentions library -->
+    <Style TargetType="Border" x:Key="TabStrip">
+        <Setter Property="StrokeShape" Value="RoundRectangle 13" />
+        <Setter Property="Stroke" Value="{StaticResource Orchid}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="BackgroundColor" Value="{StaticResource NightCard}" />
+        <Setter Property="Padding" Value="4" />
+    </Style>
+
+    <Style TargetType="Button" x:Key="TabButton">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource Lilac}" />
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="HeightRequest" Value="36" />
+        <Setter Property="CornerRadius" Value="10" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <!-- An intention in the library, and a day's log in the editor -->
+    <Style TargetType="Border" x:Key="IntentionCard" BasedOn="{StaticResource CardPanel}">
+        <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+        <Setter Property="Padding" Value="15" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="LogCard" BasedOn="{StaticResource IntentionCard}">
+        <Setter Property="Stroke" Value="{StaticResource GoldDeep}" />
+        <Setter Property="Padding" Value="14" />
+    </Style>
+
+    <!-- The gold-outlined "add one" affordance -->
+    <Style TargetType="Border" x:Key="DashedTile">
+        <Setter Property="StrokeShape" Value="RoundRectangle 13" />
+        <Setter Property="Stroke" Value="{StaticResource Gold}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeDashArray" Value="4,3" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="Padding" Value="14,13" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="DashedTileText">
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="13.5" />
+        <Setter Property="TextColor" Value="{StaticResource Gold}" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <!-- A badge in the corner of a card: "On today", "Recorded", "Complete" -->
+    <Style TargetType="Label" x:Key="CardBadge" BasedOn="{StaticResource Eyebrow}">
+        <Setter Property="FontSize" Value="9.5" />
+        <Setter Property="CharacterSpacing" Value="1.2" />
+        <Setter Property="VerticalOptions" Value="Start" />
+    </Style>
+
+    <!-- The intention title inside a card -->
+    <Style TargetType="Label" x:Key="CardTitle" BasedOn="{StaticResource DisplaySmall}">
+        <Setter Property="FontSize" Value="19" />
+        <Setter Property="LineHeight" Value="1.18" />
+    </Style>
+
+    <!-- A checkbox in the picker sheet -->
+    <Style TargetType="Border" x:Key="CheckBox">
+        <Setter Property="HeightRequest" Value="20" />
+        <Setter Property="WidthRequest" Value="20" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 6" />
+        <Setter Property="Stroke" Value="{StaticResource Gold}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="Start" />
+    </Style>
+
+    <!-- A bottom sheet that asks rather than warns -->
+    <Style TargetType="Border" x:Key="GoldSheetPanel" BasedOn="{StaticResource SheetPanel}">
+        <Setter Property="Stroke" Value="{StaticResource GoldDeep}" />
+        <Setter Property="BackgroundColor" Value="#241732" />
+    </Style>
+
+    <!-- A multi-line log field: smaller and boxed, unlike the page's own editor -->
+    <Style TargetType="Editor" x:Key="LogFieldEditor">
+        <Setter Property="FontFamily" Value="KarlaRegular" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="TextColor" Value="{StaticResource Cream}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource Orchid}" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="MinimumHeightRequest" Value="66" />
+        <Setter Property="AutoSize" Value="TextChanges" />
+        <Setter Property="Margin" Value="10,2" />
+    </Style>
+
+    <Style TargetType="Border" x:Key="LogFieldBox">
+        <Setter Property="StrokeShape" Value="RoundRectangle 11" />
+        <Setter Property="Stroke" Value="{StaticResource Orchid}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="BackgroundColor" Value="{StaticResource NightPlum}" />
+        <Setter Property="Padding" Value="0" />
     </Style>
 </ResourceDictionary>

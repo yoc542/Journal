@@ -4,13 +4,13 @@ using CommunityToolkit.Mvvm.Input;
 using JournalApp.Data;
 using JournalApp.Localization;
 using JournalApp.Services;
-using JournalApp.Views;
 
 namespace JournalApp.ViewModels;
 
 public partial class SettingsViewModel : ObservableObject
 {
     private readonly JournalDatabase _Database;
+    private readonly NavigationService _Navigation;
 
     [ObservableProperty] private string _TokenMasked = string.Empty;
     [ObservableProperty] private string _SyncStatus = string.Empty;
@@ -35,7 +35,11 @@ public partial class SettingsViewModel : ObservableObject
     /// <summary>Name being edited; only written to settings when the user saves.</summary>
     [ObservableProperty] private string _UserName = string.Empty;
 
-    public SettingsViewModel(JournalDatabase database) => _Database = database;
+    public SettingsViewModel(JournalDatabase database, NavigationService navigation)
+    {
+        _Database = database;
+        _Navigation = navigation;
+    }
 
     public int MaxUserNameLength => Constants.MaxUserNameLength;
 
@@ -105,20 +109,21 @@ public partial class SettingsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private static Task OpenUploadAsync() => Shell.Current.GoToAsync(nameof(UploadPage));
+    private Task OpenUploadAsync() => _Navigation.PushAsync(Routes.Upload);
 
     [RelayCommand]
-    private static Task OpenImportAsync() => Shell.Current.GoToAsync(nameof(ImportPage));
+    private Task OpenImportAsync() => _Navigation.PushAsync(Routes.Import);
 
     [RelayCommand]
-    private static Task OpenConnectAsync() => Shell.Current.GoToAsync(nameof(NotionConnectPage));
+    private Task OpenConnectAsync() => _Navigation.PushAsync(Routes.NotionConnect);
 
     [RelayCommand]
-    private static Task OpenPinAsync() => Shell.Current.GoToAsync(nameof(PinPage));
+    private Task OpenPinAsync() => _Navigation.PushAsync(Routes.Pin);
+
+    /// <summary>Locking also clears Settings and anything under it, so unlocking lands on Today.</summary>
+    [RelayCommand]
+    private Task LockNowAsync() => _Navigation.ResetToAsync(Routes.Lock);
 
     [RelayCommand]
-    private static Task LockNowAsync() => Shell.Current.GoToAsync($"//{nameof(LockPage)}");
-
-    [RelayCommand]
-    private static Task BackAsync() => Shell.Current.GoToAsync("..");
+    private Task BackAsync() => _Navigation.BackAsync();
 }

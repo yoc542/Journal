@@ -1,25 +1,31 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using JournalApp.Data;
 using JournalApp.Localization;
 using JournalApp.Services;
-using JournalApp.Views;
 
 namespace JournalApp.ViewModels;
 
 /// <summary>One cell of the Today screen's week strip.</summary>
 public sealed record WeekDay(int Index, string Initial, string Mark, bool IsWritten);
 
+/// <summary>One intention picked for today, as the Today screen previews it.</summary>
+/// <param name="StateLabel">Whether the day has been recorded, started, or only picked.</param>
+/// <param name="Summary">What the user did, or a nudge to write it.</param>
+public sealed record IntentionSummary(string Title, string StateLabel, string Summary, bool IsRecorded, bool IsUntouched);
+
 public partial class TodayViewModel : ObservableObject
 {
     private const int PreviewLength = 110;
     private const int WeekLength = 7;
+    private const int SummaryLength = 76;
     private const int MorningEndsAt = 12;
     private const int AfternoonEndsAt = 17;
 
     private readonly JournalDatabase _Database;
+    private readonly NavigationService _Navigation;
 
     [ObservableProperty] private string _DateLabel = string.Empty;
     [ObservableProperty] private string _Greeting = string.Empty;
@@ -30,8 +36,19 @@ public partial class TodayViewModel : ObservableObject
     [ObservableProperty] private string _PendingLabel = string.Empty;
     [ObservableProperty] private string _HistoryCountLabel = string.Empty;
     [ObservableProperty] private ObservableCollection<WeekDay> _Week = new();
+    [ObservableProperty] private ObservableCollection<IntentionSummary> _Tonight = new();
 
-    public TodayViewModel(JournalDatabase database) => _Database = database;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasNoTonight))]
+    private bool _HasTonight;
+
+    public TodayViewModel(JournalDatabase database, NavigationService navigation)
+    {
+        _Database = database;
+        _Navigation = navigation;
+    }
+
+    public bool HasNoTonight => !HasTonight;
 
     public async Task LoadAsync()
     {
@@ -67,6 +84,30 @@ public partial class TodayViewModel : ObservableObject
             : string.Format(AppResources.Today_History_Count_Format, total);
 
         await LoadWeekAsync();
+        await LoadTonightAsync();
+    }
+
+    private async Task LoadTonightAsync()
+    {
+        var logs = await _Database.GetLogsForDateAsync(DateTime.Today);
+        var intentions = await _Database.GetIntentionsAsync();
+
+        Tonight = new ObservableCollection<IntentionSummary>(
+            logs.Join(intentions, l => l.IntentionId, i => i.Id, (log, intention) =>
+            {
+                var summary = log.SummarizeDid(SummaryLength);
+
+                return new IntentionSummary(
+                    intention.Title,
+                    log.IsComplete ? AppResources.Intent_State_Recorded
+                        : log.HasContent ? AppResources.Intent_State_InProgress
+                        : AppResources.Intent_State_Empty,
+                    summary.Length > 0 ? summary : AppResources.Intent_Today_Prompt,
+                    log.IsComplete,
+                    !log.HasContent);
+            }));
+
+        HasTonight = Tonight.Count > 0;
     }
 
     /// <summary>The seven days ending today, marked according to whether anything was written.</summary>
@@ -108,14 +149,21 @@ public partial class TodayViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private static Task ContinueWritingAsync() => Shell.Current.GoToAsync(nameof(JournalEditorPage));
+    private Task ContinueWritingAsync() => _Navigation.PushAsync(Routes.JournalEditor);
 
     [RelayCommand]
-    private static Task OpenHistoryAsync() => Shell.Current.GoToAsync(nameof(JournalListPage));
+    private Task OpenHistoryAsync() => _Navigation.PushAsync(Routes.JournalList);
 
     [RelayCommand]
-    private static Task OpenUploadAsync() => Shell.Current.GoToAsync(nameof(UploadPage));
+    private Task OpenUploadAsync() => _Navigation.PushAsync(Routes.Upload);
 
     [RelayCommand]
-    private static Task OpenSettingsAsync() => Shell.Current.GoToAsync(nameof(SettingsPage));
+    private Task OpenSettingsAsync() => _Navigation.PushAsync(Routes.Settings);
+
+    [RelayCommand]
+    private Task OpenIntentionsAsync() => _Navigation.PushAsync(Routes.Intentions);
+
+    [RelayCommand]
+    private Task ChooseIntentionsAsync() =>
+        _Navigation.PushAsync(Routes.JournalEditor, new Dictionary<string, object> { ["picker"] = 1 });
 }

@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using JournalApp.Data;
 using JournalApp.Localization;
 using JournalApp.Models;
-using JournalApp.Views;
+using JournalApp.Services;
 
 namespace JournalApp.ViewModels;
 
@@ -20,6 +20,9 @@ public class MonthGroup : List<JournalEntry>
 public partial class JournalListViewModel : ObservableObject
 {
     private readonly JournalDatabase _Database;
+    private readonly NavigationService _Navigation;
+
+    private const int PreviewLength = 72;
 
     private List<JournalEntry> _All = new();
 
@@ -35,7 +38,11 @@ public partial class JournalListViewModel : ObservableObject
 
     [ObservableProperty] private string _Query = string.Empty;
 
-    public JournalListViewModel(JournalDatabase database) => _Database = database;
+    public JournalListViewModel(JournalDatabase database, NavigationService navigation)
+    {
+        _Database = database;
+        _Navigation = navigation;
+    }
 
     /// <summary>Nothing has ever been written, so the search box and list are pointless.</summary>
     public bool IsEmpty => !HasEntries;
@@ -47,6 +54,11 @@ public partial class JournalListViewModel : ObservableObject
     {
         _All = await _Database.GetEntriesAsync();
         HasEntries = _All.Count > 0;
+
+        // Days logged against an intention but never written about would otherwise read as blank.
+        var previews = await _Database.GetLogPreviewsAsync(PreviewLength);
+        foreach (var entry in _All.Where(e => e.Text.Trim().Length == 0))
+            entry.LogFallback = previews.GetValueOrDefault(entry.EntryDate.Date, string.Empty);
         ApplyFilter();
     }
 
@@ -75,15 +87,15 @@ public partial class JournalListViewModel : ObservableObject
         || entry.FullDateLabel.Contains(query, StringComparison.CurrentCultureIgnoreCase);
 
     [RelayCommand]
-    private static Task OpenEntryAsync(JournalEntry entry) =>
-        Shell.Current.GoToAsync($"{nameof(EntryDetailPage)}?id={entry.Id}");
+    private Task OpenEntryAsync(JournalEntry entry) =>
+        _Navigation.PushAsync(Routes.EntryDetail, new Dictionary<string, object> { ["id"] = entry.Id });
 
     [RelayCommand]
-    private static Task WriteTodayAsync() => Shell.Current.GoToAsync(nameof(JournalEditorPage));
+    private Task WriteTodayAsync() => _Navigation.PushAsync(Routes.JournalEditor);
 
     [RelayCommand]
-    private static Task BackAsync() => Shell.Current.GoToAsync("..");
+    private Task BackAsync() => _Navigation.BackAsync();
 
     [RelayCommand]
-    private static Task ImportAsync() => Shell.Current.GoToAsync(nameof(ImportPage));
+    private Task ImportAsync() => _Navigation.PushAsync(Routes.Import);
 }

@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -6,7 +6,6 @@ using JournalApp.Data;
 using JournalApp.Localization;
 using JournalApp.Models;
 using JournalApp.Services;
-using JournalApp.Views;
 
 namespace JournalApp.ViewModels;
 
@@ -20,10 +19,13 @@ public partial class IncomingEntry : ObservableObject
 {
     private const int PreviewLength = 90;
 
-    public IncomingEntry(JournalEntry incoming, JournalEntry? local)
+    public IncomingEntry(NotionEntry page, JournalEntry? local)
     {
-        Incoming = incoming;
+        Incoming = page.Entry;
+        Intentions = page.Intentions;
         Local = local;
+
+        var incoming = page.Entry;
         DateLabel = incoming.FullDateLabel;
         Title = incoming.DisplayTitle;
         FlagLabel = local is null ? AppResources.Import_Flag_New : AppResources.Import_Flag_Conflict;
@@ -36,6 +38,8 @@ public partial class IncomingEntry : ObservableObject
 
     public JournalEntry Incoming { get; }
     public JournalEntry? Local { get; }
+
+    public List<IntentionLine> Intentions { get; }
 
     public bool IsConflict => Local is not null;
 
@@ -58,6 +62,7 @@ public partial class ImportViewModel : ObservableObject
 {
     private readonly JournalDatabase _Database;
     private readonly NotionService _Notion;
+    private readonly NavigationService _Navigation;
 
     private List<IncomingEntry> _Conflicts = new();
     private readonly Dictionary<IncomingEntry, ConflictChoice> _Resolutions = new();
@@ -92,10 +97,11 @@ public partial class ImportViewModel : ObservableObject
     [ObservableProperty] private string _DoneTitle = string.Empty;
     [ObservableProperty] private string _DoneBody = string.Empty;
 
-    public ImportViewModel(JournalDatabase database, NotionService notion)
+    public ImportViewModel(JournalDatabase database, NotionService notion, NavigationService navigation)
     {
         _Database = database;
         _Notion = notion;
+        _Navigation = navigation;
     }
 
     public bool IsNotConnected => !IsConnected;
@@ -130,9 +136,9 @@ public partial class ImportViewModel : ObservableObject
 
             Incoming = new ObservableCollection<IncomingEntry>(
                 pages
-                    .OrderByDescending(p => p.EntryDate)
+                    .OrderByDescending(p => p.Entry.EntryDate)
                     .Select(p => new IncomingEntry(
-                        p, local.FirstOrDefault(l => l.EntryDate.Date == p.EntryDate.Date))));
+                        p, local.FirstOrDefault(l => l.EntryDate.Date == p.Entry.EntryDate.Date))));
 
             foreach (var item in Incoming)
                 item.PropertyChanged += (_, e) =>
@@ -147,7 +153,7 @@ public partial class ImportViewModel : ObservableObject
         catch (Exception ex)
         {
             await Shell.Current.DisplayAlertAsync(AppResources.Import_FailTitle, ex.Message, AppResources.OK);
-            await Shell.Current.GoToAsync("..");
+            await _Navigation.BackAsync();
         }
     }
 
@@ -267,6 +273,7 @@ public partial class ImportViewModel : ObservableObject
             {
                 item.Incoming.IsUploaded = true;
                 await _Database.SaveEntryAsync(item.Incoming);
+                await _Database.ReplaceLogsForDateAsync(item.Incoming.EntryDate, item.Intentions);
                 imported++;
                 continue;
             }
@@ -280,6 +287,7 @@ public partial class ImportViewModel : ObservableObject
                     local.NotionPageId = item.Incoming.NotionPageId;
                     local.IsUploaded = true;
                     await _Database.SaveEntryAsync(local);
+                    await _Database.ReplaceLogsForDateAsync(local.EntryDate, item.Intentions);
                     written++;
                     break;
 
@@ -303,16 +311,16 @@ public partial class ImportViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private static Task OpenHistoryAsync() => Shell.Current.GoToAsync("..");
+    private Task OpenHistoryAsync() => _Navigation.BackAsync();
 
     [RelayCommand]
-    private static Task OpenTodayAsync() => Shell.Current.Navigation.PopToRootAsync();
+    private Task OpenTodayAsync() => _Navigation.ResetToAsync(Routes.Today);
 
     [RelayCommand]
-    private static Task ConnectAsync() => Shell.Current.GoToAsync(nameof(NotionConnectPage));
+    private Task ConnectAsync() => _Navigation.PushAsync(Routes.NotionConnect);
 
     [RelayCommand]
-    private static Task BackAsync() => Shell.Current.GoToAsync("..");
+    private Task BackAsync() => _Navigation.BackAsync();
 
     [RelayCommand]
     private void BackToPicker()

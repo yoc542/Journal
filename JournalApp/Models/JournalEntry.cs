@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using JournalApp.Localization;
 using SQLite;
 
@@ -46,9 +46,14 @@ public class JournalEntry
         return line.Length <= max ? line : line[..max].TrimEnd() + "\u2026";
     }
 
+    /// <summary>Stand-in preview for a day that was logged against an intention but never written
+    /// about. Filled in by the history list, which has the logs to hand.</summary>
+    [Ignore]
+    public string LogFallback { get; set; } = string.Empty;
+
     /// <summary>One-line preview shown under the title in the history list.</summary>
     [Ignore]
-    public string Excerpt => Summarize(ExcerptLength);
+    public string Excerpt => Text.Trim().Length > 0 ? Summarize(ExcerptLength) : LogFallback;
 
     /// <summary>Day of the month, shown in the history list's date column.</summary>
     [Ignore]

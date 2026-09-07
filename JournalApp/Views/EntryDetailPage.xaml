@@ -61,6 +61,42 @@
                     </Grid>
 
                     <Label Text="{Binding Body}" Style="{StaticResource ReadingBody}" />
+
+                    <!-- What the day was for -->
+                    <VerticalStackLayout Spacing="10" Margin="0,8,0,0" IsVisible="{Binding HasIntentions}">
+                        <Label Text="{localize:Translate Intent_Detail_Header}" Style="{StaticResource Eyebrow}" FontSize="10" />
+
+                        <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Intentions}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:IntentionRecap">
+                                    <Border Style="{StaticResource IntentionCard}" Stroke="{StaticResource GoldDeep}" Padding="14">
+                                        <VerticalStackLayout Spacing="9">
+                                            <Label Text="{Binding Title}" Style="{StaticResource CardTitle}" FontSize="18" />
+
+                                            <VerticalStackLayout Spacing="3">
+                                                <Label
+                                                    Text="{localize:Translate Intent_Field_Did}"
+                                                    Style="{StaticResource EyebrowMuted}"
+                                                    FontSize="9.5"
+                                                    CharacterSpacing="1.6" />
+                                                <Label Text="{Binding Did}" Style="{StaticResource Body}" FontSize="13" TextColor="{StaticResource Cream}" Opacity="0.9" />
+                                            </VerticalStackLayout>
+
+                                            <VerticalStackLayout Spacing="3">
+                                                <Label
+                                                    Text="{localize:Translate Intent_Detail_Evidence}"
+                                                    Style="{StaticResource Eyebrow}"
+                                                    FontSize="9.5"
+                                                    CharacterSpacing="1.6"
+                                                    Opacity="0.7" />
+                                                <Label Text="{Binding Evidence}" Style="{StaticResource Body}" FontSize="13" TextColor="{StaticResource Cream}" Opacity="0.9" />
+                                            </VerticalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </ScrollView>
         </Grid>
