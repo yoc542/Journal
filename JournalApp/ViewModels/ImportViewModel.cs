@@ -9,7 +9,7 @@ using JournalApp.Services;
 
 namespace JournalApp.ViewModels;
 
-public enum ImportStep { Scanning, Picker, Conflict, Done }
+public enum ImportStep { Scanning, Picker, Conflict, Done, Failed }
 
 /// <summary>How a single date collision should be settled.</summary>
 public enum ConflictChoice { Device, Incoming, Both }
@@ -78,7 +78,8 @@ public partial class ImportViewModel : ObservableObject
     [ObservableProperty] private bool _ApplyToAll;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsScanning), nameof(IsPicker), nameof(IsConflict), nameof(IsDone))]
+    [NotifyPropertyChangedFor(
+        nameof(IsScanning), nameof(IsPicker), nameof(IsConflict), nameof(IsDone), nameof(IsFailed))]
     private ImportStep _Step = ImportStep.Scanning;
 
     // --- conflict screen ---
@@ -97,6 +98,12 @@ public partial class ImportViewModel : ObservableObject
     [ObservableProperty] private string _DoneTitle = string.Empty;
     [ObservableProperty] private string _DoneBody = string.Empty;
 
+    // --- failure screen ---
+    /// <summary>Notion's own words for why the scan stopped, so a token or schema problem is not silent.</summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasErrorDetail))]
+    private string _ErrorDetail = string.Empty;
+
     public ImportViewModel(JournalDatabase database, NotionService notion, NavigationService navigation)
     {
         _Database = database;
@@ -110,6 +117,9 @@ public partial class ImportViewModel : ObservableObject
     public bool IsPicker => Step == ImportStep.Picker;
     public bool IsConflict => Step == ImportStep.Conflict;
     public bool IsDone => Step == ImportStep.Done;
+    public bool IsFailed => Step == ImportStep.Failed;
+
+    public bool HasErrorDetail => ErrorDetail.Length > 0;
 
     public bool IsKeepDevice => Choice == ConflictChoice.Device;
     public bool IsUseNotion => Choice == ConflictChoice.Incoming;
@@ -121,16 +131,17 @@ public partial class ImportViewModel : ObservableObject
 
     public async Task LoadAsync()
     {
-        IsConnected = await NotionService.IsConnectedAsync();
-        if (!IsConnected)
-            return;
-
-        Step = ImportStep.Scanning;
-        Heading = AppResources.Import_Heading_Scanning;
-        Subheading = string.Empty;
-
         try
         {
+            IsConnected = await NotionService.IsConnectedAsync();
+            if (!IsConnected)
+                return;
+
+            Step = ImportStep.Scanning;
+            Heading = AppResources.Import_Heading_Scanning;
+            Subheading = string.Empty;
+            ErrorDetail = string.Empty;
+
             var pages = await _Notion.FetchEntriesAsync();
             var local = await _Database.GetEntriesAsync();
 
@@ -152,8 +163,11 @@ public partial class ImportViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlertAsync(AppResources.Import_FailTitle, ex.Message, AppResources.OK);
-            await _Navigation.BackAsync();
+            // Reported in the page rather than through an alert: the load runs from a navigation
+            // hook, and on iOS an alert presented while the page is still settling is dropped by
+            // UIKit with its task left uncompleted, which hangs the scan screen for good.
+            ErrorDetail = string.Format(AppResources.Import_Error_Detail_Format, ex.Message);
+            Step = ImportStep.Failed;
         }
     }
 
@@ -309,6 +323,9 @@ public partial class ImportViewModel : ObservableObject
 
         Step = ImportStep.Done;
     }
+
+    [RelayCommand]
+    private Task RetryAsync() => LoadAsync();
 
     [RelayCommand]
     private Task OpenHistoryAsync() => _Navigation.BackAsync();

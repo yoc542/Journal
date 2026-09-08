@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage
     x:Class="JournalApp.Views.ImportPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
@@ -279,6 +279,48 @@
                 </Grid>
             </Grid>
         </ScrollView>
+
+        <!-- ==================== Scan could not finish ==================== -->
+        <VerticalStackLayout IsVisible="{Binding IsFailed}" Padding="30,0,30,50" Spacing="18" VerticalOptions="Center">
+
+            <Border
+                HeightRequest="88"
+                WidthRequest="88"
+                HorizontalOptions="Start"
+                StrokeShape="RoundRectangle 44"
+                Stroke="{StaticResource EmberDeep}"
+                StrokeThickness="1"
+                BackgroundColor="#3A1E28">
+                <Label Text="⚠" FontSize="30" TextColor="{StaticResource Ember}" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+
+            <Label Text="{localize:Translate Import_FailTitle}" Style="{StaticResource DisplaySmall}" FontSize="32" />
+            <Label Text="{localize:Translate Import_Failed_Body}" Style="{StaticResource Body}" FontSize="14" />
+
+            <Label
+                Text="{Binding ErrorDetail}"
+                IsVisible="{Binding HasErrorDetail}"
+                FontFamily="KarlaRegular"
+                FontSize="11.5"
+                LineHeight="1.4"
+                TextColor="{StaticResource Ember}" />
+
+            <VerticalStackLayout Spacing="10">
+                <Button
+                    Text="{localize:Translate Import_Failed_Retry}"
+                    Style="{StaticResource PrimaryCta}"
+                    FontSize="15.5"
+                    HeightRequest="52"
+                    CornerRadius="13"
+                    Command="{Binding RetryCommand}" />
+                <Button
+                    Text="{localize:Translate Import_Back}"
+                    Style="{StaticResource SecondaryCta}"
+                    HeightRequest="48"
+                    CornerRadius="13"
+                    Command="{Binding BackCommand}" />
+            </VerticalStackLayout>
+        </VerticalStackLayout>
 
         <!-- ==================== Done ==================== -->
         <VerticalStackLayout IsVisible="{Binding IsDone}" Padding="30,0,30,50" Spacing="20" VerticalOptions="Center">
